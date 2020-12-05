@@ -16,7 +16,6 @@ int main(int argc, char** argv)
 	if (luaL_dofile(l, _mainFilePath.c_str()))
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(l, -1), NULL);
-		return -1;
 	}
 
 	_HandleQuit();
@@ -68,12 +67,13 @@ void _HandleQuit()
 	}
 }
 
+
 void _RegisteEtherLib(lua_State* l)
 {
-	for (luaL_Reg methods : cMethods)
+	for (luaL_Reg method : cMethods)
 	{
-		lua_pushcfunction(l, methods.func);
-		lua_setglobal(l, methods.name);
+		lua_pushcfunction(l, method.func);
+		lua_setglobal(l, method.name);
 	}
 
 	for (Macro macro : macros)

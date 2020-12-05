@@ -1,5 +1,6 @@
 #include "Graphic.h"
 
+
 extern "C" int setCursorShow(lua_State * L)
 {
 	SDL_ShowCursor(lua_toboolean(L, 1) ? SDL_ENABLE : SDL_DISABLE);
@@ -29,7 +30,7 @@ extern "C" int setImageColorKey(lua_State * L)
 	{
 		if (!lua_istable(L, 3))
 		{
-			luaL_error(L, "bad argument #3 to 'SetColorKey' (table expected, got %s)", luaL_typename(L, 2));
+			luaL_error(L, "bad argument #3 to 'SetColorKey' (table expected, got %s)", luaL_typename(L, 3));
 		}
 		else
 		{
@@ -42,6 +43,7 @@ extern "C" int setImageColorKey(lua_State * L)
 			lua_isnumber(L, -1) ? color.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'SetColorKey' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
 			lua_getfield(L, 3, "a");
 			lua_isnumber(L, -1) ? color.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'SetColorKey' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
+
 			SDL_SetColorKey(surface, lua_toboolean(L, 2), SDL_MapRGBA(surface->format, color.r, color.g, color.b, color.a));
 		}
 	}

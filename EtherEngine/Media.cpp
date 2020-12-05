@@ -3,7 +3,7 @@
 
 extern "C" int loadMusic(lua_State * L)
 {
-	const char* path = lua_tostring(L, 1);
+	const char* path = luaL_checkstring(L, 1);
 	Mix_Music* music = Mix_LoadMUS(path);
 	music ? lua_pushlightuserdata(L, music) : lua_pushnil(L);
 
@@ -23,6 +23,7 @@ extern "C" int unloadMusic(lua_State * L)
 		Mix_FreeMusic(music);
 		music = NULL;
 	}
+
 	return 0;
 }
 
@@ -113,25 +114,25 @@ extern "C" int getMusicType(lua_State * L)
 	switch (Mix_GetMusicType(music))
 	{
 	case MUS_WAV:
-		lua_pushstring(L, "WAV");
+		lua_pushnumber(L, MUSIC_TYPE_WAV);
 		break;
 	case MUS_MP3:
-		lua_pushstring(L, "MP3");
+		lua_pushnumber(L, MUSIC_TYPE_MP3);
 		break;
 	case MUS_OGG:
-		lua_pushstring(L, "OGG");
+		lua_pushnumber(L, MUSIC_TYPE_OGG);
 		break;
 	case MUS_CMD:
-		lua_pushstring(L, "CMD");
+		lua_pushnumber(L, MUSIC_TYPE_CMD);
 		break;
 	case MUS_MOD:
-		lua_pushstring(L, "MOD");
+		lua_pushnumber(L, MUSIC_TYPE_MOD);
 		break;
 	case MUS_MID:
-		lua_pushstring(L, "MID");
+		lua_pushnumber(L, MUSIC_TYPE_MID);
 		break;
 	default:
-		lua_pushstring(L, "UNKONWN");
+		lua_pushnumber(L, MUSIC_TYPE_UNKONWN);
 		break;
 	}
 
