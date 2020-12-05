@@ -22,11 +22,11 @@ using namespace std;
 
 #ifndef _ETHER_DEBUG_
 
-#ifdef __WIN32
+#ifdef __WINDOWS__
 
 #pragma comment( linker, "/subsystem:windows /entry:mainCRTStartup" )
 
-#endif // __WIN32
+#endif // __WINDOWS__
 
 #endif // _ETHER_DEBUG_
 
