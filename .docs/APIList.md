@@ -72,7 +72,7 @@
 + SetFontStyle():  设置已加载字体的样式
 + SetImageColorKey():  设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
 + SetMusicVolume():  设置音乐播放的音量
-+ SetTextureAlpha():  设置纹理透明度
++ SetTextureAlpha():  设置纹理透明度 
 + SetWindowMaxSize():  设置窗口最大尺寸的大小
 + SetWindowMinSize():  设置窗口最小尺寸的大小
 + SetWindowMode():  设置窗口模式
