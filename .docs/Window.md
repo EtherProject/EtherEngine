@@ -139,6 +139,22 @@ SetWindowSize(width,height)
 
 **示例**
 
+> #### GetWindowSize
+设置窗口大小
+```lua
+width,height = GetWindowSize()
+```
+**参数**
+
+无
+
+**返回值**
+
++ ***[number] width***：窗口宽度
++ ***[number] height***：窗口高度
+
+**示例**
+
 > ## SetWindowMaxSize
 设置窗口最大尺寸的大小
 ```lua
