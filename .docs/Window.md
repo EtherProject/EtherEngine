@@ -139,7 +139,7 @@ SetWindowSize(width,height)
 
 **示例**
 
-> #### GetWindowSize
+> ## GetWindowSize
 设置窗口大小
 ```lua
 width,height = GetWindowSize()
