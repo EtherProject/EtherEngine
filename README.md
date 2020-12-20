@@ -21,6 +21,7 @@
 | 时间      | [时间](./.docs/Time.md)         |
 | 窗口操作 | [窗口操作](./.docs/Window.md) |
 | 其他      | [其他](./.docs/Others.md)        |
+| 附录      | [附录](./.docs/Appendix.md)        |
 
 
 ## 联系开发组
