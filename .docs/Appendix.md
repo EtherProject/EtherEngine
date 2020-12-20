@@ -18,8 +18,8 @@
 | WINDOW_MODE_FULLSCREEN_DESKTOP | 窗口模式：桌面全屏                  |
 | EVENT_QUIT                                   | 事件：退出                            |
 | EVENT_MOUSEMOTION                     | 事件：鼠标移动                       |
-| EVENT_MOUSEBTNDOWN_LEFT            | 事件：鼠标右键按下                  |
-| EVENT_MOUSEBTNDOWN_RIGHT            | 事件：鼠标左键按下                  |
+| EVENT_MOUSEBTNDOWN_LEFT            | 事件：鼠标左键按下                  |
+| EVENT_MOUSEBTNDOWN_RIGHT            | 事件：鼠标右键按下                  |
 | EVENT_MOUSEBTNDOWN_MIDDLE         | 事件：鼠标中键按下                  |
 | EVENT_MOUSEBTNUP_LEFT                 | 事件：鼠标左键抬起                  |
 | EVENT_MOUSEBTNUP_RIGHT               | 事件：鼠标右键抬起                  |
