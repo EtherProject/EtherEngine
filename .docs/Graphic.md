@@ -487,10 +487,10 @@ font = LoadFont(path,  size)
 
 **示例**
 
-> ## UnLoadFont
+> ## UnloadFont
 释放已加载的字体
 ```lua
-UnLoadFont(font)
+UnloadFont(font)
 ```
 **参数**
 
