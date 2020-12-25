@@ -303,7 +303,7 @@
 | EVENT_KEYUP_DBLVERTICALBAR           | 事件：松开键位 DBLVERTICALBAR（双竖线）      |
 | EVENT_KEYUP_WWW                         | 事件：松开键位 WWW                                |
 | EVENT_KEYUP_EMAIL                         | 事件：松开键位 EMAIL                                |
-| FONT_STYLE_BOLD                            | 字体样式：黑体                                         |
+| FONT_STYLE_BOLD                            | 字体样式：粗体                                         |
 | FONT_STYLE_ITALIC                           | 字体样式：斜体                                         |
 | FONT_STYLE_UNDERLINE                    | 字体样式：下划线                                      |
 | FONT_STYLE_STRIKETHROUGH              | 字体样式：删除线                                      |

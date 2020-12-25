@@ -517,7 +517,7 @@ style = GetFontStyle(font)
 
 **示例**
 
-> ## SetFontStyle(
+> ## SetFontStyle
 设置已加载字体的样式
 ```lua
 SetFontStyle(font, style)
