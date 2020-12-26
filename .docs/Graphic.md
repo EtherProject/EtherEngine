@@ -759,7 +759,6 @@ UpdateWindow()
 
 **返回值**
 
-+ ***[number] width***：: 字体宽度
-+ ***[number] height***：: 字体高度
+无
 
 **示例**
