@@ -1,6 +1,10 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
+#define ETHER_API extern "C" int
+
+#define WINDOW_POSITION_DEFAULT -2147483648
+
 #define MSGBOX_ERROR 1001
 #define MSGBOX_WARNING 1002
 #define MSGBOX_INFO 1003

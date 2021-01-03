@@ -1,7 +1,7 @@
 #include "Media.h"
 
 
-extern "C" int loadMusic(lua_State * L)
+ETHER_API loadMusic(lua_State * L)
 {
 	const char* path = luaL_checkstring(L, 1);
 	Mix_Music* music = Mix_LoadMUS(path);
@@ -11,7 +11,7 @@ extern "C" int loadMusic(lua_State * L)
 }
 
 
-extern "C" int unloadMusic(lua_State * L)
+ETHER_API unloadMusic(lua_State * L)
 {
 	Mix_Music* music = (Mix_Music*)lua_touserdata(L, 1);
 	if (!music)
@@ -28,7 +28,7 @@ extern "C" int unloadMusic(lua_State * L)
 }
 
 
-extern "C" int playMusic(lua_State * L)
+ETHER_API playMusic(lua_State * L)
 {
 	Mix_Music* music = (Mix_Music*)lua_touserdata(L, 1);
 	if (!music)
@@ -44,7 +44,7 @@ extern "C" int playMusic(lua_State * L)
 }
 
 
-extern "C" int fadeInMusic(lua_State * L)
+ETHER_API fadeInMusic(lua_State * L)
 {
 	Mix_Music* music = (Mix_Music*)lua_touserdata(L, 1);
 	if (!music)
@@ -60,7 +60,7 @@ extern "C" int fadeInMusic(lua_State * L)
 }
 
 
-extern "C" int fadeOutMusic(lua_State * L)
+ETHER_API fadeOutMusic(lua_State * L)
 {
 	Mix_FadeOutMusic(luaL_checknumber(L, 1));
 
@@ -68,7 +68,7 @@ extern "C" int fadeOutMusic(lua_State * L)
 }
 
 
-extern "C" int setMusicVolume(lua_State * L)
+ETHER_API setMusicVolume(lua_State * L)
 {
 	Mix_VolumeMusic(luaL_checknumber(L, 1));
 
@@ -76,7 +76,7 @@ extern "C" int setMusicVolume(lua_State * L)
 }
 
 
-extern "C" int getMusicVolume(lua_State * L)
+ETHER_API getMusicVolume(lua_State * L)
 {
 	lua_pushnumber(L, Mix_VolumeMusic(-1));
 
@@ -84,7 +84,7 @@ extern "C" int getMusicVolume(lua_State * L)
 }
 
 
-extern "C" int pauseMusic(lua_State * L)
+ETHER_API pauseMusic(lua_State * L)
 {
 	Mix_PauseMusic();
 
@@ -92,7 +92,7 @@ extern "C" int pauseMusic(lua_State * L)
 }
 
 
-extern "C" int resumeMusic(lua_State * L)
+ETHER_API resumeMusic(lua_State * L)
 {
 	Mix_ResumeMusic();
 
@@ -100,7 +100,7 @@ extern "C" int resumeMusic(lua_State * L)
 }
 
 
-extern "C" int rewindMusic(lua_State * L)
+ETHER_API rewindMusic(lua_State * L)
 {
 	Mix_RewindMusic();
 
@@ -108,7 +108,7 @@ extern "C" int rewindMusic(lua_State * L)
 }
 
 
-extern "C" int getMusicType(lua_State * L)
+ETHER_API getMusicType(lua_State * L)
 {
 	Mix_Music* music = (Mix_Music*)lua_touserdata(L, 1);
 	switch (Mix_GetMusicType(music))
@@ -140,7 +140,7 @@ extern "C" int getMusicType(lua_State * L)
 }
 
 
-extern "C" int loadSound(lua_State * L)
+ETHER_API loadSound(lua_State * L)
 {
 	const char* path = lua_tostring(L, 1);
 	Mix_Chunk* sound = Mix_LoadWAV(path);
@@ -150,7 +150,7 @@ extern "C" int loadSound(lua_State * L)
 }
 
 
-extern "C" int unloadSound(lua_State * L)
+ETHER_API unloadSound(lua_State * L)
 {
 	Mix_Chunk* sound = (Mix_Chunk*)lua_touserdata(L, 1);
 	if (!sound)
@@ -167,7 +167,7 @@ extern "C" int unloadSound(lua_State * L)
 }
 
 
-extern "C" int playSound(lua_State * L)
+ETHER_API playSound(lua_State * L)
 {
 	Mix_Chunk* sound = (Mix_Chunk*)lua_touserdata(L, 1);
 	if (!sound)

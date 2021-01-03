@@ -1,7 +1,6 @@
 #include "Window.h"
 
-
-extern "C" int showMessageBox(lua_State * L)
+ETHER_API showMessageBox(lua_State * L)
 {
 	SDL_MessageBoxFlags flag;
 	switch ((int)luaL_checknumber(L, 3))
@@ -25,7 +24,7 @@ extern "C" int showMessageBox(lua_State * L)
 }
 
 
-extern "C" int createWindow(lua_State * L)
+ETHER_API createWindow(lua_State * L)
 {
 	if (window)
 	{
@@ -33,22 +32,9 @@ extern "C" int createWindow(lua_State * L)
 	}
 	else
 	{
-		SDL_Rect rect;
-		if (!lua_istable(L, 2))
-		{
-			luaL_error(L, "bad argument #2 to 'CreateWindow' (table expected, got %s)", luaL_typename(L, 5));
-		}
-		else
-		{
-			lua_getfield(L, 2, "x");
-			lua_isnumber(L, -1) ? (rect.x = lua_tonumber(L, -1) < 0 ? SDL_WINDOWPOS_UNDEFINED : lua_tonumber(L, -1)) : luaL_error(L, "bad argument #2 to 'CreateWindow' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 2, "y");
-			lua_isnumber(L, -1) ? (rect.y = lua_tonumber(L, -1) < 0 ? SDL_WINDOWPOS_UNDEFINED : lua_tonumber(L, -1)) : luaL_error(L, "bad argument #2 to 'CreateWindow' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 2, "w");
-			lua_isnumber(L, -1) ? rect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CreateWindow' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 2, "h");
-			lua_isnumber(L, -1) ? rect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CreateWindow' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
-		}
+		SDL_Rect rect = GetRectParam(L, 2, "CreateWindow");
+		rect.x = rect.x == WINDOW_POSITION_DEFAULT ? SDL_WINDOWPOS_UNDEFINED : rect.x;
+		rect.y = rect.y == WINDOW_POSITION_DEFAULT ? SDL_WINDOWPOS_UNDEFINED : rect.y;
 
 		int flags = SDL_WINDOW_SHOWN;
 		if (!lua_istable(L, 3))
@@ -82,7 +68,7 @@ extern "C" int createWindow(lua_State * L)
 					flags |= SDL_WINDOW_MINIMIZED;
 					break;
 				default:
-					luaL_error(L, "bad argument #3 to 'CreateWindow' (the elements of table must be number-MACRO, got %s)", luaL_typename(L, -2));
+					luaL_error(L, "bad argument #3 to 'CreateWindow' (the elements of table must be MACRO number, got %s)", luaL_typename(L, -2));
 					break;
 				}
 				lua_pop(L, 2);
@@ -97,7 +83,7 @@ extern "C" int createWindow(lua_State * L)
 }
 
 
-extern "C" int closeWindow(lua_State * L)
+ETHER_API closeWindow(lua_State * L)
 {
 	SDL_DestroyWindow(window);
 	window = NULL;
@@ -106,7 +92,7 @@ extern "C" int closeWindow(lua_State * L)
 }
 
 
-extern "C" int setWindowTitle(lua_State * L)
+ETHER_API setWindowTitle(lua_State * L)
 {
 	SDL_SetWindowTitle(window, luaL_checkstring(L, 1));
 
@@ -114,7 +100,7 @@ extern "C" int setWindowTitle(lua_State * L)
 }
 
 
-extern "C" int getWindowTitle(lua_State * L)
+ETHER_API getWindowTitle(lua_State * L)
 {
 	lua_pushstring(L, SDL_GetWindowTitle(window));
 
@@ -122,7 +108,7 @@ extern "C" int getWindowTitle(lua_State * L)
 }
 
 
-extern "C" int setWindowMode(lua_State * L)
+ETHER_API setWindowMode(lua_State * L)
 {
 	switch ((int)luaL_checknumber(L, 1))
 	{
@@ -144,7 +130,7 @@ extern "C" int setWindowMode(lua_State * L)
 }
 
 
-extern "C" int setWindowResizable(lua_State * L)
+ETHER_API setWindowResizable(lua_State * L)
 {
 	SDL_SetWindowResizable(window, lua_toboolean(L, 1) ? SDL_TRUE : SDL_FALSE);
 
@@ -152,7 +138,7 @@ extern "C" int setWindowResizable(lua_State * L)
 }
 
 
-extern "C" int setWindowOpacity(lua_State * L)
+ETHER_API setWindowOpacity(lua_State * L)
 {
 	SDL_SetWindowOpacity(window, luaL_checknumber(L, 1));
 
@@ -160,7 +146,7 @@ extern "C" int setWindowOpacity(lua_State * L)
 }
 
 
-extern "C" int setWindowSize(lua_State * L)
+ETHER_API setWindowSize(lua_State * L)
 {
 	SDL_SetWindowSize(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
 
@@ -168,7 +154,7 @@ extern "C" int setWindowSize(lua_State * L)
 }
 
 
-extern "C" int getWindowSize(lua_State * L)
+ETHER_API getWindowSize(lua_State * L)
 {
 	int width = 0;
 	int height = 0;
@@ -180,7 +166,7 @@ extern "C" int getWindowSize(lua_State * L)
 }
 
 
-extern "C" int setWindowMaxSize(lua_State * L)
+ETHER_API setWindowMaxSize(lua_State * L)
 {
 	SDL_SetWindowMaximumSize(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
 
@@ -188,7 +174,7 @@ extern "C" int setWindowMaxSize(lua_State * L)
 }
 
 
-extern "C" int getWindowMaxSize(lua_State * L)
+ETHER_API getWindowMaxSize(lua_State * L)
 {
 	int width = 0;
 	int height = 0;
@@ -200,7 +186,7 @@ extern "C" int getWindowMaxSize(lua_State * L)
 }
 
 
-extern "C" int setWindowMinSize(lua_State * L)
+ETHER_API setWindowMinSize(lua_State * L)
 {
 	SDL_SetWindowMinimumSize(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
 
@@ -208,7 +194,7 @@ extern "C" int setWindowMinSize(lua_State * L)
 }
 
 
-extern "C" int getWindowMinSize(lua_State * L)
+ETHER_API getWindowMinSize(lua_State * L)
 {
 	int width = 0;
 	int height = 0;
@@ -220,27 +206,33 @@ extern "C" int getWindowMinSize(lua_State * L)
 }
 
 
-extern "C" int setWindowPosition(lua_State * L)
+ETHER_API setWindowPosition(lua_State * L)
 {
-	SDL_SetWindowPosition(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
+	SDL_Point point = GetPointParam(L, 1, "SetWindowPosition");
+
+	SDL_SetWindowPosition(window, point.x, point.y);
 
 	return 0;
 }
 
 
-extern "C" int getWindowPosition(lua_State * L)
+ETHER_API getWindowPosition(lua_State * L)
 {
-	int x = 0;
-	int y = 0;
-	SDL_GetWindowSize(window, &x, &y);
-	lua_pushnumber(L, x);
-	lua_pushnumber(L, y);
+	SDL_Point point;
+	SDL_GetWindowPosition(window, &point.x, &point.y);
+	lua_newtable(L);
+	lua_pushstring(L, "x");
+	lua_pushnumber(L, point.x);
+	lua_settable(L, -3);
+	lua_pushstring(L, "y");
+	lua_pushnumber(L, point.y);
+	lua_settable(L, -3);
 
-	return 2;
+	return 1;
 }
 
 
-extern "C" int clearWindow(lua_State * L)
+ETHER_API clearWindow(lua_State * L)
 {
 	SDL_RenderClear(renderer);
 

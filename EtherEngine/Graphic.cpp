@@ -1,7 +1,6 @@
 #include "Graphic.h"
 
-
-extern "C" int setCursorShow(lua_State * L)
+ETHER_API setCursorShow(lua_State * L)
 {
 	SDL_ShowCursor(lua_toboolean(L, 1) ? SDL_ENABLE : SDL_DISABLE);
 
@@ -9,7 +8,7 @@ extern "C" int setCursorShow(lua_State * L)
 }
 
 
-extern "C" int loadImage(lua_State * L)
+ETHER_API loadImage(lua_State * L)
 {
 	const char* path = luaL_checkstring(L, 1);
 	SDL_Surface* surface = IMG_Load(path);
@@ -19,40 +18,25 @@ extern "C" int loadImage(lua_State * L)
 }
 
 
-extern "C" int setImageColorKey(lua_State * L)
+ETHER_API setImageColorKey(lua_State * L)
 {
 	SDL_Surface* surface = (SDL_Surface*)lua_touserdata(L, 1);
+
 	if (!surface)
 	{
 		luaL_error(L, "bad argument #1 to 'SetColorKey' (userdata-IMAGE expected, got %s)", luaL_typename(L, 1));
 	}
 	else
 	{
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'SetColorKey' (table expected, got %s)", luaL_typename(L, 3));
-		}
-		else
-		{
-			SDL_Color color;
-			lua_getfield(L, 3, "r");
-			lua_isnumber(L, -1) ? color.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'SetColorKey' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "g");
-			lua_isnumber(L, -1) ? color.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'SetColorKey' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "b");
-			lua_isnumber(L, -1) ? color.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'SetColorKey' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "a");
-			lua_isnumber(L, -1) ? color.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'SetColorKey' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
-
-			SDL_SetColorKey(surface, lua_toboolean(L, 2), SDL_MapRGBA(surface->format, color.r, color.g, color.b, color.a));
-		}
+		SDL_Color color = GetColorParam(L, 3, "SetImageColorKey");
+		SDL_SetColorKey(surface, lua_toboolean(L, 2), SDL_MapRGBA(surface->format, color.r, color.g, color.b, color.a));
 	}
 
 	return 0;
 }
 
 
-extern "C" int unloadImage(lua_State * L)
+ETHER_API unloadImage(lua_State * L)
 {
 	SDL_Surface* surface = (SDL_Surface*)lua_touserdata(L, 1);
 	if (!surface)
@@ -69,7 +53,7 @@ extern "C" int unloadImage(lua_State * L)
 }
 
 
-extern "C" int createTexture(lua_State * L)
+ETHER_API createTexture(lua_State * L)
 {
 	SDL_Surface* surface = (SDL_Surface*)lua_touserdata(L, 1);
 	if (!surface)
@@ -85,7 +69,7 @@ extern "C" int createTexture(lua_State * L)
 	return 1;
 }
 
-extern "C" int destroyTexture(lua_State * L)
+ETHER_API destroyTexture(lua_State * L)
 {
 	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
 	if (!texture)
@@ -102,7 +86,7 @@ extern "C" int destroyTexture(lua_State * L)
 }
 
 
-extern "C" int setTextureAlpha(lua_State * L)
+ETHER_API setTextureAlpha(lua_State * L)
 {
 	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
 	if (!texture)
@@ -120,7 +104,7 @@ extern "C" int setTextureAlpha(lua_State * L)
 }
 
 
-extern "C" int getImageSize(lua_State * L)
+ETHER_API getImageSize(lua_State * L)
 {
 	SDL_Surface* surface = (SDL_Surface*)lua_touserdata(L, 1);
 	if (!surface)
@@ -137,7 +121,7 @@ extern "C" int getImageSize(lua_State * L)
 }
 
 
-extern "C" int copyTexture(lua_State * L)
+ETHER_API copyTexture(lua_State * L)
 {
 	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
 	if (!texture)
@@ -146,30 +130,15 @@ extern "C" int copyTexture(lua_State * L)
 	}
 	else
 	{
-		if (!lua_istable(L, 2))
-		{
-			luaL_error(L, "bad argument #2 to 'CopyTexture' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			SDL_Rect rect;
-			lua_getfield(L, 2, "x");
-			lua_isnumber(L, -1) ? rect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CopyTexture' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 2, "y");
-			lua_isnumber(L, -1) ? rect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CopyTexture' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 2, "w");
-			lua_isnumber(L, -1) ? rect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CopyTexture' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 2, "h");
-			lua_isnumber(L, -1) ? rect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CopyTexture' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
-			SDL_RenderCopy(renderer, texture, NULL, &rect);
-		}
+		SDL_Rect rect = GetRectParam(L, 2, "CopyTexture");
+		SDL_RenderCopy(renderer, texture, NULL, &rect);
 	}
 
 	return 0;
 }
 
 
-extern "C" int copyRotateTexture(lua_State * L)
+ETHER_API copyRotateTexture(lua_State * L)
 {
 	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
 	if (!texture)
@@ -178,21 +147,9 @@ extern "C" int copyRotateTexture(lua_State * L)
 	}
 	else
 	{
-		double degree = luaL_checknumber(L, 2);
+		SDL_Point flipCenter = GetPointParam(L, 3, "CopyRotateTexture");
 
-		
-		SDL_Point flipCenter;
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'CopyRotateTexture' (table expected, got %s)", luaL_typename(L, 3));
-		}
-		else
-		{
-			lua_getfield(L, 3, "x");
-			lua_isnumber(L, -1) ? flipCenter.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CopyRotateTexture' (table must have number value for key 'x')");
-			lua_getfield(L, 3, "y");
-			lua_isnumber(L, -1) ? flipCenter.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CopyRotateTexture' (table must have number value for key 'y')");
-		}
+		SDL_Rect showRect = GetRectParam(L, 5, "CopyRotateTexture");
 
 		SDL_RendererFlip flip;
 		if (!lua_istable(L, 4))
@@ -231,30 +188,14 @@ extern "C" int copyRotateTexture(lua_State * L)
 			}
 		}
 
-		SDL_Rect showRect;
-		if (!lua_istable(L, 5))
-		{
-			luaL_error(L, "bad argument #5 to 'CopyRotateTexture' (table expected, got %s)", luaL_typename(L, 5));
-		}
-		else
-		{
-			lua_getfield(L, 5, "x");
-			lua_isnumber(L, -1) ? showRect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #5 to 'CopyRotateTexture' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 5, "y");
-			lua_isnumber(L, -1) ? showRect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #5 to 'CopyRotateTexture' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 5, "w");
-			lua_isnumber(L, -1) ? showRect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #5 to 'CopyRotateTexture' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 5, "h");
-			lua_isnumber(L, -1) ? showRect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #5 to 'CopyRotateTexture' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
-		}
-		SDL_RenderCopyEx(renderer, texture, NULL, &showRect, degree, &flipCenter, flip);
+		SDL_RenderCopyEx(renderer, texture, NULL, &showRect, luaL_checknumber(L, 2), &flipCenter, flip);
 	}
 
 	return 0;
 }
 
 
-extern "C" int copyReshapeTexture(lua_State * L)
+ETHER_API copyReshapeTexture(lua_State * L)
 {
 	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
 	if (!texture)
@@ -263,39 +204,9 @@ extern "C" int copyReshapeTexture(lua_State * L)
 	}
 	else
 	{
-		SDL_Rect reshapeRect;
-		if (!lua_istable(L, 2))
-		{
-			luaL_error(L, "bad argument #2 to 'CopyReshapeTexture' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			lua_getfield(L, 2, "x");
-			lua_isnumber(L, -1) ? reshapeRect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CopyReshapeTexture' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 2, "y");
-			lua_isnumber(L, -1) ? reshapeRect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CopyReshapeTexture' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 2, "w");
-			lua_isnumber(L, -1) ? reshapeRect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CopyReshapeTexture' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 2, "h");
-			lua_isnumber(L, -1) ? reshapeRect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'CopyReshapeTexture' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
-		}
+		SDL_Rect reshapeRect = GetRectParam(L, 2, "CopyReshapeTexture");
 
-		SDL_Rect showRect;
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'copyReshapeTexture' (table expected, got %s)", luaL_typename(L, 3));
-		}
-		else
-		{
-			lua_getfield(L, 3, "x");
-			lua_isnumber(L, -1) ? showRect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CopyReshapeTexture' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "y");
-			lua_isnumber(L, -1) ? showRect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CopyReshapeTexture' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "w");
-			lua_isnumber(L, -1) ? showRect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CopyReshapeTexture' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "h");
-			lua_isnumber(L, -1) ? showRect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CopyReshapeTexture' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
-		}
+		SDL_Rect showRect = GetRectParam(L, 3, "CopyReshapeTexture");
 
 		SDL_RenderCopy(renderer, texture, &reshapeRect, &showRect);
 	}
@@ -304,7 +215,7 @@ extern "C" int copyReshapeTexture(lua_State * L)
 }
 
 
-extern "C" int copyRotateReshapeTexture(lua_State * L)
+ETHER_API copyRotateReshapeTexture(lua_State * L)
 {
 	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
 	if (!texture)
@@ -313,20 +224,9 @@ extern "C" int copyRotateReshapeTexture(lua_State * L)
 	}
 	else
 	{
-		int degree = luaL_checknumber(L, 2);
-
-		SDL_Point flipCenter;
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'CopyRotateReshapeTexture' (table expected, got %s)", luaL_typename(L, 3));
-		}
-		else
-		{
-			lua_getfield(L, 3, "x");
-			lua_isnumber(L, -1) ? flipCenter.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CopyRotateReshapeTexture' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "y");
-			lua_isnumber(L, -1) ? flipCenter.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CopyRotateReshapeTexture' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-		}
+		SDL_Point flipCenter = GetPointParam(L, 3, "CopyRotateReshapeTexture");
+		SDL_Rect reshapeRect = GetRectParam(L, 5, "CopyRotateReshapeTexture");
+		SDL_Rect showRect = GetRectParam(L, 6, "CopyRotateReshapeTexture");
 
 		SDL_RendererFlip flip;
 		if (!lua_istable(L, 4))
@@ -365,74 +265,25 @@ extern "C" int copyRotateReshapeTexture(lua_State * L)
 			}
 		}
 
-		SDL_Rect reshapeRect;
-		if (!lua_istable(L, 5))
-		{
-			luaL_error(L, "bad argument #5 to 'CopyRotateReshapeTexture' (table expected, got %s)", luaL_typename(L, 5));
-		}
-		else
-		{
-			lua_getfield(L, 5, "x");
-			lua_isnumber(L, -1) ? reshapeRect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #5 to 'CopyRotateReshapeTexture' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 5, "y");
-			lua_isnumber(L, -1) ? reshapeRect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #5 to 'CopyRotateReshapeTexture' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 5, "w");
-			lua_isnumber(L, -1) ? reshapeRect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #5 to 'CopyRotateReshapeTexture' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 5, "h");
-			lua_isnumber(L, -1) ? reshapeRect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #5 to 'CopyRotateReshapeTexture' (table must have number value for key 'h'), got %s)", luaL_typename(L, -1));
-		}
-
-		SDL_Rect showRect;
-		if (!lua_istable(L, 6))
-		{
-			luaL_error(L, "bad argument #6 to 'CopyRotateReshapeTexture' (table expected, got %s)", luaL_typename(L, 6));
-		}
-		else
-		{
-			lua_getfield(L, 6, "x");
-			lua_isnumber(L, -1) ? showRect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #6 to 'CopyRotateReshapeTexture' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 6, "y");
-			lua_isnumber(L, -1) ? showRect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #6 to 'CopyRotateReshapeTexture' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 6, "w");
-			lua_isnumber(L, -1) ? showRect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #6 to 'CopyRotateReshapeTexture' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 6, "h");
-			lua_isnumber(L, -1) ? showRect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #6 to 'CopyRotateReshapeTexture' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
-		}
-
-		SDL_RenderCopyEx(renderer, texture, &reshapeRect, &showRect, degree, &flipCenter, flip);
+		SDL_RenderCopyEx(renderer, texture, &reshapeRect, &showRect, luaL_checknumber(L, 2), &flipCenter, flip);
 	}
 
 	return 0;
 }
 
 
-extern "C" int setDrawColor(lua_State * L)
+ETHER_API setDrawColor(lua_State * L)
 {
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'SetDrawColor' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Color color;
-		lua_getfield(L, 1, "r");
-		lua_isnumber(L, -1) ? color.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'SetDrawColor' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "g");
-		lua_isnumber(L, -1) ? color.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'SetDrawColor' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "b");
-		lua_isnumber(L, -1) ? color.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'SetDrawColor' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "a");
-		lua_isnumber(L, -1) ? color.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'SetDrawColor' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
+	SDL_Color color = GetColorParam(L, 1, "SetDrawColor");
 
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-	}
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
 	return 0;
 }
 
 
-extern "C" int getDrawColor(lua_State * L)
+ETHER_API getDrawColor(lua_State * L)
 {
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
@@ -455,55 +306,21 @@ extern "C" int getDrawColor(lua_State * L)
 }
 
 
-extern "C" int point(lua_State * L)
+ETHER_API point(lua_State * L)
 {
-	
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'Point' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Point point;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? point.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Point' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? point.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Point' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
+	SDL_Point point = GetPointParam(L, 1, "Point");
 
-		SDL_RenderDrawPoint(renderer, point.x, point.y);
-	}
+	SDL_RenderDrawPoint(renderer, point.x, point.y);
 
 	return 0;
 }
 
 
-extern "C" int line(lua_State * L)
+ETHER_API line(lua_State * L)
 {
-	SDL_Point startPoint;
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'Line' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? startPoint.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Line' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? startPoint.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Line' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
+	SDL_Point startPoint = GetPointParam(L, 1, "Line");
 
-	SDL_Point endPoint;
-	if (!lua_istable(L, 2))
-	{
-		luaL_error(L, "bad argument #2 to 'Line' (table expected, got %s)", luaL_typename(L, 2));
-	}
-	else
-	{
-		lua_getfield(L, 2, "x");
-		lua_isnumber(L, -1) ? endPoint.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'Line' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 2, "y");
-		lua_isnumber(L, -1) ? endPoint.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'Line' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
+	SDL_Point endPoint = GetPointParam(L, 2, "Line");
 
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
@@ -513,33 +330,11 @@ extern "C" int line(lua_State * L)
 }
 
 
-extern "C" int thickLine(lua_State * L)
+ETHER_API thickLine(lua_State * L)
 {
-	SDL_Point startPoint;
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'ThickLine' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? startPoint.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'ThickLine' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? startPoint.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'ThickLine' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
+	SDL_Point startPoint = GetPointParam(L, 1, "ThickLine");
 
-	SDL_Point endPoint;
-	if (!lua_istable(L, 2))
-	{
-		luaL_error(L, "bad argument #2 to 'ThickLine' (table expected, got %s)", luaL_typename(L, 2));
-	}
-	else
-	{
-		lua_getfield(L, 2, "x");
-		lua_isnumber(L, -1) ? endPoint.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'ThickLine' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 2, "y");
-		lua_isnumber(L, -1) ? endPoint.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'ThickLine' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
+	SDL_Point endPoint = GetPointParam(L, 2, "ThickLine");
 
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
@@ -549,286 +344,124 @@ extern "C" int thickLine(lua_State * L)
 }
 
 
-extern "C" int rectangle(lua_State * L)
+ETHER_API rectangle(lua_State * L)
 {
+	SDL_Rect rect = GetRectParam(L, 1, "Rectangle");
+
+	SDL_RenderDrawRect(renderer, &rect);
+
+	return 0;
+}
+
+
+ETHER_API fillRectangle(lua_State * L)
+{
+	SDL_Rect rect = GetRectParam(L, 1, "FillRectangle");
+
+	SDL_RenderFillRect(renderer, &rect);
+
+	return 0;
+}
+
+
+ETHER_API roundRectangle(lua_State * L)
+{
+	SDL_Rect rect = GetRectParam(L, 1, "RoundRectangle");
+
+	SDL_Color color;
+	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
+	roundedRectangleRGBA(renderer, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
+
+	return 0;
+}
+
+
+ETHER_API fillRoundRectangle(lua_State * L)
+{
+	SDL_Rect rect = GetRectParam(L, 1, "FillRoundRectangle");
+
+	SDL_Color color;
+	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
+	roundedBoxRGBA(renderer, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
+
+	return 0;
+}
+
+
+ETHER_API circle(lua_State * L)
+{
+	SDL_Point point = GetPointParam(L, 1, "Circle");
 	
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'Rectangle' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Rect rect;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? rect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Rectangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? rect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Rectangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "w");
-		lua_isnumber(L, -1) ? rect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Rectangle' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "h");
-		lua_isnumber(L, -1) ? rect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Rectangle' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
-
-		SDL_RenderDrawRect(renderer, &rect);
-	}
+	SDL_Color color;
+	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
+	aacircleRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
 
 	return 0;
 }
 
 
-extern "C" int fillRectangle(lua_State * L)
+ETHER_API fillCircle(lua_State * L)
 {
-	SDL_Rect rect;
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'FillRectangle' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? rect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillRectangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? rect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillRectangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "w");
-		lua_isnumber(L, -1) ? rect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillRectangle' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "h");
-		lua_isnumber(L, -1) ? rect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillRectangle' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
-
-		SDL_RenderFillRect(renderer, &rect);
-	}
+	SDL_Point point = GetPointParam(L, 1, "FillCircle");
+	
+	SDL_Color color;
+	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
+	filledCircleRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
 
 	return 0;
 }
 
 
-extern "C" int roundRectangle(lua_State * L)
+ETHER_API ellipse(lua_State * L)
 {
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'RoundRectangle' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Rect rect;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? rect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'RoundRectangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? rect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'RoundRectangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "w");
-		lua_isnumber(L, -1) ? rect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'RoundRectangle' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "h");
-		lua_isnumber(L, -1) ? rect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'RoundRectangle' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
+	SDL_Point point = GetPointParam(L, 1, "Ellipse");
 
-		SDL_Color color;
-		SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
-		roundedRectangleRGBA(renderer, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
-	}
+	SDL_Color color;
+	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
+	aaellipseRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), color.r, color.g, color.b, color.a);
 
 	return 0;
 }
 
 
-extern "C" int fillRoundRectangle(lua_State * L)
+ETHER_API fillEllipse(lua_State * L)
 {
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'RoundRectangle' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Rect rect;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? rect.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'RoundRectangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? rect.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'RoundRectangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "w");
-		lua_isnumber(L, -1) ? rect.w = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'RoundRectangle' (table must have number value for key 'w', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "h");
-		lua_isnumber(L, -1) ? rect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'RoundRectangle' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
+	SDL_Point point = GetPointParam(L, 1, "FillEllipse");
 
-		SDL_Color color;
-		SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
-		roundedBoxRGBA(renderer, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
-	}
+	SDL_Color color;
+	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
+	aaellipseRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), color.r, color.g, color.b, color.a);
 
 	return 0;
 }
 
-
-extern "C" int circle(lua_State * L)
+ETHER_API pie(lua_State * L)
 {
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'Circle' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Point point;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? point.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Circle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? point.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Circle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-
-		SDL_Color color;
-		SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
-		aacircleRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
-	}
+	SDL_Point point = GetPointParam(L, 1, "Pie");
+	
+	SDL_Color color;
+	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
+	pieRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), luaL_checknumber(L, 4), color.r, color.g, color.b, color.a);
 
 	return 0;
 }
 
-
-extern "C" int fillCircle(lua_State * L)
+ETHER_API fillPie(lua_State * L)
 {
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'FillCircle' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Point point;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? point.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillCircle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? point.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillCircle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
+	SDL_Point point = GetPointParam(L, 1, "FillPie");
 
-		SDL_Color color;
-		SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
-		filledCircleRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
-	}
+	SDL_Color color;
+	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
+	filledPieRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), luaL_checknumber(L, 4), color.r, color.g, color.b, color.a);
 
 	return 0;
 }
 
-
-extern "C" int ellipse(lua_State * L)
+ETHER_API triangle(lua_State * L)
 {
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'Ellipse' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Point point;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? point.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Ellipse' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? point.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Ellipse' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-
-		SDL_Color color;
-		SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
-		aaellipseRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), color.r, color.g, color.b, color.a);
-	}
-
-	return 0;
-}
-
-
-extern "C" int fillEllipse(lua_State * L)
-{
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'FillEllipse' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Point point;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? point.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillEllipse' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? point.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillEllipse' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-
-		SDL_Color color;
-		SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
-		aaellipseRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), color.r, color.g, color.b, color.a);
-	}
-
-	return 0;
-}
-
-extern "C" int pie(lua_State * L)
-{
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'Pie' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Point point;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? point.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Pie' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? point.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Pie' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-
-		SDL_Color color;
-		SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
-		pieRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), luaL_checknumber(L, 4), color.r, color.g, color.b, color.a);
-	}
-
-	return 0;
-}
-
-extern "C" int fillPie(lua_State * L)
-{
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'FillPie' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Point point;
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? point.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillPie' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? point.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillPie' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-
-		SDL_Color color;
-		SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
-		filledPieRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), luaL_checknumber(L, 4), color.r, color.g, color.b, color.a);
-	}
-
-	return 0;
-}
-
-extern "C" int triangle(lua_State * L)
-{
-	SDL_Point point_1;
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'Triangle' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? point_1.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Triangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? point_1.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'Triangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
-
-	SDL_Point point_2;
-	if (!lua_istable(L, 2))
-	{
-		luaL_error(L, "bad argument #2 to 'Triangle' (table expected, got %s)", luaL_typename(L, 2));
-	}
-	else
-	{
-		lua_getfield(L, 2, "x");
-		lua_isnumber(L, -1) ? point_2.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'Triangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 2, "y");
-		lua_isnumber(L, -1) ? point_2.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'Triangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
-
-	SDL_Point point_3;
-	if (!lua_istable(L, 3))
-	{
-		luaL_error(L, "bad argument #3 to 'Triangle' (table expected, got %s)", luaL_typename(L, 3));
-	}
-	else
-	{
-		lua_getfield(L, 3, "x");
-		lua_isnumber(L, -1) ? point_3.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'Triangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 3, "y");
-		lua_isnumber(L, -1) ? point_3.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'Triangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
+	SDL_Point point_1 = GetPointParam(L, 1, "Triangle");
+	SDL_Point point_2 = GetPointParam(L, 2, "Triangle");
+	SDL_Point point_3 = GetPointParam(L, 3, "Triangle");
 
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
@@ -837,46 +470,11 @@ extern "C" int triangle(lua_State * L)
 	return 0;
 }
 
-extern "C" int fillTriangle(lua_State * L)
+ETHER_API fillTriangle(lua_State * L)
 {
-	SDL_Point point_1;
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "bad argument #1 to 'FillTriangle' (table expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		lua_getfield(L, 1, "x");
-		lua_isnumber(L, -1) ? point_1.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillTriangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 1, "y");
-		lua_isnumber(L, -1) ? point_1.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'FillTriangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
-
-	SDL_Point point_2;
-	if (!lua_istable(L, 2))
-	{
-		luaL_error(L, "bad argument #2 to 'FillTriangle' (table expected, got %s)", luaL_typename(L, 2));
-	}
-	else
-	{
-		lua_getfield(L, 2, "x");
-		lua_isnumber(L, -1) ? point_2.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'FillTriangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 2, "y");
-		lua_isnumber(L, -1) ? point_2.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #2 to 'FillTriangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
-
-	SDL_Point point_3;
-	if (!lua_istable(L, 3))
-	{
-		luaL_error(L, "bad argument #3 to 'FillTriangle' (table expected, got %s)", luaL_typename(L, 3));
-	}
-	else
-	{
-		lua_getfield(L, 3, "x");
-		lua_isnumber(L, -1) ? point_3.x = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'FillTriangle' (table must have number value for key 'x', got %s)", luaL_typename(L, -1));
-		lua_getfield(L, 3, "y");
-		lua_isnumber(L, -1) ? point_3.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'FillTriangle' (table must have number value for key 'y', got %s)", luaL_typename(L, -1));
-	}
+	SDL_Point point_1 = GetPointParam(L, 1, "Triangle");
+	SDL_Point point_2 = GetPointParam(L, 2, "Triangle");
+	SDL_Point point_3 = GetPointParam(L, 3, "Triangle");
 
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
@@ -886,7 +484,7 @@ extern "C" int fillTriangle(lua_State * L)
 }
 
 
-extern "C" int loadFont(lua_State * L)
+ETHER_API loadFont(lua_State * L)
 {
 	const char* path = luaL_checkstring(L, 1);
 	int size = luaL_checknumber(L, 2);
@@ -897,7 +495,7 @@ extern "C" int loadFont(lua_State * L)
 }
 
 
-extern "C" int unloadFont(lua_State * L)
+ETHER_API unloadFont(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -914,7 +512,7 @@ extern "C" int unloadFont(lua_State * L)
 }
 
 
-extern "C" int getFontStyle(lua_State * L)
+ETHER_API getFontStyle(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -969,7 +567,7 @@ extern "C" int getFontStyle(lua_State * L)
 }
 
 
-extern "C" int setFontStyle(lua_State * L)
+ETHER_API setFontStyle(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1028,7 +626,7 @@ extern "C" int setFontStyle(lua_State * L)
 }
 
 
-extern "C" int getFontOutlineWidth(lua_State * L)
+ETHER_API getFontOutlineWidth(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1044,7 +642,7 @@ extern "C" int getFontOutlineWidth(lua_State * L)
 }
 
 
-extern "C" int setFontOutlineWidth(lua_State * L)
+ETHER_API setFontOutlineWidth(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1060,7 +658,7 @@ extern "C" int setFontOutlineWidth(lua_State * L)
 }
 
 
-extern "C" int getFontKerning(lua_State * L)
+ETHER_API getFontKerning(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1076,7 +674,7 @@ extern "C" int getFontKerning(lua_State * L)
 }
 
 
-extern "C" int setFontKerning(lua_State * L)
+ETHER_API setFontKerning(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1092,7 +690,7 @@ extern "C" int setFontKerning(lua_State * L)
 }
 
 
-extern "C" int getFontHeight(lua_State * L)
+ETHER_API getFontHeight(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1108,7 +706,7 @@ extern "C" int getFontHeight(lua_State * L)
 }
 
 
-extern "C" int getTextSize(lua_State * L)
+ETHER_API getTextSize(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1127,7 +725,7 @@ extern "C" int getTextSize(lua_State * L)
 }
 
 
-extern "C" int getUTF8TextSize(lua_State * L)
+ETHER_API getUTF8TextSize(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1146,7 +744,7 @@ extern "C" int getUTF8TextSize(lua_State * L)
 }
 
 
-extern "C" int createTextImageSolid(lua_State * L)
+ETHER_API createTextImageSolid(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1155,31 +753,17 @@ extern "C" int createTextImageSolid(lua_State * L)
 	}
 	else
 	{
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			SDL_Color color;
-			lua_getfield(L, 3, "r");
-			lua_isnumber(L, -1) ? color.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "g");
-			lua_isnumber(L, -1) ? color.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "b");
-			lua_isnumber(L, -1) ? color.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "a");
-			lua_isnumber(L, -1) ? color.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
-			SDL_Surface* surface = TTF_RenderText_Solid(font, luaL_checkstring(L, 2), color);
-			surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-		}
+		SDL_Color color = GetColorParam(L, 3, "CreateTextImageSolid");
+
+		SDL_Surface* surface = TTF_RenderText_Solid(font, luaL_checkstring(L, 2), color);
+		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
 	}
 
 	return 1;
 }
 
 
-extern "C" int createUTF8TextImageSolid(lua_State * L)
+ETHER_API createUTF8TextImageSolid(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1188,72 +772,27 @@ extern "C" int createUTF8TextImageSolid(lua_State * L)
 	}
 	else
 	{
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageSolid' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			SDL_Color color;
-			lua_getfield(L, 3, "r");
-			lua_isnumber(L, -1) ? color.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageSolid' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "g");
-			lua_isnumber(L, -1) ? color.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageSolid' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "b");
-			lua_isnumber(L, -1) ? color.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageSolid' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "a");
-			lua_isnumber(L, -1) ? color.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageSolid' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
-			SDL_Surface* surface = TTF_RenderUTF8_Solid(font, luaL_checkstring(L, 2), color);
-			surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-		}
+		SDL_Color color = GetColorParam(L, 3, "CreateUTF8TextImageSolid");
+		
+		SDL_Surface* surface = TTF_RenderUTF8_Solid(font, luaL_checkstring(L, 2), color);
+		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
 	}
 
 	return 1;
 }
 
 
-extern "C" int createTextImageShaded(lua_State * L)
+ETHER_API createTextImageShaded(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
 	{
-		luaL_error(L, "bad argument #1 to 'CreateTextImageSolid' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
+		luaL_error(L, "bad argument #1 to 'CreateTextImageShaded' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
 	}
 	else
 	{
-		SDL_Color fgColor;
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			lua_getfield(L, 3, "r");
-			lua_isnumber(L, -1) ? fgColor.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "g");
-			lua_isnumber(L, -1) ? fgColor.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "b");
-			lua_isnumber(L, -1) ? fgColor.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "a");
-			lua_isnumber(L, -1) ? fgColor.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageSolid' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
-		}
-
-		SDL_Color bgColor;
-		if (!lua_istable(L, 4))
-		{
-			luaL_error(L, "bad argument #4 to 'CreateTextImageSolid' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			lua_getfield(L, 4, "r");
-			lua_isnumber(L, -1) ? bgColor.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #4 to 'CreateTextImageSolid' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 4, "g");
-			lua_isnumber(L, -1) ? bgColor.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #4 to 'CreateTextImageSolid' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 4, "b");
-			lua_isnumber(L, -1) ? bgColor.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #4 to 'CreateTextImageSolid' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 4, "a");
-			lua_isnumber(L, -1) ? bgColor.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #4 to 'CreateTextImageSolid' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
-		}
+		SDL_Color fgColor = GetColorParam(L, 3, "CreateTextImageShaded");
+		SDL_Color bgColor = GetColorParam(L, 4, "CreateTextImageShaded");
 
 		SDL_Surface* surface = TTF_RenderText_Shaded(font, luaL_checkstring(L, 2), fgColor, bgColor);
 		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
@@ -1263,7 +802,7 @@ extern "C" int createTextImageShaded(lua_State * L)
 }
 
 
-extern "C" int createUTF8TextImageShaded(lua_State * L)
+ETHER_API createUTF8TextImageShaded(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1272,39 +811,8 @@ extern "C" int createUTF8TextImageShaded(lua_State * L)
 	}
 	else
 	{
-		SDL_Color fgColor;
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageShaded' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			lua_getfield(L, 3, "r");
-			lua_isnumber(L, -1) ? fgColor.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageShaded' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "g");
-			lua_isnumber(L, -1) ? fgColor.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageShaded' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "b");
-			lua_isnumber(L, -1) ? fgColor.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageShaded' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "a");
-			lua_isnumber(L, -1) ? fgColor.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageShaded' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
-		}
-
-		SDL_Color bgColor;
-		if (!lua_istable(L, 4))
-		{
-			luaL_error(L, "bad argument #4 to 'CreateUTF8TextImageShaded' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			lua_getfield(L, 4, "r");
-			lua_isnumber(L, -1) ? bgColor.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #4 to 'CreateUTF8TextImageShaded' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 4, "g");
-			lua_isnumber(L, -1) ? bgColor.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #4 to 'CreateUTF8TextImageShaded' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 4, "b");
-			lua_isnumber(L, -1) ? bgColor.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #4 to 'CreateUTF8TextImageShaded' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 4, "a");
-			lua_isnumber(L, -1) ? bgColor.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #4 to 'CreateUTF8TextImageShaded' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
-		}
+		SDL_Color fgColor = GetColorParam(L, 3, "CreateUTF8TextImageShaded");
+		SDL_Color bgColor = GetColorParam(L, 4, "CreateUTF8TextImageShaded");
 
 		SDL_Surface* surface = TTF_RenderUTF8_Shaded(font, luaL_checkstring(L, 2), fgColor, bgColor);
 		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
@@ -1314,7 +822,7 @@ extern "C" int createUTF8TextImageShaded(lua_State * L)
 }
 
 
-extern "C" int createTextImageBlended(lua_State * L)
+ETHER_API createTextImageBlended(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1323,31 +831,17 @@ extern "C" int createTextImageBlended(lua_State * L)
 	}
 	else
 	{
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'CreateTextImageBlended' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			SDL_Color color;
-			lua_getfield(L, 3, "r");
-			lua_isnumber(L, -1) ? color.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageBlended' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "g");
-			lua_isnumber(L, -1) ? color.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageBlended' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "b");
-			lua_isnumber(L, -1) ? color.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageBlended' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "a");
-			lua_isnumber(L, -1) ? color.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateTextImageBlended' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
-			SDL_Surface* surface = TTF_RenderText_Blended(font, luaL_checkstring(L, 2), color);
-			surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-		}
+		SDL_Color color = GetColorParam(L, 3, "CreateTextImageBlended");
+
+		SDL_Surface* surface = TTF_RenderText_Blended(font, luaL_checkstring(L, 2), color);
+		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
 	}
 
 	return 1;
 }
 
 
-extern "C" int createUTF8TextImageBlended(lua_State * L)
+ETHER_API createUTF8TextImageBlended(lua_State * L)
 {
 	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
 	if (!font)
@@ -1356,31 +850,17 @@ extern "C" int createUTF8TextImageBlended(lua_State * L)
 	}
 	else
 	{
-		if (!lua_istable(L, 3))
-		{
-			luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageBlended' (table expected, got %s)", luaL_typename(L, 2));
-		}
-		else
-		{
-			SDL_Color color;
-			lua_getfield(L, 3, "r");
-			lua_isnumber(L, -1) ? color.r = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageBlended' (table must have number value for key 'r', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "g");
-			lua_isnumber(L, -1) ? color.g = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageBlended' (table must have number value for key 'g', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "b");
-			lua_isnumber(L, -1) ? color.b = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageBlended' (table must have number value for key 'b', got %s)", luaL_typename(L, -1));
-			lua_getfield(L, 3, "a");
-			lua_isnumber(L, -1) ? color.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #3 to 'CreateUTF8TextImageBlended' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
-			SDL_Surface* surface = TTF_RenderUTF8_Blended(font, luaL_checkstring(L, 2), color);
-			surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-		}
+		SDL_Color color = GetColorParam(L, 3, "CreateUTF8TextImageBlended");
+
+		SDL_Surface* surface = TTF_RenderUTF8_Blended(font, luaL_checkstring(L, 2), color);
+		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
 	}
 
 	return 1;
 }
 
 
-extern "C" int updateWindow(lua_State * L)
+ETHER_API updateWindow(lua_State * L)
 {
 	SDL_RenderPresent(renderer);
 

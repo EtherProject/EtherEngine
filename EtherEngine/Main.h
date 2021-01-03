@@ -1,13 +1,8 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-#define _ETHER_DEBUG_	// define _ETHER_DEUBG_ to complie with Deubg Version
-
-#include <lua.hpp>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include <SDL_ttf.h>
+// 定义 _ETHER_DEUBG_ 来开启Debug模式
+#define _ETHER_DEBUG_
 
 #include "Macros.h"
 #include "Window.h"
@@ -16,9 +11,13 @@
 #include "Interactivity.h"
 #include "Time.h"
 #include "Others.h"
+#include "Algorithm.h"
 
-#include <string>
-using namespace std;
+#include <lua.hpp>
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_mixer.h>
+#include <SDL_ttf.h>
 
 #ifndef _ETHER_DEBUG_
 
@@ -26,9 +25,11 @@ using namespace std;
 
 #pragma comment( linker, "/subsystem:windows /entry:mainCRTStartup" )
 
-#endif // __WINDOWS__
+// __WINDOWS__
+#endif
 
-#endif // _ETHER_DEBUG_
+// _ETHER_DEBUG_
+#endif
 
 struct Macro
 {
@@ -46,6 +47,8 @@ void _HandleInit();
 void _RegisteEtherLib(lua_State* l);
 
 static Macro macros[] = {
+	{ "WINDOW_POSITION_DEFAULT", WINDOW_POSITION_DEFAULT },
+
 	{ "MSGBOX_ERROR", MSGBOX_ERROR },
 	{ "MSGBOX_WARNING", MSGBOX_WARNING },
 	{ "MSGBOX_INFO", MSGBOX_INFO },
@@ -377,6 +380,7 @@ static luaL_Reg cMethods[] = {
 	{ "GetClipboardText", getClipboardText },
 	{ "GetPlatform", getPlatform },
 	{ "GetSystemRAM", getSystemRAM },
+
 	{ "ShowMessageBox", showMessageBox},
 	{ "CreateWindow", createWindow },
 	{ "CloseWindow", closeWindow },
@@ -394,9 +398,8 @@ static luaL_Reg cMethods[] = {
 	{ "SetWindowPosition", setWindowPosition },
 	{ "GetWindowPosition", getWindowPosition },
 	{ "ClearWindow", clearWindow },
+
 	{ "SetCursorShow", setCursorShow },
-	{ "GetCursorPosition", getCursorPosition },
-	{ "GetScrollValue", getScrollValue },
 	{ "LoadImage", loadImage },
 	{ "SetImageColorKey", setImageColorKey },
 	{ "UnloadImage", unloadImage },
@@ -426,6 +429,7 @@ static luaL_Reg cMethods[] = {
 	{ "Triangle", triangle },
 	{ "FillTriangle", fillTriangle },
 	{ "UpdateWindow", updateWindow },
+
 	{ "LoadMusic", loadMusic },
 	{ "UnloadMusic", unloadMusic },
 	{ "PlayMusic", playMusic },
@@ -440,6 +444,7 @@ static luaL_Reg cMethods[] = {
 	{ "LoadSound", loadSound },
 	{ "UnloadSound", unloadSound },
 	{ "PlaySound", playSound },
+
 	{ "LoadFont", loadFont },
 	{ "UnloadFont", unloadFont },
 	{ "GetFontStyle", getFontStyle },
@@ -457,13 +462,32 @@ static luaL_Reg cMethods[] = {
 	{ "CreateUTF8TextImageShaded", createUTF8TextImageShaded },
 	{ "CreateTextImageBlended", createTextImageBlended },
 	{ "CreateUTF8TextImageBlended", createUTF8TextImageBlended },
+
+	{ "GetCursorPosition", getCursorPosition },
+	{ "GetScrollValue", getScrollValue },
 	{ "UpdateEvent", updateEvent },
 	{ "GetEventType", getEventType },
+
 	{ "Pause", pause },
 	{ "Sleep", sleep },
+	{ "DynamicSleep", dynamicSleep },
 	{ "GetInitTime", getInitTime },
 	{ "GetAccurateCount", getAccurateCount },
 	{ "GetCounterFrequency", getCounterFrequency },
+
+	{ "Clamp", clamp },
+	{ "IfPointInRect", ifPointInRect },
+	{ "IfPointInRectStrict", ifPointInRectStrict },
+	{ "IfPointInCircle", ifPointInCircle },
+	{ "IfPointInCircleStrict", ifPointInCircleStrict },
+	{ "IfRectsOverlap", ifRectsOverlap },
+	{ "IfRectsOverlapStrict", ifRectsOverlapStrict },
+	{ "IfCirclesOverlap", ifCirclesOverlap },
+	{ "IfCirclesOverlapStrict", ifCirclesOverlapStrict },
+	{ "GetPointsDistance", getPointsDistance },
+	{ "GetLinesDistance", getLinesDistance },
+	{ "GetPointLineDistance", getPointLineDistance },
+	{ "RGBAToHSLA", rgbaToHSLA },
 };
 
 #endif // !_MAIN_H_

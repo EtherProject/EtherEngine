@@ -1,6 +1,5 @@
 #include "Main.h"
 
-
 int main(int argc, char** argv)
 {
 	_HandleInit();
@@ -12,8 +11,7 @@ int main(int argc, char** argv)
 
 	_RegisteEtherLib(l);
 
-	string _mainFilePath = (string(argv[0]).find('\\') != -1 ? string(argv[0]).substr(0, string(argv[0]).find_last_of('\\')) + "\\" : "") + "main.lua";
-	if (luaL_dofile(l, _mainFilePath.c_str()))
+	if (luaL_dofile(l, "Main.lua"))
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(l, -1), NULL);
 	}
@@ -36,6 +34,7 @@ void _PushArgs(lua_State* l, int argc, char** argv)
 		lua_pushstring(l, argv[i - 1]);
 		lua_settable(l, -3);
 	}
+
 	lua_setglobal(l, "_argv");
 }
 
@@ -47,6 +46,8 @@ void _HandleInit()
 	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF);
 	Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 }
 
 

@@ -1,15 +1,19 @@
 #include "Interactivity.h"
 
-
-extern "C" int getCursorPosition(lua_State * L)
+ETHER_API getCursorPosition(lua_State * L)
 {
+	lua_newtable(L);
+	lua_pushstring(L, "x");
 	lua_pushnumber(L, event.motion.x);
+	lua_settable(L, -3);
+	lua_pushstring(L, "y");
 	lua_pushnumber(L, event.motion.y);
-	return 2;
+	lua_settable(L, -3);
+	return 1;
 }
 
 
-extern "C" int getScrollValue(lua_State * L)
+ETHER_API getScrollValue(lua_State * L)
 {
 	lua_pushnumber(L, event.wheel.x);
 	lua_pushnumber(L, event.wheel.y);
@@ -17,7 +21,7 @@ extern "C" int getScrollValue(lua_State * L)
 }
 
 
-extern "C" int updateEvent(lua_State * L)
+ETHER_API updateEvent(lua_State * L)
 {
 	if (SDL_PollEvent(&event))
 	{
@@ -31,7 +35,7 @@ extern "C" int updateEvent(lua_State * L)
 }
 
 
-extern "C" int getEventType(lua_State * L)
+ETHER_API getEventType(lua_State * L)
 {
 	switch (event.type)
 	{

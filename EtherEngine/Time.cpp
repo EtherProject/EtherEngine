@@ -1,7 +1,7 @@
 #include "Time.h"
 
 
-extern "C" int pause(lua_State * L)
+ETHER_API pause(lua_State * L)
 {
 	system("pause");
 
@@ -9,16 +9,28 @@ extern "C" int pause(lua_State * L)
 }
 
 
-extern "C" int sleep(lua_State * L)
+ETHER_API sleep(lua_State * L)
 {
-	int delay = luaL_checknumber(L, 1);
-	SDL_Delay(delay);
+	SDL_Delay(luaL_checknumber(L, 1));
 
 	return 0;
 }
 
 
-extern "C" int getInitTime(lua_State * L)
+ETHER_API dynamicSleep(lua_State* L)
+{
+	int expected_delay = luaL_checknumber(L, 1);
+	int duration = luaL_checknumber(L, 2);
+	if (duration < expected_delay)
+	{
+		SDL_Delay(expected_delay - duration);
+	}
+
+	return 0;
+}
+
+
+ETHER_API getInitTime(lua_State * L)
 {
 	lua_pushnumber(L, SDL_GetTicks());
 
@@ -26,7 +38,7 @@ extern "C" int getInitTime(lua_State * L)
 }
 
 
-extern "C" int getAccurateCount(lua_State * L)
+ETHER_API getAccurateCount(lua_State * L)
 {
 	lua_pushnumber(L, SDL_GetPerformanceCounter());
 
@@ -34,7 +46,7 @@ extern "C" int getAccurateCount(lua_State * L)
 }
 
 
-extern "C" int getCounterFrequency(lua_State * L)
+ETHER_API getCounterFrequency(lua_State * L)
 {
 	lua_pushnumber(L, SDL_GetPerformanceFrequency());
 

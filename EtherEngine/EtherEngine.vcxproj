@@ -147,19 +147,23 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="Interactivity.cpp" />
+    <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="Media.cpp" />
     <ClCompile Include="Others.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Macros.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="Interactivity.h" />
+    <ClInclude Include="Algorithm.h" />
     <ClInclude Include="Media.h" />
     <ClInclude Include="Others.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="util.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
