@@ -41,6 +41,7 @@ SDL_Rect GetRectParam(lua_State* L, int index, const char* funName)
 	return rect;
 }
 
+
 SDL_Color GetColorParam(lua_State* L, int index, const char* funName)
 {
 	SDL_Color color;
@@ -61,4 +62,60 @@ SDL_Color GetColorParam(lua_State* L, int index, const char* funName)
 	}
 
 	return color;
+}
+
+
+string GetLinkDomain(string link)
+{
+	if (link.substr(0, 5) == "http:" || link.substr(0, 6) == "https:")
+	{
+		size_t index_begin = link.find_first_of("/") + 2;
+		size_t index_end = link.find_first_of("/", index_begin + 1);
+		return link.substr(index_begin, index_end - index_begin);
+	}
+	else
+	{
+		size_t index_end = link.find_first_of("/");
+		if (index_end == string::npos)
+			return link;
+		return link.substr(0, index_end);
+	}
+}
+
+
+string GetLinkRoute(string link)
+{
+	string domain = GetLinkDomain(link);
+	size_t index_domain_end = link.find(domain) + domain.size();
+	if (index_domain_end == link.size())
+		return "/";
+	else
+		return link.substr(index_domain_end);
+}
+
+void PushResponseTable(lua_State* L, shared_ptr<Response> response)
+{
+	if (!response)
+		lua_pushnil(L);
+	else
+	{
+		lua_newtable(L);
+		lua_pushstring(L, "status");
+		lua_pushnumber(L, response->status);
+		lua_settable(L, -3);
+
+		lua_pushstring(L, "body");
+		lua_pushstring(L, response->body.c_str());
+		lua_settable(L, -3);
+
+		lua_pushstring(L, "headers");
+		lua_newtable(L);
+		for (auto kv : response->headers)
+		{
+			lua_pushstring(L, kv.first.c_str());
+			lua_pushstring(L, kv.second.c_str());
+			lua_settable(L, -3);
+		}
+		lua_settable(L, -3);
+	}
 }

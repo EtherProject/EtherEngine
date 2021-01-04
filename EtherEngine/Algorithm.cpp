@@ -161,7 +161,7 @@ ETHER_API getPointLineDistance(lua_State* L)
 
 ETHER_API rgbaToHSLA(lua_State* L)
 {
-	SDL_Color color = GetColorParam(L, 1, "RGBAToHSLA");
+	/*SDL_Color color = GetColorParam(L, 1, "RGBAToHSLA");
 	
 	double r = color.r / 255;
 	double g = color.g / 255;
@@ -202,7 +202,17 @@ ETHER_API rgbaToHSLA(lua_State* L)
 	lua_settable(L, -3);
 	lua_pushstring(L, "a");
 	lua_pushnumber(L, color.a);
-	lua_settable(L, -3);
+	lua_settable(L, -3);*/
+
+	// 待施工 ...
+
+	return 1;
+}
+
+
+ETHER_API hslaToRGBA(lua_State* L)
+{
+	// 待施工 ...
 
 	return 1;
 }

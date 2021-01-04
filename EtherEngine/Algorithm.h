@@ -69,10 +69,15 @@ ETHER_API getLinesDistance(lua_State* L);
 // 1返回值：点到直线的距离（number）
 ETHER_API getPointLineDistance(lua_State* L);
 
-//
-//
-//
+// RGBA颜色空间转HSLA颜色空间
+// 1参数：使用RGBA描述的颜色（table）
+// 1返回值：使用HSLA描述的颜色（table）
 ETHER_API rgbaToHSLA(lua_State* L);
+
+// HSLA颜色空间转RGBA颜色空间
+// 1参数：使用HSLA描述的颜色（table）
+// 1返回值：使用RGBA描述的颜色（table）
+ETHER_API hslaToRGBA(lua_State* L);
 
 #endif // !_ALGORITHM_H_
 

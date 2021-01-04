@@ -27,9 +27,6 @@
     <ClCompile Include="Media.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Others.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Time.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -40,6 +37,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Algorithm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Network.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="OS.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,9 +62,6 @@
     <ClInclude Include="Media.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Others.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -75,6 +75,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Algorithm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Network.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="OS.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

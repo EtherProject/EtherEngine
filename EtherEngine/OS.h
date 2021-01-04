@@ -1,5 +1,5 @@
-#ifndef _OTHERS_H_
-#define _OTHERS_H_
+#ifndef _OS_H_
+#define _OS_H_
 
 #include "Macros.h"
 
@@ -31,4 +31,4 @@ ETHER_API getPlatform(lua_State * L);
 // 1返回值：系统内存（number，单位MB）
 ETHER_API getSystemRAM(lua_State * L);
 
-#endif // !_OTHERS_H_
+#endif // !_OS_H_

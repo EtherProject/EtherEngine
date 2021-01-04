@@ -10,8 +10,9 @@
 #include "Media.h"
 #include "Interactivity.h"
 #include "Time.h"
-#include "Others.h"
+#include "OS.h"
 #include "Algorithm.h"
+#include "Network.h"
 
 #include <lua.hpp>
 #include <SDL.h>
@@ -488,6 +489,11 @@ static luaL_Reg cMethods[] = {
 	{ "GetLinesDistance", getLinesDistance },
 	{ "GetPointLineDistance", getPointLineDistance },
 	{ "RGBAToHSLA", rgbaToHSLA },
+	{ "HSLAToRGBA", hslaToRGBA },
+
+	{ "GetLinkDomain", getLinkDomain },
+	{ "GetLinkRoute", getLinkRoute },
+	{ "RequestGet", requestGet },
 };
 
 #endif // !_MAIN_H_
