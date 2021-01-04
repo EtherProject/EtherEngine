@@ -1,11 +1,5 @@
-# EtherEngine
-
-[![](https://img.shields.io/github/stars/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/stargazers)  [![](https://img.shields.io/github/forks/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/network/members)  [![](https://img.shields.io/github/issues/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/issues)  ![](https://img.shields.io/github/license/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&label=license&message=notspecified&labelColor=3f48cc)
-
-
-
 ## EtherEngine介绍
-
+[![](https://img.shields.io/github/stars/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/stargazers)  [![](https://img.shields.io/github/forks/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/network/members)  [![](https://img.shields.io/github/issues/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/issues)  ![](https://img.shields.io/github/license/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&label=license&message=notspecified&labelColor=3f48cc)
 > ~~更简单~~更专业的游戏引擎
 
 ## EtherEngine文档
