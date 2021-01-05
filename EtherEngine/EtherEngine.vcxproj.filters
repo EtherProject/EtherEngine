@@ -45,6 +45,9 @@
     <ClCompile Include="OS.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Moudle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -81,6 +84,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="OS.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Moudle.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

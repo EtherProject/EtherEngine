@@ -1,6 +1,7 @@
 #ifndef _NETWORK_H_
 #define _NETWORK_H_
 
+#include "Moudle.h"
 #include "Macros.h"
 #include "util.h"
 
@@ -22,6 +23,15 @@ ETHER_API getLinkRoute(lua_State* L);
 // 1参数：链接（string）
 // 1返回值：成功则返回Response表（table，成员：状态码status（number），响应头headers（table），正文body（string）），失败则返回nil
 ETHER_API requestGet(lua_State* L);
+
+
+class MoudleNetwork : public Moudle
+{
+public:
+	MoudleNetwork(lua_State* L);
+	~MoudleNetwork() {};
+
+};
 
 #endif // !_NETWORK_H_
 

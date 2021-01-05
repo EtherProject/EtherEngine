@@ -860,9 +860,71 @@ ETHER_API createUTF8TextImageBlended(lua_State * L)
 }
 
 
-ETHER_API updateWindow(lua_State * L)
+MoudleGraphic::MoudleGraphic(lua_State* L)
 {
-	SDL_RenderPresent(renderer);
+	_pL = L;
 
-	return 0;
+	TTF_Init();
+	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF);
+
+	_vCMethods = {
+		{ "SetCursorShow", setCursorShow },
+		{ "LoadImage", loadImage },
+		{ "SetImageColorKey", setImageColorKey },
+		{ "UnloadImage", unloadImage },
+		{ "CreateTexture", createTexture },
+		{ "DestroyTexture", destroyTexture },
+		{ "SetTextureAlpha", setTextureAlpha },
+		{ "GetImageSize", getImageSize },
+		{ "CopyTexture", copyTexture },
+		{ "CopyRotateTexture", copyRotateTexture },
+		{ "CopyReshapeTexture", copyReshapeTexture },
+		{ "CopyRotateReshapeTexture", copyRotateReshapeTexture },
+		{ "SetDrawColor", setDrawColor },
+		{ "GetDrawColor", getDrawColor },
+		{ "Point", point },
+		{ "Line", line },
+		{ "ThickLine", thickLine },
+		{ "Rectangle", rectangle },
+		{ "FillRectangle", fillRectangle },
+		{ "RoundRectangle", roundRectangle },
+		{ "FillRoundRectangle", fillRoundRectangle },
+		{ "Circle", circle },
+		{ "FillCircle", fillCircle },
+		{ "Ellipse", ellipse },
+		{ "FillEllipse", fillEllipse },
+		{ "Pie", pie },
+		{ "FillPie", fillPie },
+		{ "Triangle", triangle },
+		{ "FillTriangle", fillTriangle },
+		{ "LoadFont", loadFont },
+		{ "UnloadFont", unloadFont },
+		{ "GetFontStyle", getFontStyle },
+		{ "SetFontStyle", setFontStyle },
+		{ "GetFontOutlineWidth", getFontOutlineWidth },
+		{ "SetFontOutlineWidth", setFontOutlineWidth },
+		{ "GetFontKerning", getFontKerning },
+		{ "SetFontKerning", setFontKerning },
+		{ "GetFontHeight", getFontHeight },
+		{ "GetTextSize", getTextSize },
+		{ "GetUTF8TextSize", getUTF8TextSize },
+		{ "CreateTextImageSolid", createTextImageSolid },
+		{ "CreateUTF8TextImageSolid", createUTF8TextImageSolid },
+		{ "CreateTextImageShaded", createTextImageShaded },
+		{ "CreateUTF8TextImageShaded", createUTF8TextImageShaded },
+		{ "CreateTextImageBlended", createTextImageBlended },
+		{ "CreateUTF8TextImageBlended", createUTF8TextImageBlended },
+	};
+
+	_vMacros = {
+		{ "FLIP_HORIZONTAL", FLIP_HORIZONTAL },
+		{ "FLIP_VERTICAL", FLIP_VERTICAL },
+		{ "FLIP_NONE", FLIP_NONE },
+
+		{ "FONT_STYLE_BOLD", FONT_STYLE_BOLD },
+		{ "FONT_STYLE_ITALIC", FONT_STYLE_ITALIC },
+		{ "FONT_STYLE_UNDERLINE", FONT_STYLE_UNDERLINE },
+		{ "FONT_STYLE_STRIKETHROUGH", FONT_STYLE_STRIKETHROUGH },
+		{ "FONT_STYLE_NORMAL", FONT_STYLE_NORMAL },
+	};
 }

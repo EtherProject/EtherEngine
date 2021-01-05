@@ -1,6 +1,7 @@
 #ifndef _WINDOW_H_
 #define _WINDOW_H_
 
+#include "Moudle.h"
 #include "Macros.h"
 #include "util.h"
 
@@ -94,5 +95,19 @@ ETHER_API getWindowPosition(lua_State * L);
 // 0参数
 // 0返回值
 ETHER_API clearWindow(lua_State * L);
+
+// 将渲染缓冲区的内容刷新到屏幕上
+// 0参数
+// 0返回值
+ETHER_API updateWindow(lua_State* L);
+
+
+class MoudleWindow : public Moudle
+{
+public:
+	MoudleWindow(lua_State* L);
+	~MoudleWindow() {};
+
+};
 
 #endif // !_WINDOW_H_

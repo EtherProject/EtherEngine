@@ -88,6 +88,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\libs\Cpp-httplib;..\libs\Lua5.4\include;..\libs\SDL2\include;..\libs\Lua5.4\include;..\libs\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,6 +118,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\libs\Cpp-httplib;..\libs\Lua5.4\include;..\libs\SDL2\include;</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,6 +151,7 @@
     <ClCompile Include="Interactivity.cpp" />
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="Media.cpp" />
+    <ClCompile Include="Moudle.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="OS.cpp" />
     <ClCompile Include="Time.cpp" />
@@ -162,6 +165,7 @@
     <ClInclude Include="Interactivity.h" />
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="Media.h" />
+    <ClInclude Include="Moudle.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="OS.h" />
     <ClInclude Include="Time.h" />

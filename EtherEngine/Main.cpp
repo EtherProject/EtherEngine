@@ -2,18 +2,18 @@
 
 int main(int argc, char** argv)
 {
-	_HandleInit();
+	SDL_Init(SDL_INIT_EVERYTHING);
+	
+	luaL_openlibs(L);
 
-	lua_State* l = luaL_newstate();
-	luaL_openlibs(l);
+	_PushArgs(L, argc, argv);
 
-	_PushArgs(l, argc, argv);
+	lua_pushcfunction(L, usingMoudle);
+	lua_setglobal(L, "UsingMoudle");
 
-	_RegisteEtherLib(l);
-
-	if (luaL_dofile(l, "Main.lua"))
+	if (luaL_dofile(L, "Main.lua"))
 	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(l, -1), NULL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(L, -1), NULL);
 	}
 
 	_HandleQuit();
@@ -39,18 +39,6 @@ void _PushArgs(lua_State* l, int argc, char** argv)
 }
 
 
-void _HandleInit()
-{
-	SDL_Init(SDL_INIT_EVERYTHING);
-	TTF_Init();
-	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF);
-	Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
-	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-}
-
-
 void _HandleQuit()
 {
 	IMG_Quit();
@@ -65,21 +53,5 @@ void _HandleQuit()
 	{
 		SDL_DestroyWindow(window);
 		window = NULL;
-	}
-}
-
-
-void _RegisteEtherLib(lua_State* l)
-{
-	for (luaL_Reg method : cMethods)
-	{
-		lua_pushcfunction(l, method.func);
-		lua_setglobal(l, method.name);
-	}
-
-	for (Macro macro : macros)
-	{
-		lua_pushnumber(l, macro.value);
-		lua_setglobal(l, macro.name);
 	}
 }

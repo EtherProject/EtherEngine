@@ -329,4 +329,10 @@
 #define MUSIC_TYPE_MID 1313
 #define MUSIC_TYPE_UNKONWN 1314
 
+struct Macro
+{
+	const char* name;
+	int value;
+};
+
 #endif // !_MACROS_H_

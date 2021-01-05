@@ -1,6 +1,7 @@
 #ifndef _GRAPHIC_H_
 #define _GRAPHIC_H_
 
+#include "Moudle.h"
 #include "Macros.h"
 #include "util.h"
 
@@ -242,10 +243,13 @@ ETHER_API createTextImageBlended(lua_State * L);
 // 1返回值：成功则返回图像数据（userdata-IMAGE），失败则返回nil
 ETHER_API createUTF8TextImageBlended(lua_State * L);
 
-// 将渲染缓冲区的内容刷新到屏幕上
-// 0参数
-// 0返回值
-ETHER_API updateWindow(lua_State * L);
 
+class MoudleGraphic : public Moudle
+{
+public:
+	MoudleGraphic(lua_State* L);
+	~MoudleGraphic() {};
+
+};
 
 #endif // !_GRAPHIC_H_

@@ -40,3 +40,19 @@ ETHER_API getSystemRAM(lua_State * L)
 
 	return 1;
 }
+
+
+MoudleOS::MoudleOS(lua_State* L)
+{
+	_pL = L;
+
+	_vCMethods = {
+		{ "GetBasePath", getBasePath },
+		{ "SetClipboardText", setClipboardText },
+		{ "GetClipboardText", getClipboardText },
+		{ "GetPlatform", getPlatform },
+		{ "GetSystemRAM", getSystemRAM },
+	};
+
+	_vMacros = {};
+}

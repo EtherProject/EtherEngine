@@ -1,6 +1,7 @@
 #ifndef _ALGORITHM_H_
 #define _ALGORITHM_H_
 
+#include "Moudle.h"
 #include "Macros.h"
 #include "util.h"
 
@@ -78,6 +79,15 @@ ETHER_API rgbaToHSLA(lua_State* L);
 // 1参数：使用HSLA描述的颜色（table）
 // 1返回值：使用RGBA描述的颜色（table）
 ETHER_API hslaToRGBA(lua_State* L);
+
+
+class MoudleAlgorithm : public Moudle
+{
+public:
+	MoudleAlgorithm(lua_State* L);
+	~MoudleAlgorithm() {};
+
+};
 
 #endif // !_ALGORITHM_H_
 

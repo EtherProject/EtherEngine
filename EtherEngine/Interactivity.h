@@ -1,6 +1,7 @@
 #ifndef _INTERACTIVITY_H_
 #define _INTERACTIVITY_H_
 
+#include "Moudle.h"
 #include "Macros.h"
 
 #include <lua.hpp>
@@ -27,5 +28,14 @@ ETHER_API updateEvent(lua_State * L);
 // 0参数
 // 1返回值：事件类型（MACRO number）
 ETHER_API getEventType(lua_State * L);
+
+
+class MoudleInteractivity : public Moudle
+{
+public:
+	MoudleInteractivity(lua_State* L);
+	~MoudleInteractivity() {};
+
+};
 
 #endif // !_INTERACTIVITY_H_

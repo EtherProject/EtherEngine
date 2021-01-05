@@ -181,3 +181,39 @@ ETHER_API playSound(lua_State * L)
 
 	return 0;
 }
+
+
+MoudleMedia::MoudleMedia(lua_State* L)
+{
+	_pL = L;
+
+	Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	_vCMethods = {
+		{ "LoadMusic", loadMusic },
+		{ "UnloadMusic", unloadMusic },
+		{ "PlayMusic", playMusic },
+		{ "FadeInMusic", fadeInMusic },
+		{ "FadeOutMusic", fadeOutMusic },
+		{ "SetMusicVolume", setMusicVolume },
+		{ "GetMusicVolume", getMusicVolume },
+		{ "PauseMusic", pauseMusic },
+		{ "ResumeMusic", resumeMusic },
+		{ "RewindMusic", rewindMusic },
+		{ "GetMusicType", getMusicType },
+		{ "LoadSound", loadSound },
+		{ "UnloadSound", unloadSound },
+		{ "PlaySound", playSound },
+	};
+
+	_vMacros = {
+		{ "MUSIC_TYPE_WAV", MUSIC_TYPE_WAV },
+		{ "MUSIC_TYPE_MP3", MUSIC_TYPE_MP3 },
+		{ "MUSIC_TYPE_OGG", MUSIC_TYPE_OGG },
+		{ "MUSIC_TYPE_CMD", MUSIC_TYPE_CMD },
+		{ "MUSIC_TYPE_MOD", MUSIC_TYPE_MOD },
+		{ "MUSIC_TYPE_MID", MUSIC_TYPE_MID },
+		{ "MUSIC_TYPE_UNKONWN", MUSIC_TYPE_UNKONWN },
+	};
+}

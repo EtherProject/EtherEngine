@@ -1,6 +1,7 @@
 #ifndef _TIME_H_
 #define _TIME_H_
 
+#include "Moudle.h"
 #include "Macros.h"
 
 #include <lua.hpp>
@@ -35,5 +36,14 @@ ETHER_API getAccurateCount(lua_State * L);
 // 0参数
 // 1返回值：计数器频率（number，单位：赫兹）
 ETHER_API getCounterFrequency(lua_State * L);
+
+
+class MoudleTime : public Moudle
+{
+public:
+	MoudleTime(lua_State* L);
+	~MoudleTime() {};
+
+};
 
 #endif // !_TIME_H_

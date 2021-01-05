@@ -216,3 +216,28 @@ ETHER_API hslaToRGBA(lua_State* L)
 
 	return 1;
 }
+
+
+MoudleAlgorithm::MoudleAlgorithm(lua_State* L)
+{
+	_pL = L;
+
+	_vCMethods = {
+		{ "Clamp", clamp },
+		{ "IfPointInRect", ifPointInRect },
+		{ "IfPointInRectStrict", ifPointInRectStrict },
+		{ "IfPointInCircle", ifPointInCircle },
+		{ "IfPointInCircleStrict", ifPointInCircleStrict },
+		{ "IfRectsOverlap", ifRectsOverlap },
+		{ "IfRectsOverlapStrict", ifRectsOverlapStrict },
+		{ "IfCirclesOverlap", ifCirclesOverlap },
+		{ "IfCirclesOverlapStrict", ifCirclesOverlapStrict },
+		{ "GetPointsDistance", getPointsDistance },
+		{ "GetLinesDistance", getLinesDistance },
+		{ "GetPointLineDistance", getPointLineDistance },
+		{ "RGBAToHSLA", rgbaToHSLA },
+		{ "HSLAToRGBA", hslaToRGBA },
+	};
+
+	_vMacros = {};
+}

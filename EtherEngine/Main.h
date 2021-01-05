@@ -1,7 +1,7 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-// 定义 _ETHER_DEUBG_ 来开启Debug模式
+// 定义 _ETHER_DEUBG_ 以开启Debug模式
 #define _ETHER_DEBUG_
 
 #include "Macros.h"
@@ -32,11 +32,15 @@
 // _ETHER_DEBUG_
 #endif
 
-struct Macro
-{
-	const char* name;
-	int value;
-};
+#define MOUDLENAME_ALL "All"
+#define MOUDLENAME_ALGORITHM "Algorithm"
+#define MOUDLENAME_GRAPHIC "Graphic"
+#define MOUDLENAME_INTERACTIVITY "Interactivity"
+#define MOUDLENAME_MEDIA "Media"
+#define MOUDLENAME_NETWORK "Network"
+#define MOUDLENAME_OS "OS"
+#define MOUDLENAME_TIME "Time"
+#define MOUDLENAME_WINDOW "Window"
 
 SDL_Event event;
 SDL_Window* window = NULL;
@@ -44,456 +48,132 @@ SDL_Renderer* renderer = NULL;
 
 void _PushArgs(lua_State* l, int argc, char** argv);
 void _HandleQuit();
-void _HandleInit();
-void _RegisteEtherLib(lua_State* l);
 
-static Macro macros[] = {
-	{ "WINDOW_POSITION_DEFAULT", WINDOW_POSITION_DEFAULT },
+lua_State* L = luaL_newstate();
 
-	{ "MSGBOX_ERROR", MSGBOX_ERROR },
-	{ "MSGBOX_WARNING", MSGBOX_WARNING },
-	{ "MSGBOX_INFO", MSGBOX_INFO },
+MoudleWindow* moudleWindow;
+MoudleGraphic* moudleGraphic;
+MoudleAlgorithm* moudleAlgorithm;
+MoudleInteractivity* moudleInteractivity;
+MoudleMedia* moudleMedia;
+MoudleNetwork* moudleNetwork;
+MoudleOS* moudleOS;
+MoudleTime* moudleTime;
 
-	{ "WINDOW_FULLSCREEN", WINDOW_FULLSCREEN },
-	{ "WINDOW_FULLSCREEN_DESKTOP", WINDOW_FULLSCREEN_DESKTOP },
-	{ "WINDOW_BORDERLESS", WINDOW_BORDERLESS },
-	{ "WINDOW_RESIZABLE", WINDOW_RESIZABLE },
-	{ "WINDOW_MAXIMIZED", WINDOW_MAXIMIZED },
-	{ "WINDOW_MINIMIZED", WINDOW_MINIMIZED },
+ETHER_API usingMoudle(lua_State* L)
+{
+	string moudleName = luaL_checkstring(L, 1);
+	if (moudleName == MOUDLENAME_ALL)
+	{
+		if (!moudleWindow)
+		{
+			moudleWindow = new MoudleWindow(L);
+			moudleWindow->OpenMoudle();
+		}
+		if (!moudleGraphic)
+		{
+			moudleGraphic = new MoudleGraphic(L);
+			moudleGraphic->OpenMoudle();
+		}
+		if (!moudleAlgorithm)
+		{
+			moudleAlgorithm = new MoudleAlgorithm(L);
+			moudleAlgorithm->OpenMoudle();
+		}
+		if (!moudleInteractivity)
+		{
+			moudleInteractivity = new MoudleInteractivity(L);
+			moudleInteractivity->OpenMoudle();
+		}
+		if (!moudleMedia)
+		{
+			moudleMedia = new MoudleMedia(L);
+			moudleMedia->OpenMoudle();
+		}
+		if (!moudleNetwork)
+		{
+			moudleNetwork = new MoudleNetwork(L);
+			moudleNetwork->OpenMoudle();
+		}
+		if (!moudleOS)
+		{
+			moudleOS = new MoudleOS(L);
+			moudleOS->OpenMoudle();
+		}
+		if (!moudleTime)
+		{
+			moudleTime = new MoudleTime(L);
+			moudleTime->OpenMoudle();
+		}
+	}
+	else if (moudleName == MOUDLENAME_WINDOW)
+	{
+		if (!moudleWindow)
+		{
+			moudleWindow = new MoudleWindow(L);
+			moudleWindow->OpenMoudle();
+		}
+	}
+	else if (moudleName == MOUDLENAME_GRAPHIC)
+	{
+		if (!moudleGraphic)
+		{
+			moudleGraphic = new MoudleGraphic(L);
+			moudleGraphic->OpenMoudle();
+		}
+	}
+	else if (moudleName == MOUDLENAME_ALGORITHM)
+	{
+		if (!moudleAlgorithm)
+		{
+			moudleAlgorithm = new MoudleAlgorithm(L);
+			moudleAlgorithm->OpenMoudle();
+		}
+	}
+	else if (moudleName == MOUDLENAME_INTERACTIVITY)
+	{
+		if (!moudleInteractivity)
+		{
+			moudleInteractivity = new MoudleInteractivity(L);
+			moudleInteractivity->OpenMoudle();
+		}
+	}
+	else if (moudleName == MOUDLENAME_MEDIA)
+	{
+		if (!moudleMedia)
+		{
+			moudleMedia = new MoudleMedia(L);
+			moudleMedia->OpenMoudle();
+		}
+	}
+	else if (moudleName == MOUDLENAME_NETWORK)
+	{
+		if (!moudleNetwork)
+		{
+			moudleNetwork = new MoudleNetwork(L);
+			moudleNetwork->OpenMoudle();
+		}
+	}
+	else if (moudleName == MOUDLENAME_OS)
+	{
+		if (!moudleOS)
+		{
+			moudleOS = new MoudleOS(L);
+			moudleOS->OpenMoudle();
+		}
+	}
+	else if (moudleName == MOUDLENAME_TIME)
+	{
+		if (!moudleTime)
+		{
+			moudleTime = new MoudleTime(L);
+			moudleTime->OpenMoudle();
+		}
+	}
+	else
+		luaL_error(L, "moudle '%s' not found", moudleName);
 
-	{ "FLIP_HORIZONTAL", FLIP_HORIZONTAL },
-	{ "FLIP_VERTICAL", FLIP_VERTICAL },
-	{ "FLIP_NONE", FLIP_NONE },
-
-	{ "WINDOW_MODE_WINDOWED", WINDOW_MODE_WINDOWED },
-	{ "WINDOW_MODE_FULLSCREEN", WINDOW_MODE_FULLSCREEN },
-	{ "WINDOW_MODE_FULLSCREEN_DESKTOP", WINDOW_MODE_FULLSCREEN_DESKTOP },
-
-	{ "EVENT_QUIT", EVENT_QUIT },
-
-	{ "EVENT_MOUSEMOTION", EVENT_MOUSEMOTION },
-	{ "EVENT_MOUSEBTNDOWN_LEFT", EVENT_MOUSEBTNDOWN_LEFT },
-	{ "EVENT_MOUSEBTNDOWN_RIGHT", EVENT_MOUSEBTNDOWN_RIGHT },
-	{ "EVENT_MOUSEBTNDOWN_MIDDLE", EVENT_MOUSEBTNDOWN_MIDDLE },
-	{ "EVENT_MOUSEBTNUP_LEFT", EVENT_MOUSEBTNUP_LEFT },
-	{ "EVENT_MOUSEBTNUP_RIGHT", EVENT_MOUSEBTNUP_RIGHT },
-	{ "EVENT_MOUSEBTNUP_MIDDLE", EVENT_MOUSEBTNUP_MIDDLE },
-	{ "EVENT_MOUSESCROLL", EVENT_MOUSESCROLL },
-	
-	{ "EVENT_WINDOW_SHOW", EVENT_WINDOW_SHOW },
-	{ "EVENT_WINDOW_HIDE", EVENT_WINDOW_HIDE },
-	{ "EVENT_WINDOW_MOVE", EVENT_WINDOW_MOVE },
-	{ "EVENT_WINDOW_RESIZE", EVENT_WINDOW_RESIZE },
-	{ "EVENT_WINDOW_MINSIZE", EVENT_WINDOW_MINSIZE },
-	{ "EVENT_WINDOW_MAXSIZE", EVENT_WINDOW_MAXSIZE },
-	{ "EVENT_WINDOW_ENTER", EVENT_WINDOW_ENTER },
-	{ "EVENT_WINDOW_LEAVE", EVENT_WINDOW_LEAVE },
-	{ "EVENT_WINDOW_FOCUS", EVENT_WINDOW_FOCUS },
-	{ "EVENT_WINDOW_LOST", EVENT_WINDOW_LOST },
-	{ "EVENT_WINDOW_CLOSE", EVENT_WINDOW_CLOSE },
-	{ "EVENT_WINDOW_EXPOSED", EVENT_WINDOW_EXPOSED },
-	
-	{ "EVENT_KEYDOWN_0", EVENT_KEYDOWN_0 },
-	{ "EVENT_KEYDOWN_00", EVENT_KEYDOWN_00 },
-	{ "EVENT_KEYDOWN_000", EVENT_KEYDOWN_000 },
-	{ "EVENT_KEYDOWN_1", EVENT_KEYDOWN_1 },
-	{ "EVENT_KEYDOWN_2", EVENT_KEYDOWN_2 },
-	{ "EVENT_KEYDOWN_3", EVENT_KEYDOWN_3 },
-	{ "EVENT_KEYDOWN_4", EVENT_KEYDOWN_4 },
-	{ "EVENT_KEYDOWN_5", EVENT_KEYDOWN_5 },
-	{ "EVENT_KEYDOWN_6", EVENT_KEYDOWN_6 },
-	{ "EVENT_KEYDOWN_7", EVENT_KEYDOWN_7 },
-	{ "EVENT_KEYDOWN_8", EVENT_KEYDOWN_8 },
-	{ "EVENT_KEYDOWN_9", EVENT_KEYDOWN_9 },
-	{ "EVENT_KEYDOWN_F1", EVENT_KEYDOWN_F1 },
-	{ "EVENT_KEYDOWN_F2", EVENT_KEYDOWN_F2 },
-	{ "EVENT_KEYDOWN_F3", EVENT_KEYDOWN_F3 },
-	{ "EVENT_KEYDOWN_F4", EVENT_KEYDOWN_F4 },
-	{ "EVENT_KEYDOWN_F5", EVENT_KEYDOWN_F5 },
-	{ "EVENT_KEYDOWN_F6", EVENT_KEYDOWN_F6 },
-	{ "EVENT_KEYDOWN_F7", EVENT_KEYDOWN_F7 },
-	{ "EVENT_KEYDOWN_F8", EVENT_KEYDOWN_F8 },
-	{ "EVENT_KEYDOWN_F9", EVENT_KEYDOWN_F9 },
-	{ "EVENT_KEYDOWN_F10", EVENT_KEYDOWN_F10 },
-	{ "EVENT_KEYDOWN_F11", EVENT_KEYDOWN_F11 },
-	{ "EVENT_KEYDOWN_F12", EVENT_KEYDOWN_F12 },
-	{ "EVENT_KEYDOWN_F13", EVENT_KEYDOWN_F13 },
-	{ "EVENT_KEYDOWN_F14", EVENT_KEYDOWN_F14 },
-	{ "EVENT_KEYDOWN_F15", EVENT_KEYDOWN_F15 },
-	{ "EVENT_KEYDOWN_F16", EVENT_KEYDOWN_F16 },
-	{ "EVENT_KEYDOWN_F17", EVENT_KEYDOWN_F17 },
-	{ "EVENT_KEYDOWN_F18", EVENT_KEYDOWN_F18 },
-	{ "EVENT_KEYDOWN_F19", EVENT_KEYDOWN_F19 },
-	{ "EVENT_KEYDOWN_F20", EVENT_KEYDOWN_F20 },
-	{ "EVENT_KEYDOWN_F21", EVENT_KEYDOWN_F21 },
-	{ "EVENT_KEYDOWN_F22", EVENT_KEYDOWN_F22 },
-	{ "EVENT_KEYDOWN_F23", EVENT_KEYDOWN_F23 },
-	{ "EVENT_KEYDOWN_F24", EVENT_KEYDOWN_F24 },
-	{ "EVENT_KEYDOWN_A", EVENT_KEYDOWN_A },
-	{ "EVENT_KEYDOWN_B", EVENT_KEYDOWN_B },
-	{ "EVENT_KEYDOWN_C", EVENT_KEYDOWN_C },
-	{ "EVENT_KEYDOWN_D", EVENT_KEYDOWN_D },
-	{ "EVENT_KEYDOWN_E", EVENT_KEYDOWN_E },
-	{ "EVENT_KEYDOWN_F", EVENT_KEYDOWN_F },
-	{ "EVENT_KEYDOWN_G", EVENT_KEYDOWN_G },
-	{ "EVENT_KEYDOWN_H", EVENT_KEYDOWN_H },
-	{ "EVENT_KEYDOWN_I", EVENT_KEYDOWN_I },
-	{ "EVENT_KEYDOWN_J", EVENT_KEYDOWN_J },
-	{ "EVENT_KEYDOWN_K", EVENT_KEYDOWN_K },
-	{ "EVENT_KEYDOWN_L", EVENT_KEYDOWN_L },
-	{ "EVENT_KEYDOWN_M", EVENT_KEYDOWN_M },
-	{ "EVENT_KEYDOWN_N", EVENT_KEYDOWN_N },
-	{ "EVENT_KEYDOWN_O", EVENT_KEYDOWN_O },
-	{ "EVENT_KEYDOWN_P", EVENT_KEYDOWN_P },
-	{ "EVENT_KEYDOWN_Q", EVENT_KEYDOWN_Q },
-	{ "EVENT_KEYDOWN_R", EVENT_KEYDOWN_R },
-	{ "EVENT_KEYDOWN_S", EVENT_KEYDOWN_S },
-	{ "EVENT_KEYDOWN_T", EVENT_KEYDOWN_T },
-	{ "EVENT_KEYDOWN_U", EVENT_KEYDOWN_U },
-	{ "EVENT_KEYDOWN_V", EVENT_KEYDOWN_V },
-	{ "EVENT_KEYDOWN_W", EVENT_KEYDOWN_W },
-	{ "EVENT_KEYDOWN_X", EVENT_KEYDOWN_X },
-	{ "EVENT_KEYDOWN_Y", EVENT_KEYDOWN_Y },
-	{ "EVENT_KEYDOWN_Z", EVENT_KEYDOWN_Z },
-	{ "EVENT_KEYDOWN_ESC", EVENT_KEYDOWN_ESC },
-	{ "EVENT_KEYDOWN_ENTER", EVENT_KEYDOWN_ENTER },
-	{ "EVENT_KEYDOWN_BACKSPACE", EVENT_KEYDOWN_BACKSPACE },
-	{ "EVENT_KEYDOWN_UP", EVENT_KEYDOWN_UP },
-	{ "EVENT_KEYDOWN_DOWN", EVENT_KEYDOWN_DOWN },
-	{ "EVENT_KEYDOWN_LEFT", EVENT_KEYDOWN_LEFT },
-	{ "EVENT_KEYDOWN_RIGHT", EVENT_KEYDOWN_RIGHT },
-	{ "EVENT_KEYDOWN_INSERT", EVENT_KEYDOWN_INSERT },
-	{ "EVENT_KEYDOWN_DELETE", EVENT_KEYDOWN_DELETE },
-	{ "EVENT_KEYDOWN_HOME", EVENT_KEYDOWN_HOME },
-	{ "EVENT_KEYDOWN_END", EVENT_KEYDOWN_END },
-	{ "EVENT_KEYDOWN_PAGEUP", EVENT_KEYDOWN_PAGEUP },
-	{ "EVENT_KEYDOWN_PAGEDOWN", EVENT_KEYDOWN_PAGEDOWN },
-	{ "EVENT_KEYDOWN_LEFTCTRL", EVENT_KEYDOWN_LEFTCTRL },
-	{ "EVENT_KEYDOWN_LEFTGUI", EVENT_KEYDOWN_LEFTGUI },
-	{ "EVENT_KEYDOWN_LEFTALT", EVENT_KEYDOWN_LEFTALT },
-	{ "EVENT_KEYDOWN_LEFTSHIFT", EVENT_KEYDOWN_LEFTSHIFT },
-	{ "EVENT_KEYDOWN_RIGHTCTRL", EVENT_KEYDOWN_RIGHTCTRL },
-	{ "EVENT_KEYDOWN_RIGHTGUI", EVENT_KEYDOWN_RIGHTGUI },
-	{ "EVENT_KEYDOWN_RIGHTALT", EVENT_KEYDOWN_RIGHTALT },
-	{ "EVENT_KEYDOWN_RIGHTSHIFT", EVENT_KEYDOWN_RIGHTSHIFT },
-	{ "EVENT_KEYDOWN_SPACE", EVENT_KEYDOWN_SPACE },
-	{ "EVENT_KEYDOWN_TAB", EVENT_KEYDOWN_TAB },
-	{ "EVENT_KEYDOWN_CAPSLOCK", EVENT_KEYDOWN_CAPSLOCK },
-	{ "EVENT_KEYDOWN_NUMLOCK", EVENT_KEYDOWN_NUMLOCK },
-	{ "EVENT_KEYDOWN_PRINTSCREEN", EVENT_KEYDOWN_PRINTSCREEN },
-	{ "EVENT_KEYDOWN_SCROLLLOCK", EVENT_KEYDOWN_SCROLLLOCK },
-	{ "EVENT_KEYDOWN_PAUSE", EVENT_KEYDOWN_PAUSE },
-	{ "EVENT_KEYDOWN_AUDIOMUTE", EVENT_KEYDOWN_AUDIOMUTE },
-	{ "EVENT_KEYDOWN_AUDIOPREV", EVENT_KEYDOWN_AUDIOPREV },
-	{ "EVENT_KEYDOWN_AUDIONEXT", EVENT_KEYDOWN_AUDIONEXT },
-	{ "EVENT_KEYDOWN_AUDIOPLAY", EVENT_KEYDOWN_AUDIOPLAY },
-	{ "EVENT_KEYDOWN_AUDIOSTOP", EVENT_KEYDOWN_AUDIOSTOP },
-	{ "EVENT_KEYDOWN_VOLUMEUP", EVENT_KEYDOWN_VOLUMEUP },
-	{ "EVENT_KEYDOWN_VOLUMEDOWN", EVENT_KEYDOWN_VOLUMEDOWN },
-	{ "EVENT_KEYDOWN_BRIGHTNESSUP", EVENT_KEYDOWN_BRIGHTNESSUP },
-	{ "EVENT_KEYDOWN_BRIGHTNESSDOWN", EVENT_KEYDOWN_BRIGHTNESSDOWN },
-	{ "EVENT_KEYDOWN_BACKQUOTE", EVENT_KEYDOWN_BACKQUOTE },
-	{ "EVENT_KEYDOWN_EXCLAM", EVENT_KEYDOWN_EXCLAM },
-	{ "EVENT_KEYDOWN_AT", EVENT_KEYDOWN_AT },
-	{ "EVENT_KEYDOWN_HASH", EVENT_KEYDOWN_HASH },
-	{ "EVENT_KEYDOWN_DOOLAR", EVENT_KEYDOWN_DOOLAR },
-	{ "EVENT_KEYDOWN_CARET", EVENT_KEYDOWN_CARET },
-	{ "EVENT_KEYDOWN_AMPERSAND", EVENT_KEYDOWN_AMPERSAND },
-	{ "EVENT_KEYDOWN_DBLAMPERSAND", EVENT_KEYDOWN_DBLAMPERSAND },
-	{ "EVENT_KEYDOWN_ASTERISK", EVENT_KEYDOWN_ASTERISK },
-	{ "EVENT_KEYDOWN_LEFTPAREN", EVENT_KEYDOWN_LEFTPAREN },
-	{ "EVENT_KEYDOWN_RIGHTPAREN", EVENT_KEYDOWN_RIGHTPAREN },
-	{ "EVENT_KEYDOWN_MINUS", EVENT_KEYDOWN_MINUS },
-	{ "EVENT_KEYDOWN_UNDERSCORE", EVENT_KEYDOWN_UNDERSCORE },
-	{ "EVENT_KEYDOWN_PLUS", EVENT_KEYDOWN_PLUS },
-	{ "EVENT_KEYDOWN_EQUALS", EVENT_KEYDOWN_EQUALS },
-	{ "EVENT_KEYDOWN_LEFTBRACKET", EVENT_KEYDOWN_LEFTBRACKET },
-	{ "EVENT_KEYDOWN_RIGHTBRACKET", EVENT_KEYDOWN_RIGHTBRACKET },
-	{ "EVENT_KEYDOWN_LEFTBRACE", EVENT_KEYDOWN_LEFTBRACE },
-	{ "EVENT_KEYDOWN_RIGHTBRACE", EVENT_KEYDOWN_RIGHTBRACE },
-	{ "EVENT_KEYDOWN_COLON", EVENT_KEYDOWN_COLON },
-	{ "EVENT_KEYDOWN_SEMICOLON", EVENT_KEYDOWN_SEMICOLON },
-	{ "EVENT_KEYDOWN_BACKSLASH", EVENT_KEYDOWN_BACKSLASH },
-	{ "EVENT_KEYDOWN_QUOTE", EVENT_KEYDOWN_QUOTE },
-	{ "EVENT_KEYDOWN_QUOTEDBL", EVENT_KEYDOWN_QUOTEDBL },
-	{ "EVENT_KEYDOWN_LESS", EVENT_KEYDOWN_LESS },
-	{ "EVENT_KEYDOWN_GREATER", EVENT_KEYDOWN_GREATER },
-	{ "EVENT_KEYDOWN_COMMA", EVENT_KEYDOWN_COMMA },
-	{ "EVENT_KEYDOWN_PERIOD", EVENT_KEYDOWN_PERIOD },
-	{ "EVENT_KEYDOWN_QUESTION", EVENT_KEYDOWN_QUESTION },
-	{ "EVENT_KEYDOWN_SLASH", EVENT_KEYDOWN_SLASH },
-	{ "EVENT_KEYDOWN_VERTICALBAR", EVENT_KEYDOWN_VERTICALBAR },
-	{ "EVENT_KEYDOWN_DBLVERTICALBAR", EVENT_KEYDOWN_DBLVERTICALBAR },
-	{ "EVENT_KEYDOWN_WWW", EVENT_KEYDOWN_WWW },
-	{ "EVENT_KEYDOWN_EMAIL", EVENT_KEYDOWN_EMAIL },
-	{ "EVENT_KEYUP_0", EVENT_KEYUP_0 },
-	{ "EVENT_KEYUP_00", EVENT_KEYUP_00 },
-	{ "EVENT_KEYUP_000", EVENT_KEYUP_000 },
-	{ "EVENT_KEYUP_1", EVENT_KEYUP_1 },
-	{ "EVENT_KEYUP_2", EVENT_KEYUP_2 },
-	{ "EVENT_KEYUP_3", EVENT_KEYUP_3 },
-	{ "EVENT_KEYUP_4", EVENT_KEYUP_4 },
-	{ "EVENT_KEYUP_5", EVENT_KEYUP_5 },
-	{ "EVENT_KEYUP_6", EVENT_KEYUP_6 },
-	{ "EVENT_KEYUP_7", EVENT_KEYUP_7 },
-	{ "EVENT_KEYUP_8", EVENT_KEYUP_8 },
-	{ "EVENT_KEYUP_9", EVENT_KEYUP_9 },
-	{ "EVENT_KEYUP_F1", EVENT_KEYUP_F1 },
-	{ "EVENT_KEYUP_F2", EVENT_KEYUP_F2 },
-	{ "EVENT_KEYUP_F3", EVENT_KEYUP_F3 },
-	{ "EVENT_KEYUP_F4", EVENT_KEYUP_F4 },
-	{ "EVENT_KEYUP_F5", EVENT_KEYUP_F5 },
-	{ "EVENT_KEYUP_F6", EVENT_KEYUP_F6 },
-	{ "EVENT_KEYUP_F7", EVENT_KEYUP_F7 },
-	{ "EVENT_KEYUP_F8", EVENT_KEYUP_F8 },
-	{ "EVENT_KEYUP_F9", EVENT_KEYUP_F9 },
-	{ "EVENT_KEYUP_F10", EVENT_KEYUP_F10 },
-	{ "EVENT_KEYUP_F11", EVENT_KEYUP_F11 },
-	{ "EVENT_KEYUP_F12", EVENT_KEYUP_F12 },
-	{ "EVENT_KEYUP_F13", EVENT_KEYUP_F13 },
-	{ "EVENT_KEYUP_F14", EVENT_KEYUP_F14 },
-	{ "EVENT_KEYUP_F15", EVENT_KEYUP_F15 },
-	{ "EVENT_KEYUP_F16", EVENT_KEYUP_F16 },
-	{ "EVENT_KEYUP_F17", EVENT_KEYUP_F17 },
-	{ "EVENT_KEYUP_F18", EVENT_KEYUP_F18 },
-	{ "EVENT_KEYUP_F19", EVENT_KEYUP_F19 },
-	{ "EVENT_KEYUP_F20", EVENT_KEYUP_F20 },
-	{ "EVENT_KEYUP_F21", EVENT_KEYUP_F21 },
-	{ "EVENT_KEYUP_F22", EVENT_KEYUP_F22 },
-	{ "EVENT_KEYUP_F23", EVENT_KEYUP_F23 },
-	{ "EVENT_KEYUP_F24", EVENT_KEYUP_F24 },
-	{ "EVENT_KEYUP_A", EVENT_KEYUP_A },
-	{ "EVENT_KEYUP_B", EVENT_KEYUP_B },
-	{ "EVENT_KEYUP_C", EVENT_KEYUP_C },
-	{ "EVENT_KEYUP_D", EVENT_KEYUP_D },
-	{ "EVENT_KEYUP_E", EVENT_KEYUP_E },
-	{ "EVENT_KEYUP_F", EVENT_KEYUP_F },
-	{ "EVENT_KEYUP_G", EVENT_KEYUP_G },
-	{ "EVENT_KEYUP_H", EVENT_KEYUP_H },
-	{ "EVENT_KEYUP_I", EVENT_KEYUP_I },
-	{ "EVENT_KEYUP_J", EVENT_KEYUP_J },
-	{ "EVENT_KEYUP_K", EVENT_KEYUP_K },
-	{ "EVENT_KEYUP_L", EVENT_KEYUP_L },
-	{ "EVENT_KEYUP_M", EVENT_KEYUP_M },
-	{ "EVENT_KEYUP_N", EVENT_KEYUP_N },
-	{ "EVENT_KEYUP_O", EVENT_KEYUP_O },
-	{ "EVENT_KEYUP_P", EVENT_KEYUP_P },
-	{ "EVENT_KEYUP_Q", EVENT_KEYUP_Q },
-	{ "EVENT_KEYUP_R", EVENT_KEYUP_R },
-	{ "EVENT_KEYUP_S", EVENT_KEYUP_S },
-	{ "EVENT_KEYUP_T", EVENT_KEYUP_T },
-	{ "EVENT_KEYUP_U", EVENT_KEYUP_U },
-	{ "EVENT_KEYUP_V", EVENT_KEYUP_V },
-	{ "EVENT_KEYUP_W", EVENT_KEYUP_W },
-	{ "EVENT_KEYUP_X", EVENT_KEYUP_X },
-	{ "EVENT_KEYUP_Y", EVENT_KEYUP_Y },
-	{ "EVENT_KEYUP_Z", EVENT_KEYUP_Z },
-	{ "EVENT_KEYUP_ESC", EVENT_KEYUP_ESC },
-	{ "EVENT_KEYUP_ENTER", EVENT_KEYUP_ENTER },
-	{ "EVENT_KEYUP_BACKSPACE", EVENT_KEYUP_BACKSPACE },
-	{ "EVENT_KEYUP_UP", EVENT_KEYUP_UP },
-	{ "EVENT_KEYUP_DOWN", EVENT_KEYUP_DOWN },
-	{ "EVENT_KEYUP_LEFT", EVENT_KEYUP_LEFT },
-	{ "EVENT_KEYUP_RIGHT", EVENT_KEYUP_RIGHT },
-	{ "EVENT_KEYUP_INSERT", EVENT_KEYUP_INSERT },
-	{ "EVENT_KEYUP_DELETE", EVENT_KEYUP_DELETE },
-	{ "EVENT_KEYUP_HOME", EVENT_KEYUP_HOME },
-	{ "EVENT_KEYUP_END", EVENT_KEYUP_END },
-	{ "EVENT_KEYUP_PAGEUP", EVENT_KEYUP_PAGEUP },
-	{ "EVENT_KEYUP_PAGEDOWN", EVENT_KEYUP_PAGEDOWN },
-	{ "EVENT_KEYUP_LEFTCTRL", EVENT_KEYUP_LEFTCTRL },
-	{ "EVENT_KEYUP_LEFTGUI", EVENT_KEYUP_LEFTGUI },
-	{ "EVENT_KEYUP_LEFTALT", EVENT_KEYUP_LEFTALT },
-	{ "EVENT_KEYUP_LEFTSHIFT", EVENT_KEYUP_LEFTSHIFT },
-	{ "EVENT_KEYUP_RIGHTCTRL", EVENT_KEYUP_RIGHTCTRL },
-	{ "EVENT_KEYUP_RIGHTGUI", EVENT_KEYUP_RIGHTGUI },
-	{ "EVENT_KEYUP_RIGHTALT", EVENT_KEYUP_RIGHTALT },
-	{ "EVENT_KEYUP_RIGHTSHIFT", EVENT_KEYUP_RIGHTSHIFT },
-	{ "EVENT_KEYUP_SPACE", EVENT_KEYUP_SPACE },
-	{ "EVENT_KEYUP_TAB", EVENT_KEYUP_TAB },
-	{ "EVENT_KEYUP_CAPSLOCK", EVENT_KEYUP_CAPSLOCK },
-	{ "EVENT_KEYUP_NUMLOCK", EVENT_KEYUP_NUMLOCK },
-	{ "EVENT_KEYUP_PRINTSCREEN", EVENT_KEYUP_PRINTSCREEN },
-	{ "EVENT_KEYUP_SCROLLLOCK", EVENT_KEYUP_SCROLLLOCK },
-	{ "EVENT_KEYUP_PAUSE", EVENT_KEYUP_PAUSE },
-	{ "EVENT_KEYUP_AUDIOMUTE", EVENT_KEYUP_AUDIOMUTE },
-	{ "EVENT_KEYUP_AUDIOPREV", EVENT_KEYUP_AUDIOPREV },
-	{ "EVENT_KEYUP_AUDIONEXT", EVENT_KEYUP_AUDIONEXT },
-	{ "EVENT_KEYUP_AUDIOPLAY", EVENT_KEYUP_AUDIOPLAY },
-	{ "EVENT_KEYUP_AUDIOSTOP", EVENT_KEYUP_AUDIOSTOP },
-	{ "EVENT_KEYUP_VOLUMEUP", EVENT_KEYUP_VOLUMEUP },
-	{ "EVENT_KEYUP_VOLUMEDOWN", EVENT_KEYUP_VOLUMEDOWN },
-	{ "EVENT_KEYUP_BRIGHTNESSUP", EVENT_KEYUP_BRIGHTNESSUP },
-	{ "EVENT_KEYUP_BRIGHTNESSDOWN", EVENT_KEYUP_BRIGHTNESSDOWN },
-	{ "EVENT_KEYUP_BACKQUOTE", EVENT_KEYUP_BACKQUOTE },
-	{ "EVENT_KEYUP_EXCLAM", EVENT_KEYUP_EXCLAM },
-	{ "EVENT_KEYUP_AT", EVENT_KEYUP_AT },
-	{ "EVENT_KEYUP_HASH", EVENT_KEYUP_HASH },
-	{ "EVENT_KEYUP_DOOLAR", EVENT_KEYUP_DOOLAR },
-	{ "EVENT_KEYUP_CARET", EVENT_KEYUP_CARET },
-	{ "EVENT_KEYUP_AMPERSAND", EVENT_KEYUP_AMPERSAND },
-	{ "EVENT_KEYUP_DBLAMPERSAND", EVENT_KEYUP_DBLAMPERSAND },
-	{ "EVENT_KEYUP_ASTERISK", EVENT_KEYUP_ASTERISK },
-	{ "EVENT_KEYUP_LEFTPAREN", EVENT_KEYUP_LEFTPAREN },
-	{ "EVENT_KEYUP_RIGHTPAREN", EVENT_KEYUP_RIGHTPAREN },
-	{ "EVENT_KEYUP_MINUS", EVENT_KEYUP_MINUS },
-	{ "EVENT_KEYUP_UNDERSCORE", EVENT_KEYUP_UNDERSCORE },
-	{ "EVENT_KEYUP_PLUS", EVENT_KEYUP_PLUS },
-	{ "EVENT_KEYUP_EQUALS", EVENT_KEYUP_EQUALS },
-	{ "EVENT_KEYUP_LEFTBRACKET", EVENT_KEYUP_LEFTBRACKET },
-	{ "EVENT_KEYUP_RIGHTBRACKET", EVENT_KEYUP_RIGHTBRACKET },
-	{ "EVENT_KEYUP_LEFTBRACE", EVENT_KEYUP_LEFTBRACE },
-	{ "EVENT_KEYUP_RIGHTBRACE", EVENT_KEYUP_RIGHTBRACE },
-	{ "EVENT_KEYUP_COLON", EVENT_KEYUP_COLON },
-	{ "EVENT_KEYUP_SEMICOLON", EVENT_KEYUP_SEMICOLON },
-	{ "EVENT_KEYUP_BACKSLASH", EVENT_KEYUP_BACKSLASH },
-	{ "EVENT_KEYUP_QUOTE", EVENT_KEYUP_QUOTE },
-	{ "EVENT_KEYUP_QUOTEDBL", EVENT_KEYUP_QUOTEDBL },
-	{ "EVENT_KEYUP_LESS", EVENT_KEYUP_LESS },
-	{ "EVENT_KEYUP_GREATER", EVENT_KEYUP_GREATER },
-	{ "EVENT_KEYUP_COMMA", EVENT_KEYUP_COMMA },
-	{ "EVENT_KEYUP_PERIOD", EVENT_KEYUP_PERIOD },
-	{ "EVENT_KEYUP_QUESTION", EVENT_KEYUP_QUESTION },
-	{ "EVENT_KEYUP_SLASH", EVENT_KEYUP_SLASH },
-	{ "EVENT_KEYUP_VERTICALBAR", EVENT_KEYUP_VERTICALBAR },
-	{ "EVENT_KEYUP_DBLVERTICALBAR", EVENT_KEYUP_DBLVERTICALBAR },
-	{ "EVENT_KEYUP_WWW", EVENT_KEYUP_WWW },
-	{ "EVENT_KEYUP_EMAIL", EVENT_KEYUP_EMAIL },
-
-	{ "FONT_STYLE_BOLD", FONT_STYLE_BOLD },
-	{ "FONT_STYLE_ITALIC", FONT_STYLE_ITALIC },
-	{ "FONT_STYLE_UNDERLINE", FONT_STYLE_UNDERLINE },
-	{ "FONT_STYLE_STRIKETHROUGH", FONT_STYLE_STRIKETHROUGH },
-	{ "FONT_STYLE_NORMAL", FONT_STYLE_NORMAL },
-
-	{ "MUSIC_TYPE_WAV", MUSIC_TYPE_WAV },
-	{ "MUSIC_TYPE_MP3", MUSIC_TYPE_MP3 },
-	{ "MUSIC_TYPE_OGG", MUSIC_TYPE_OGG },
-	{ "MUSIC_TYPE_CMD", MUSIC_TYPE_CMD },
-	{ "MUSIC_TYPE_MOD", MUSIC_TYPE_MOD },
-	{ "MUSIC_TYPE_MID", MUSIC_TYPE_MID },
-	{ "MUSIC_TYPE_UNKONWN", MUSIC_TYPE_UNKONWN },
-};
-
-static luaL_Reg cMethods[] = {
-	{ "GetBasePath", getBasePath },
-	{ "SetClipboardText", setClipboardText },
-	{ "GetClipboardText", getClipboardText },
-	{ "GetPlatform", getPlatform },
-	{ "GetSystemRAM", getSystemRAM },
-
-	{ "ShowMessageBox", showMessageBox},
-	{ "CreateWindow", createWindow },
-	{ "CloseWindow", closeWindow },
-	{ "SetWindowTitle", setWindowTitle },
-	{ "GetWindowTitle", getWindowTitle },
-	{ "SetWindowMode", setWindowMode },
-	{ "SetWindowResizable", setWindowResizable },
-	{ "SetWindowOpacity", setWindowOpacity },
-	{ "SetWindowSize", setWindowSize },
-	{ "GetWindowSize", getWindowSize },
-	{ "SetWindowMaxSize", setWindowMaxSize },
-	{ "GetWindowMaxSize", getWindowMaxSize },
-	{ "SetWindowMinSize", setWindowMinSize },
-	{ "GetWindowMinSize", getWindowMinSize },
-	{ "SetWindowPosition", setWindowPosition },
-	{ "GetWindowPosition", getWindowPosition },
-	{ "ClearWindow", clearWindow },
-
-	{ "SetCursorShow", setCursorShow },
-	{ "LoadImage", loadImage },
-	{ "SetImageColorKey", setImageColorKey },
-	{ "UnloadImage", unloadImage },
-	{ "CreateTexture", createTexture },
-	{ "DestroyTexture", destroyTexture },
-	{ "SetTextureAlpha", setTextureAlpha },
-	{ "GetImageSize", getImageSize },
-	{ "CopyTexture", copyTexture },
-	{ "CopyRotateTexture", copyRotateTexture },
-	{ "CopyReshapeTexture", copyReshapeTexture },
-	{ "CopyRotateReshapeTexture", copyRotateReshapeTexture },
-	{ "SetDrawColor", setDrawColor },
-	{ "GetDrawColor", getDrawColor },
-	{ "Point", point },
-	{ "Line", line },
-	{ "ThickLine", thickLine },
-	{ "Rectangle", rectangle },
-	{ "FillRectangle", fillRectangle },
-	{ "RoundRectangle", roundRectangle },
-	{ "FillRoundRectangle", fillRoundRectangle },
-	{ "Circle", circle },
-	{ "FillCircle", fillCircle },
-	{ "Ellipse", ellipse },
-	{ "FillEllipse", fillEllipse },
-	{ "Pie", pie },
-	{ "FillPie", fillPie },
-	{ "Triangle", triangle },
-	{ "FillTriangle", fillTriangle },
-	{ "UpdateWindow", updateWindow },
-
-	{ "LoadMusic", loadMusic },
-	{ "UnloadMusic", unloadMusic },
-	{ "PlayMusic", playMusic },
-	{ "FadeInMusic", fadeInMusic },
-	{ "FadeOutMusic", fadeOutMusic },
-	{ "SetMusicVolume", setMusicVolume },
-	{ "GetMusicVolume", getMusicVolume },
-	{ "PauseMusic", pauseMusic },
-	{ "ResumeMusic", resumeMusic },
-	{ "RewindMusic", rewindMusic },
-	{ "GetMusicType", getMusicType },
-	{ "LoadSound", loadSound },
-	{ "UnloadSound", unloadSound },
-	{ "PlaySound", playSound },
-
-	{ "LoadFont", loadFont },
-	{ "UnloadFont", unloadFont },
-	{ "GetFontStyle", getFontStyle },
-	{ "SetFontStyle", setFontStyle },
-	{ "GetFontOutlineWidth", getFontOutlineWidth },
-	{ "SetFontOutlineWidth", setFontOutlineWidth },
-	{ "GetFontKerning", getFontKerning },
-	{ "SetFontKerning", setFontKerning },
-	{ "GetFontHeight", getFontHeight },
-	{ "GetTextSize", getTextSize },
-	{ "GetUTF8TextSize", getUTF8TextSize },
-	{ "CreateTextImageSolid", createTextImageSolid },
-	{ "CreateUTF8TextImageSolid", createUTF8TextImageSolid },
-	{ "CreateTextImageShaded", createTextImageShaded },
-	{ "CreateUTF8TextImageShaded", createUTF8TextImageShaded },
-	{ "CreateTextImageBlended", createTextImageBlended },
-	{ "CreateUTF8TextImageBlended", createUTF8TextImageBlended },
-
-	{ "GetCursorPosition", getCursorPosition },
-	{ "GetScrollValue", getScrollValue },
-	{ "UpdateEvent", updateEvent },
-	{ "GetEventType", getEventType },
-
-	{ "Pause", pause },
-	{ "Sleep", sleep },
-	{ "DynamicSleep", dynamicSleep },
-	{ "GetInitTime", getInitTime },
-	{ "GetAccurateCount", getAccurateCount },
-	{ "GetCounterFrequency", getCounterFrequency },
-
-	{ "Clamp", clamp },
-	{ "IfPointInRect", ifPointInRect },
-	{ "IfPointInRectStrict", ifPointInRectStrict },
-	{ "IfPointInCircle", ifPointInCircle },
-	{ "IfPointInCircleStrict", ifPointInCircleStrict },
-	{ "IfRectsOverlap", ifRectsOverlap },
-	{ "IfRectsOverlapStrict", ifRectsOverlapStrict },
-	{ "IfCirclesOverlap", ifCirclesOverlap },
-	{ "IfCirclesOverlapStrict", ifCirclesOverlapStrict },
-	{ "GetPointsDistance", getPointsDistance },
-	{ "GetLinesDistance", getLinesDistance },
-	{ "GetPointLineDistance", getPointLineDistance },
-	{ "RGBAToHSLA", rgbaToHSLA },
-	{ "HSLAToRGBA", hslaToRGBA },
-
-	{ "GetLinkDomain", getLinkDomain },
-	{ "GetLinkRoute", getLinkRoute },
-	{ "RequestGet", requestGet },
-};
+	return 0;
+}
 
 #endif // !_MAIN_H_

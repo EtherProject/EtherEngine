@@ -34,3 +34,17 @@ ETHER_API requestGet(lua_State* L)
 
 	return 1;
 }
+
+
+MoudleNetwork::MoudleNetwork(lua_State* L)
+{
+	_pL = L;
+
+	_vCMethods = {
+		{ "GetLinkDomain", getLinkDomain },
+		{ "GetLinkRoute", getLinkRoute },
+		{ "RequestGet", requestGet },
+	};
+
+	_vMacros = {};
+}

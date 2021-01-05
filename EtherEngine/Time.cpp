@@ -52,3 +52,20 @@ ETHER_API getCounterFrequency(lua_State * L)
 
 	return 1;
 }
+
+
+MoudleTime::MoudleTime(lua_State* L)
+{
+	_pL = L;
+
+	_vCMethods = {
+		{ "Pause", pause },
+		{ "Sleep", sleep },
+		{ "DynamicSleep", dynamicSleep },
+		{ "GetInitTime", getInitTime },
+		{ "GetAccurateCount", getAccurateCount },
+		{ "GetCounterFrequency", getCounterFrequency },
+	};
+
+	_vMacros = {};
+}
