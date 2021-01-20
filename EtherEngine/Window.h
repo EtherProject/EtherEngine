@@ -12,12 +12,12 @@ extern SDL_Window* window;
 extern SDL_Renderer* renderer;
 
 // 显示模态的提示信息窗口
-// 3参数：标题（string），提示信息内容（string），窗口类型（Macro number）
+// 3参数：提示窗口标题（string），提示信息内容（string），窗口类型（Macro number）
 // 0返回值
 ETHER_API showMessageBox(lua_State * L);
 
 // 创建窗口，并将此窗口作为图形绘制等操作的上下文
-// 5参数：窗口标题，用以描述显示区域的矩形（table，x和y的值为-1表示在默认位置显示），用以描述窗口属性的表（table）
+// 5参数：窗口标题，用以描述显示区域的矩形，用以描述窗口属性的表（table）
 // 0返回值
 ETHER_API createWindow(lua_State * L);
 
@@ -27,13 +27,13 @@ ETHER_API createWindow(lua_State * L);
 ETHER_API closeWindow(lua_State * L);
 
 // 设置窗口标题
-// 1参数：标题内容（string）
+// 1参数：窗口标题（string）
 // 0返回值
 ETHER_API setWindowTitle(lua_State * L);
 
 // 获取窗口标题
 // 0参数
-// 1返回值：标题内容（string）
+// 1返回值：窗口标题（string）
 ETHER_API getWindowTitle(lua_State * L);
 
 // 设置窗口模式
@@ -81,12 +81,12 @@ ETHER_API setWindowMinSize(lua_State * L);
 // 2返回值：窗口最小宽度（number），窗口最小高度（number）
 ETHER_API getWindowMinSize(lua_State * L);
 
-// 设置窗口坐标
+// 设置窗口位置
 // 1参数：窗口位置坐标（table）
 // 0返回值
 ETHER_API setWindowPosition(lua_State * L);
 
-// 获取窗口坐标
+// 获取窗口位置
 // 0参数
 // 1返回值：窗口位置坐标（table）
 ETHER_API getWindowPosition(lua_State * L);

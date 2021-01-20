@@ -26,7 +26,7 @@ ETHER_API getClipboardText(lua_State * L)
 }
 
 
-ETHER_API getPlatform(lua_State * L)
+ETHER_API getPlatformType(lua_State * L)
 {
 	lua_pushstring(L, SDL_GetPlatform());
 
@@ -34,7 +34,7 @@ ETHER_API getPlatform(lua_State * L)
 }
 
 
-ETHER_API getSystemRAM(lua_State * L)
+ETHER_API getSystemTotalRAM(lua_State * L)
 {
 	lua_pushnumber(L, SDL_GetSystemRAM());
 
@@ -258,8 +258,8 @@ MoudleOS::MoudleOS(lua_State* L)
 		{ "GetBasePath", getBasePath },
 		{ "SetClipboardText", setClipboardText },
 		{ "GetClipboardText", getClipboardText },
-		{ "GetPlatform", getPlatform },
-		{ "GetSystemRAM", getSystemRAM },
+		{ "GetPlatformType", getPlatformType },
+		{ "GetSystemTotalRAM", getSystemTotalRAM },
 		{ "ListDirectory", listDirectory },
 		{ "IfPathExist", ifPathExist },
 		{ "GetPathInfo", getPathInfo },

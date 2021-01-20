@@ -33,15 +33,15 @@ ETHER_API getClipboardText(lua_State * L);
 // 获取平台类型
 // 0参数
 // 1返回值：平台类型（string）
-ETHER_API getPlatform(lua_State * L);
+ETHER_API getPlatformType(lua_State * L);
 
 // 获取系统总内存大小
 // 0参数
-// 1返回值：系统内存（number，单位MB）
-ETHER_API getSystemRAM(lua_State * L);
+// 1返回值：系统内存大小（number，单位为MB）
+ETHER_API getSystemTotalRAM(lua_State * L);
 
 /*
-* 获取目录下文件信息
+* 获取指定目录下文件列表
 * 1参数：目录路径（string）
 * 1返回值：文件列表（table）
 */
@@ -73,9 +73,9 @@ ETHER_API ifPathExist(lua_State* L);
 ETHER_API getPathInfo(lua_State* L);
 
 /*
-* 合并目录和文件名为一个路径
+* 合并目录和文件名为完整路径
 * 2参数：目录（string），文件名（string）
-* 1返回值：路径（string）
+* 1返回值：完整路径（string）
 */
 ETHER_API joinPath(lua_State* L);
 
