@@ -7,15 +7,17 @@
 
 ### 面向开发者的学习流程和API参考
 
-| 快速开始 | [快速开始](./.docs/快速开始.md) |
-| ---------- | ----------------------------------------- |
-| 图形      | [图形](./.docs/Graphic.md)       |
-| 交互事件 | [交互事件](./.docs/Interactivity.md)   |
-| 媒体      | [媒体](./.docs/Media.md)         |
-| 时间      | [时间](./.docs/Time.md)         |
-| 窗口操作 | [窗口操作](./.docs/Window.md) |
-| 其他      | [其他](./.docs/Others.md)        |
-| 附录      | [附录](./.docs/Appendix.md)        |
+跳转到指定模块：
+
++ [Algorithm](Algorithm/index.md)：算法相关API
+
++ [Graphic](Graphic/index.md)：图形相关API
+
++ [Interactivity](Interactivity/index.md)：交互相关API
+
++ [Media](Media/index.md)：媒体相关API
+
++ [Network](Network/index.md)：网络相关API
 
 
 ## 联系开发组
