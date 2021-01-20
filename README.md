@@ -9,7 +9,7 @@
 
 跳转到指定模块：
 
-+ [Algorithm](Algorithm/index.md)：算法相关API
++ [Algorithm](.docs/Algorithm/index.md)：算法相关API
 
 + [Graphic](Graphic/index.md)：图形相关API
 
