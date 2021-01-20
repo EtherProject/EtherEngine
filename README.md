@@ -11,13 +11,13 @@
 
 + [Algorithm](.docs/Algorithm/index.md)：算法相关API
 
-+ [Graphic](Graphic/index.md)：图形相关API
++ [Graphic](.docs/Graphic/index.md)：图形相关API
 
-+ [Interactivity](Interactivity/index.md)：交互相关API
++ [Interactivity](.docs/Interactivity/index.md)：交互相关API
 
-+ [Media](Media/index.md)：媒体相关API
++ [Media](.docs/Media/index.md)：媒体相关API
 
-+ [Network](Network/index.md)：网络相关API
++ [Network](.docs/Network/index.md)：网络相关API
 
 
 ## 联系开发组
