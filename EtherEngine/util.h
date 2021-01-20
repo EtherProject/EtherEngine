@@ -1,6 +1,8 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
+#include "Macros.h"
+
 #include <lua.hpp>
 #include <SDL.h>
 #include <httplib.h>
@@ -57,6 +59,13 @@ string GetLinkRoute(string link);
 /// <param name="L">当前Lua虚拟机环境</param>
 /// <param name="response">Response表</param>
 void PushResponseTable(lua_State* L, shared_ptr<Response> response);
+
+/// <summary>
+/// 将宏转换为 MIME Type
+/// </summary>
+/// <param name="macro">宏</param>
+/// <returns>MIME Type</returns>
+string ConvertMacroToMIMEType(int macro);
 
 #endif // !_UTIL_H_
 

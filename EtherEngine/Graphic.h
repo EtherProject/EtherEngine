@@ -24,7 +24,7 @@ ETHER_API setCursorShow(lua_State * L);
 ETHER_API loadImage(lua_State * L);
 
 // 设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
-// 2参数：图像文件（userdata-IMAGE），是否启用（boolean），ColorKey（table）
+// 2参数：图像数据（userdata-IMAGE），是否启用（boolean），ColorKey（table）
 // 0返回值
 ETHER_API setImageColorKey(lua_State * L);
 
@@ -33,7 +33,7 @@ ETHER_API setImageColorKey(lua_State * L);
 // 0返回值
 ETHER_API unloadImage(lua_State * L);
 
-// 从图像数据创建属于窗口的可渲染纹理（必须在创建窗口完成之后进行）
+// 从图像数据创建属于窗口的可渲染纹理
 // 1参数：图像数据（userdata-IMAGE）
 // 1返回值：纹理数据（userdata-TEXTURE）
 ETHER_API createTexture(lua_State * L);
@@ -91,7 +91,7 @@ ETHER_API point(lua_State * L);
 // 在指定位置绘制直线
 // 2参数：起点坐标（table），终点坐标（table）
 // 0返回值
-ETHER_API line(lua_State * L);
+ETHER_API singleline(lua_State * L);
 
 // 在指定位置绘制粗直线
 // 3参数：起点坐标（table），终点坐标（table），线条宽度（number）

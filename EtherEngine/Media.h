@@ -74,7 +74,7 @@ ETHER_API loadSound(lua_State * L);
 ETHER_API unloadSound(lua_State * L);
 
 // 播放已加载的音效
-// 2参数：音效数据（userdata-MUSIC）、音效播放的次数（number，-1为循环播放）
+// 2参数：音效数据（userdata-SOUND）、音效播放的次数（number，-1为循环播放）
 // 0返回值
 ETHER_API playSound(lua_State * L);
 

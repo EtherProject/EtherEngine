@@ -18,9 +18,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Graphic.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Interactivity.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -48,15 +45,15 @@
     <ClCompile Include="Moudle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Graphic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphic.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Interactivity.h">
@@ -87,6 +84,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Moudle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

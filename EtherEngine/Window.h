@@ -91,6 +91,11 @@ ETHER_API setWindowPosition(lua_State * L);
 // 1返回值：窗口位置坐标（table）
 ETHER_API getWindowPosition(lua_State * L);
 
+// 设置窗口图标 (Windows平台下窗口将优先使用可执行文件图标资源)
+// 1参数：图像数据（userdata-IMAGE）
+// 0返回值
+ETHER_API setWindowIcon(lua_State * L);
+
 // 使用当前绘图颜色清空窗口内容
 // 0参数
 // 0返回值

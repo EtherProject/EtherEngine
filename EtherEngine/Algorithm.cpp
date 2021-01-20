@@ -218,6 +218,66 @@ ETHER_API hslaToRGBA(lua_State* L)
 }
 
 
+ETHER_API ifElementInTable(lua_State* L)
+{
+	int type;
+	switch ((int)luaL_checknumber(L, 3))
+	{
+	case ELEMENTTYPE_NUM:
+		type = ELEMENTTYPE_NUM;
+		break;
+	case ELEMENTTYPE_STR:
+		type = ELEMENTTYPE_STR;
+		break;
+	default:
+		luaL_error(L, "bad argument #3 to 'IfElementInTable' (MACRO number expected, got %s)", luaL_typename(L, 3));
+		break;
+	}
+
+	if (!lua_istable(L, 2))
+	{
+		luaL_error(L, "bad argument #2 to 'IfElementInTable' (table expected, got %s)", luaL_typename(L, 2));
+	}
+	else
+	{
+		if (type == ELEMENTTYPE_NUM)
+		{
+			bool isExist = false;
+			double num = luaL_checknumber(L, 1);
+			lua_pushnil(L);
+			while (!isExist && lua_next(L, 2))
+			{
+				lua_pushvalue(L, -2);
+				if (!lua_isnumber(L, -2))
+					luaL_error(L, "bad argument #2 to 'IfElementInTable' (table elements must be number, got %s)", luaL_typename(L, -2));
+				else if (num == lua_tonumber(L, -2))
+					isExist = true;
+				lua_pop(L, 2);
+			}
+			lua_pushboolean(L, isExist);
+		}
+		else
+		{
+			bool isExist = false;
+			string str = luaL_checkstring(L, 1);
+			lua_pushnil(L);
+			while (!isExist && lua_next(L, 2))
+			{
+				lua_pushvalue(L, -2);
+				if (!lua_isstring(L, -2))
+					luaL_error(L, "bad argument #2 to 'IfElementInTable' (table elements must be string, got %s)", luaL_typename(L, -2));
+				else if (str == lua_tostring(L, -2))
+					isExist = true;
+				lua_pop(L, 2);
+			}
+			lua_pushboolean(L, isExist);
+		}
+	}
+
+	return 1;
+}
+
+
 MoudleAlgorithm::MoudleAlgorithm(lua_State* L)
 {
 	_pL = L;
@@ -237,7 +297,11 @@ MoudleAlgorithm::MoudleAlgorithm(lua_State* L)
 		{ "GetPointLineDistance", getPointLineDistance },
 		{ "RGBAToHSLA", rgbaToHSLA },
 		{ "HSLAToRGBA", hslaToRGBA },
+		{ "IfElementInTable", ifElementInTable },
 	};
 
-	_vMacros = {};
+	_vMacros = {
+		{ "ELEMENTTYPE_NUM", ELEMENTTYPE_NUM },
+		{ "ELEMENTTYPE_STR", ELEMENTTYPE_STR },
+	};
 }

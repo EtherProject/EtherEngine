@@ -3,6 +3,9 @@
 SDL_Point GetPointParam(lua_State* L, int index, const char* funName)
 {
 	SDL_Point point;
+
+#ifdef _ETHER_DEBUG_
+
 	if (!lua_istable(L, index))
 	{
 		luaL_error(L, "bad argument #%d to '%s' (table expected, got %s)", index, funName, luaL_typename(L, index));
@@ -15,6 +18,15 @@ SDL_Point GetPointParam(lua_State* L, int index, const char* funName)
 		lua_isnumber(L, -1) ? point.y = lua_tonumber(L, -1) : luaL_error(L, "bad argument #%d to '%s' (table must have number value for key 'y', got %s)", index, funName, luaL_typename(L, -1));
 	}
 
+#else
+
+	lua_getfield(L, index, "x");
+	point.x = lua_tonumber(L, -1);
+	lua_getfield(L, index, "y");
+	point.y = lua_tonumber(L, -1);
+
+#endif
+
 	return point;
 }
 
@@ -22,6 +34,9 @@ SDL_Point GetPointParam(lua_State* L, int index, const char* funName)
 SDL_Rect GetRectParam(lua_State* L, int index, const char* funName)
 {
 	SDL_Rect rect;
+
+#ifdef _ETHER_DEBUG_
+
 	if (!lua_istable(L, index))
 	{
 		luaL_error(L, "bad argument #%d to '%s' (table expected, got %s)", index, funName, luaL_typename(L, index));
@@ -38,6 +53,19 @@ SDL_Rect GetRectParam(lua_State* L, int index, const char* funName)
 		lua_isnumber(L, -1) ? rect.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #%d to '%s' (table must have number value for key 'h', got %s)", index, funName, luaL_typename(L, -1));
 	}
 
+#else
+
+	lua_getfield(L, index, "x");
+	rect.x = lua_tonumber(L, -1);
+	lua_getfield(L, index, "y");
+	rect.y = lua_tonumber(L, -1);
+	lua_getfield(L, index, "w");
+	rect.w = lua_tonumber(L, -1);
+	lua_getfield(L, index, "h");
+	rect.h = lua_tonumber(L, -1);
+
+#endif
+
 	return rect;
 }
 
@@ -45,6 +73,9 @@ SDL_Rect GetRectParam(lua_State* L, int index, const char* funName)
 SDL_Color GetColorParam(lua_State* L, int index, const char* funName)
 {
 	SDL_Color color;
+
+#ifdef _ETHER_DEBUG_
+
 	if (!lua_istable(L, index))
 	{
 		luaL_error(L, "bad argument #%d to '%s' (table expected, got %s)", index, funName, luaL_typename(L, index));
@@ -60,6 +91,19 @@ SDL_Color GetColorParam(lua_State* L, int index, const char* funName)
 		lua_getfield(L, index, "a");
 		lua_isnumber(L, -1) ? color.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #%d to '%s' (table must have number value for key 'a', got %s)", index, funName, luaL_typename(L, -1));
 	}
+
+#else
+
+	lua_getfield(L, index, "r");
+	color.r = lua_tonumber(L, -1);
+	lua_getfield(L, index, "g");
+	color.g = lua_tonumber(L, -1);
+	lua_getfield(L, index, "b");
+	color.b = lua_tonumber(L, -1);
+	lua_getfield(L, index, "a");
+	color.a = lua_tonumber(L, -1);
+
+#endif 
 
 	return color;
 }
@@ -117,5 +161,130 @@ void PushResponseTable(lua_State* L, shared_ptr<Response> response)
 			lua_settable(L, -3);
 		}
 		lua_settable(L, -3);
+	}
+}
+
+
+string ConvertMacroToMIMEType(int macro)
+{
+	switch (macro)
+	{
+	case MIMETYPE_CSS:
+		return "text/css";
+		break;
+	case MIMETYPE_CSV:
+		return "text/csv";
+		break;
+	case MIMETYPE_TEXT:
+		return "text/plain";
+		break;
+	case MIMETYPE_VTT:
+		return "text/vtt";
+		break;
+	case MIMETYPE_HTML:
+		return "text/html";
+		break;
+	case MIMETYPE_APNG:
+		return "image/apng";
+		break;
+	case MIMETYPE_SVG:
+		return "image/svg+xml";
+		break;
+	case MIMETYPE_WEBP:
+		return "image/webp";
+	case MIMETYPE_ICO:
+		return "image/x-icon";
+		break;
+	case MIMETYPE_TIFF:
+		return "image/tiff";
+		break;
+	case MIMETYPE_JPG:
+		return "image/jpeg";
+		break;
+	case MIMETYPE_AVIF:
+		return "image/avif";
+		break;
+	case MIMETYPE_BMP:
+		return "image/bmp";
+		break;
+	case MIMETYPE_GIF:
+		return "image/gif";
+		break;
+	case MIMETYPE_PNG:
+		return "image/png";
+	case MIMETYPE_MP4:
+		return "video/mp4";
+		break;
+	case MIMETYPE_MPEG:
+		return "video/mpeg";
+		break;
+	case MIMETYPE_WEBM:
+		return "video/webm";
+		break;
+	case MIMETYPE_MPGA:
+		return "audio/mpeg";
+		break;
+	case MIMETYPE_WEBA:
+		return "audio/webm";
+		break;
+	case MIMETYPE_MP3:
+		return "audio/mp3";
+		break;
+	case MIMETYPE_WAV:
+		return "audio/wave";
+		break;
+	case MIMETYPE_OTF:
+		return "font/otf";
+		break;
+	case MIMETYPE_TTF:
+		return "font/ttf";
+		break;
+	case MIMETYPE_WOFF:
+		return "font/woff";
+		break;
+	case MIMETYPE_WOFF2:
+		return "font/woff2";
+		break;
+	case MIMETYPE_7Z:
+		return "application/x-7z-compressed";
+		break;
+	case MIMETYPE_ATOM:
+		return "application/atom+xml";
+		break;
+	case MIMETYPE_PDF:
+		return "application/pdf";
+		break;
+	case MIMETYPE_JS:
+		return "application/javascript";
+		break;
+	case MIMETYPE_JSON:
+		return "application/json";
+		break;
+	case MIMETYPE_RSS:
+		return "application/rss+xml";
+		break;
+	case MIMETYPE_TAR:
+		return "application/x-tar";
+		break;
+	case MIMETYPE_XHTML:
+		return "application/xhtml+xml";
+		break;
+	case MIMETYPE_XSLT:
+		return "application/xslt+xml";
+		break;
+	case MIMETYPE_XML:
+		return "application/xml";
+		break;
+	case MIMETYPE_GZ:
+		return "application/gzip";
+		break;
+	case MIMETYPE_ZIP:
+		return "application/zip";
+	case MIMETYPE_WASM:
+		return "application/wasm";
+		break;
+	default:
+		return "";
+		break;
 	}
 }

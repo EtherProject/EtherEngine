@@ -10,7 +10,7 @@
 
 #include <math.h>
 
-// 区间限定
+// 将数值限制在指定区间
 // 1或3参数：被限定值（number），下限和上限（number，默认为0和1）
 // 1返回值：限定后值
 ETHER_API clamp(lua_State * L);
@@ -45,12 +45,12 @@ ETHER_API ifRectsOverlap(lua_State* L);
 // 1返回值：是否严格相交（boolean）
 ETHER_API ifRectsOverlapStrict(lua_State* L);
 
-// 判断两圆是否相交（包含圆边界）
+// 判断两圆是否相交（包含圆形边界）
 // 2参数：圆1圆心坐标（table），圆1半径（number），圆2圆心坐标（table），圆2半径（number）
 // 1返回值：是否相交（boolean）
 ETHER_API ifCirclesOverlap(lua_State* L);
 
-// 判断两圆是否严格相交（不包含圆边界）
+// 判断两圆是否严格相交（不包含圆形边界）
 // 2参数：圆1圆心坐标（table），圆1半径（number），圆2圆心坐标（table），圆2半径（number）
 // 1返回值：是否严格相交（boolean）
 ETHER_API ifCirclesOverlapStrict(lua_State* L);
@@ -80,6 +80,12 @@ ETHER_API rgbaToHSLA(lua_State* L);
 // 1返回值：使用RGBA描述的颜色（table）
 ETHER_API hslaToRGBA(lua_State* L);
 
+/*
+* 判断指定元素是否位于表值中
+* 3参数：指定元素（number或string），表（table，值类型与被判断元素类型相同），元素类型（Macro number）
+* 1参数：是否存在（boolean）
+*/
+ETHER_API ifElementInTable(lua_State* L);
 
 class MoudleAlgorithm : public Moudle
 {

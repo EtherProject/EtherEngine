@@ -4,16 +4,18 @@ int main(int argc, char** argv)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	
-	luaL_openlibs(L);
+	luaL_openlibs(pL);
 
-	_PushArgs(L, argc, argv);
+	_PushArgs(pL, argc, argv);
 
-	lua_pushcfunction(L, usingMoudle);
-	lua_setglobal(L, "UsingMoudle");
+	lua_pushcfunction(pL, usingMoudle);
+	lua_setglobal(pL, "UsingMoudle");
+	lua_pushcfunction(pL, getVersion);
+	lua_setglobal(pL, "GetVersion");
 
-	if (luaL_dofile(L, "Main.lua"))
+	if (luaL_dofile(pL, "Main.lua"))
 	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(L, -1), NULL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(pL, -1), NULL);
 	}
 
 	_HandleQuit();
@@ -34,7 +36,6 @@ void _PushArgs(lua_State* l, int argc, char** argv)
 		lua_pushstring(l, argv[i - 1]);
 		lua_settable(l, -3);
 	}
-
 	lua_setglobal(l, "_argv");
 }
 

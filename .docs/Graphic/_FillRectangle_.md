@@ -1,0 +1,25 @@
+### [[ << 回到上层 ]](index.md)
+
+# FillRectangle
+
+> 在指定位置绘制填充矩形
+
+```lua
+
+FillRectangle(rect)
+
+```
+
+## 参数：
+
++ rect [table]：用以描述显示区域的矩形
+
+## 返回值：
+
+无
+
+## 示例
+
+```lua
+
+```

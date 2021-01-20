@@ -62,12 +62,17 @@ ETHER_API createTexture(lua_State * L)
 	}
 	else
 	{
+		if (!renderer)
+		{
+			luaL_error(L, "Texture creation must be done after the window creation operation");
+		}
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 		lua_pushlightuserdata(L, texture);
 	}
 
 	return 1;
 }
+
 
 ETHER_API destroyTexture(lua_State * L)
 {
@@ -316,7 +321,7 @@ ETHER_API point(lua_State * L)
 }
 
 
-ETHER_API line(lua_State * L)
+ETHER_API singleline(lua_State * L)
 {
 	SDL_Point startPoint = GetPointParam(L, 1, "Line");
 
@@ -883,7 +888,7 @@ MoudleGraphic::MoudleGraphic(lua_State* L)
 		{ "SetDrawColor", setDrawColor },
 		{ "GetDrawColor", getDrawColor },
 		{ "Point", point },
-		{ "Line", line },
+		{ "Line", singleline },
 		{ "ThickLine", thickLine },
 		{ "Rectangle", rectangle },
 		{ "FillRectangle", fillRectangle },

@@ -1,9 +1,6 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-// 定义 _ETHER_DEUBG_ 以开启Debug模式
-#define _ETHER_DEBUG_
-
 #include "Macros.h"
 #include "Window.h"
 #include "Graphic.h"
@@ -21,16 +18,22 @@
 #include <SDL_ttf.h>
 
 #ifndef _ETHER_DEBUG_
-
 #ifdef __WINDOWS__
-
 #pragma comment( linker, "/subsystem:windows /entry:mainCRTStartup" )
+#else
 
-// __WINDOWS__
+#endif
 #endif
 
-// _ETHER_DEBUG_
+#ifdef _WINDOWS_
+
+#pragma comment(lib, "Setupapi.lib")
+#pragma comment(lib, "Winmm.lib")
+#pragma comment(lib, "Imm32.lib")
+#pragma comment(lib, "Version.lib")
+
 #endif
+
 
 #define MOUDLENAME_ALL "All"
 #define MOUDLENAME_ALGORITHM "Algorithm"
@@ -49,7 +52,7 @@ SDL_Renderer* renderer = NULL;
 void _PushArgs(lua_State* l, int argc, char** argv);
 void _HandleQuit();
 
-lua_State* L = luaL_newstate();
+lua_State* pL = luaL_newstate();
 
 MoudleWindow* moudleWindow;
 MoudleGraphic* moudleGraphic;
@@ -174,6 +177,14 @@ ETHER_API usingMoudle(lua_State* L)
 		luaL_error(L, "moudle '%s' not found", moudleName);
 
 	return 0;
+}
+
+
+ETHER_API getVersion(lua_State* L)
+{
+	lua_pushstring(L, _VERSION_);
+
+	return 1;
 }
 
 #endif // !_MAIN_H_
