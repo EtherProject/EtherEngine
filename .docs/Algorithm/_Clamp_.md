@@ -14,7 +14,7 @@ result = Clamp(checknum [, lower, upper])
 
 + checknum [number]：被限定值
 + lower [number]：下限，可选，默认为0
-+ upper [number]：下限，可选，默认为1
++ upper [number]：上限，可选，默认为1
 
 ## 返回值：
 
