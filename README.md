@@ -16,11 +16,11 @@
 
 + [OS](.docs/OS/index.md)：操作系统相关API
 
++ [String](.docs/String/index.md)：字符串相关API
+
 + [Time](.docs/Time/index.md)：时间相关API
 
 + [Window](.docs/Window/index.md)：窗口相关API
-
-+ [String](.docs/String/index.md)：字符串相关API
 
 ## 其他API：
 
