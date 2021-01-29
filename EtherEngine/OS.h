@@ -79,6 +79,19 @@ ETHER_API getPathInfo(lua_State* L);
 */
 ETHER_API joinPath(lua_State* L);
 
+/*
+* 从路径中获取文件名
+* 1参数：路径（string）
+* 1返回值：文件名（string）
+*/
+ETHER_API getFileNameFromPath(lua_State* L);
+
+/*
+* 从路径中获取根目录路径
+* 1参数：路径（string）
+* 1返回值：根目录路径（string）
+*/
+ETHER_API getBasePathFromPath(lua_State* L);
 
 class MoudleOS : public Moudle
 {

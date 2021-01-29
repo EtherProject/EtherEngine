@@ -250,6 +250,52 @@ ETHER_API joinPath(lua_State* L)
 }
 
 
+ETHER_API getFileNameFromPath(lua_State* L)
+{
+	string path = luaL_checkstring(L, 1);
+	string::size_type index_slash = path.find_last_of('/');
+	string::size_type index_backslash = path.find_last_of('\\');
+
+	if (index_slash == string::npos && index_backslash == string::npos)
+	{
+		lua_pushstring(L, path.c_str());
+	}
+	else if (index_slash != string::npos && index_backslash != string::npos)
+	{
+		lua_pushstring(L, path.substr((index_slash < index_backslash ? index_backslash : index_slash) + 1).c_str());
+	}
+	else
+	{
+		lua_pushstring(L, index_slash == string::npos ? path.substr(index_backslash + 1).c_str() : path.substr(index_slash + 1).c_str());
+	}
+	
+	return 1;
+}
+
+
+ETHER_API getBasePathFromPath(lua_State* L)
+{
+	string path = luaL_checkstring(L, 1);
+	string::size_type index_slash = path.find_last_of('/');
+	string::size_type index_backslash = path.find_last_of('\\');
+
+	if (index_slash == string::npos && index_backslash == string::npos)
+	{
+		lua_pushstring(L, path.c_str());
+	}
+	else if (index_slash != string::npos && index_backslash != string::npos)
+	{
+		lua_pushstring(L, path.substr(0, (index_slash < index_backslash ? index_backslash : index_slash) + 1).c_str());
+	}
+	else
+	{
+		lua_pushstring(L, index_slash == string::npos ? path.substr(0, index_backslash + 1).c_str() : path.substr(0, index_slash + 1).c_str());
+	}
+
+	return 1;
+}
+
+
 MoudleOS::MoudleOS(lua_State* L)
 {
 	_pL = L;
@@ -264,6 +310,8 @@ MoudleOS::MoudleOS(lua_State* L)
 		{ "IfPathExist", ifPathExist },
 		{ "GetPathInfo", getPathInfo },
 		{ "JoinPath", joinPath },
+		{ "GetFileNameFromPath", getFileNameFromPath },
+		{ "GetBasePathFromPath", getBasePathFromPath },
 	};
 
 	_vMacros = {

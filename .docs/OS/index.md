@@ -23,3 +23,7 @@
 + [GetPathInfo(path)](_GetPathInfo_.md)：获取指定路径的信息
 
 + [JoinPath(directory, file)](_JoinPath_.md)：合并目录和文件名为完整路径
+
++ [GetFileNameFromPath(path)](_GetFileNameFromPath_.md)：从路径中获取文件名
+
++ [GetBasePathFromPath(path)](_GetBasePathFromPath_.md)：从路径中获取根目录路径
