@@ -29,7 +29,7 @@ ETHER_API ifPointInRect(lua_State* L)
 	SDL_Point point = GetPointParam(L, 1, "IfPointInRect");
 	SDL_Rect rect = GetRectParam(L, 2, "IfPointInRect");
 
-	lua_pushboolean(L, point.x >= rect.x && point.x <= rect.x + rect.w && point.y >= rect.y && point.y < rect.y + rect.h);
+	lua_pushboolean(L, point.x >= rect.x && point.x <= rect.x + rect.w && point.y >= rect.y && point.y <= rect.y + rect.h);
 
 	return 1;
 }
@@ -161,27 +161,27 @@ ETHER_API getPointLineDistance(lua_State* L)
 
 ETHER_API rgbaToHSLA(lua_State* L)
 {
-	/*SDL_Color color = GetColorParam(L, 1, "RGBAToHSLA");
+	SDL_Color color = GetColorParam(L, 1, "RGBAToHSLA");
 	
-	double r = color.r / 255;
-	double g = color.g / 255;
-	double b = color.b / 255;
+	double r = (double)color.r / 255;
+	double g = (double)color.g / 255;
+	double b = (double)color.b / 255;
 
-	int max = fmax(fmax(r, g), b);
-	int min = fmin(fmin(r, g), b);
-	int h, l = 0.5 * (max + min), s;
+	double max = fmax(fmax(r, g), b);
+	double min = fmin(fmin(r, g), b);
+	double h, l = 0.5 * (max + min), s;
 
 	if (max == min)
 		h = 0;
 	else if (max == r)
 		if (g >= b)
-			h = 60 * (g - b) / (max - min);
+			h = 60 * (g - b) / (max - min) + 0;
 		else
 			h = 60 * (g - b) / (max - min) + 360;
 	else if (max == g)
 		h = 60 * (b - r) / (max - min) + 120;
-	else if (max == color.b)
-		h = 60 * (b - r) / (max - min) + 120;
+	else if (max == b)
+		h = 60 * (r - g) / (max - min) + 240;
 
 	if (l == 0 || max == min)
 		s = 0;
@@ -201,10 +201,8 @@ ETHER_API rgbaToHSLA(lua_State* L)
 	lua_pushnumber(L, s);
 	lua_settable(L, -3);
 	lua_pushstring(L, "a");
-	lua_pushnumber(L, color.a);
-	lua_settable(L, -3);*/
-
-	// 待施工 ...
+	lua_pushnumber(L, (double)color.a / 255);
+	lua_settable(L, -3);
 
 	return 1;
 }
@@ -212,7 +210,71 @@ ETHER_API rgbaToHSLA(lua_State* L)
 
 ETHER_API hslaToRGBA(lua_State* L)
 {
-	// 待施工 ...
+	ColorHSLA color;
+
+#ifdef _ETHER_DEBUG_
+
+	if (!lua_istable(L, 1))
+	{
+		luaL_error(L, "bad argument 1 to 'HSLAToRGBA' (table expected, got %s)", luaL_typename(L, 1));
+	}
+	else
+	{
+		lua_getfield(L, 1, "h");
+		lua_isnumber(L, -1) ? color.h = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'HSLAToRGBA' (table must have number value for key 'h', got %s)", luaL_typename(L, -1));
+		lua_getfield(L, 1, "s");
+		lua_isnumber(L, -1) ? color.s = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'HSLAToRGBA' (table must have number value for key 's', got %s)", luaL_typename(L, -1));
+		lua_getfield(L, 1, "l");
+		lua_isnumber(L, -1) ? color.l = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'HSLAToRGBA' (table must have number value for key 'l', got %s)", luaL_typename(L, -1));
+		lua_getfield(L, 1, "a");
+		lua_isnumber(L, -1) ? color.a = lua_tonumber(L, -1) : luaL_error(L, "bad argument #1 to 'HSLAToRGBA' (table must have number value for key 'a', got %s)", luaL_typename(L, -1));
+	}
+
+#else
+
+	lua_getfield(L, 1, "h");
+	color.h = lua_tonumber(L, -1);
+	lua_getfield(L, 1, "s");
+	color.s = lua_tonumber(L, -1);
+	lua_getfield(L, 1, "l");
+	color.l = lua_tonumber(L, -1);
+	lua_getfield(L, 1, "a");
+	color.a = lua_tonumber(L, -1);
+
+#endif 
+
+	Uint8 r, g, b;
+
+	double cmax, cmin;
+
+	if (color.l <= 0.5)
+		cmax = color.l * (1 + color.s);
+	else
+		cmax = color.l * (1 - color.s) + color.s;
+	cmin = 2 * color.l - cmax;
+
+	if (color.s == 0) {
+		r = g = b = color.l * 255;
+	}
+	else {
+		r = HLS2RGBvalue(cmin, cmax, color.h + 120) * 255;
+		g = HLS2RGBvalue(cmin, cmax, color.h) * 255;
+		b = HLS2RGBvalue(cmin, cmax, color.h - 120) * 255;
+	}
+
+	lua_newtable(L);
+	lua_pushstring(L, "r");
+	lua_pushnumber(L, r);
+	lua_settable(L, -3);
+	lua_pushstring(L, "g");
+	lua_pushnumber(L, g);
+	lua_settable(L, -3);
+	lua_pushstring(L, "b");
+	lua_pushnumber(L, b);
+	lua_settable(L, -3);
+	lua_pushstring(L, "a");
+	lua_pushnumber(L, color.a * 255);
+	lua_settable(L, -3);
 
 	return 1;
 }

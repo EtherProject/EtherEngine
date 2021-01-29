@@ -288,3 +288,20 @@ string ConvertMacroToMIMEType(int macro)
 		break;
 	}
 }
+
+
+double HLS2RGBvalue(double n1, double n2, double hue)
+{
+	if (hue > 360)
+		hue -= 360;
+	else if (hue < 0)
+		hue += 360;
+	if (hue < 60)
+		return n1 + (n2 - n1) * hue / 60;
+	else if (hue < 180)
+		return n2;
+	else if (hue < 240)
+		return n1 + (n2 - n1) * (240 - hue) / 60;
+	else
+		return n1;
+}

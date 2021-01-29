@@ -10,6 +10,7 @@
 #include "OS.h"
 #include "Algorithm.h"
 #include "Network.h"
+#include "String.h"
 
 #include <lua.hpp>
 #include <SDL.h>
@@ -44,6 +45,7 @@
 #define MOUDLENAME_OS "OS"
 #define MOUDLENAME_TIME "Time"
 #define MOUDLENAME_WINDOW "Window"
+#define MOUDLENAME_STRING "String"
 
 SDL_Event event;
 SDL_Window* window = NULL;
@@ -62,6 +64,7 @@ MoudleMedia* moudleMedia;
 MoudleNetwork* moudleNetwork;
 MoudleOS* moudleOS;
 MoudleTime* moudleTime;
+MoudleString* moudleString;
 
 ETHER_API usingMoudle(lua_State* L)
 {
@@ -107,6 +110,11 @@ ETHER_API usingMoudle(lua_State* L)
 		{
 			moudleTime = new MoudleTime(L);
 			moudleTime->OpenMoudle();
+		}
+		if (!moudleString)
+		{
+			moudleString = new MoudleString(L);
+			moudleString->OpenMoudle();
 		}
 	}
 	else if (moudleName == MOUDLENAME_WINDOW)
@@ -171,6 +179,14 @@ ETHER_API usingMoudle(lua_State* L)
 		{
 			moudleTime = new MoudleTime(L);
 			moudleTime->OpenMoudle();
+		}
+	}
+	else if (moudleName == MOUDLENAME_STRING)
+	{
+		if (!moudleString)
+		{
+			moudleString = new MoudleString(L);
+			moudleString->OpenMoudle();
 		}
 	}
 	else

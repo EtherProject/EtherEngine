@@ -12,6 +12,14 @@ using namespace httplib;
 #include <string>
 using namespace std;
 
+#ifdef _WINDOWS_
+
+#include <Windows.h>
+#include <wchar.h>
+
+#endif
+
+
 /// <summary>
 /// 获取描述点位置的表的参数
 /// </summary>
@@ -66,6 +74,8 @@ void PushResponseTable(lua_State* L, shared_ptr<Response> response);
 /// <param name="macro">宏</param>
 /// <returns>MIME Type</returns>
 string ConvertMacroToMIMEType(int macro);
+
+double HLS2RGBvalue(double n1, double n2, double hue);
 
 #endif // !_UTIL_H_
 

@@ -10,6 +10,14 @@
 
 #include <math.h>
 
+struct ColorHSLA
+{
+	double h;
+	double s;
+	double l;
+	double a;
+};
+
 // 将数值限制在指定区间
 // 1或3参数：被限定值（number），下限和上限（number，默认为0和1）
 // 1返回值：限定后值

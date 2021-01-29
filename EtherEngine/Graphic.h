@@ -243,6 +243,10 @@ ETHER_API createTextImageBlended(lua_State * L);
 // 1返回值：成功则返回图像数据（userdata-IMAGE），失败则返回nil
 ETHER_API createUTF8TextImageBlended(lua_State * L);
 
+// Unicode字符串转UTF8字符串
+// 1参数：Unicode字符串
+// 1返回值：UTF8字符串
+ETHER_API unicodeToUTF8(lua_State* L);
 
 class MoudleGraphic : public Moudle
 {
