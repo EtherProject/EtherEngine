@@ -20,6 +20,8 @@
 
 + [Window](.docs/Window/index.md)：窗口相关API
 
++ [String](.docs/String/index.md)：字符串相关API
+
 ## 其他API：
 
 + UsingMoudle(name)
