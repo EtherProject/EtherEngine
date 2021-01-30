@@ -50,7 +50,7 @@ ETHER_API listDirectory(lua_State* L)
 	intptr_t hFile = 0;
     _finddata_t fileinfo;
     string path = luaL_checkstring(L, 1);
-	path = path.empty() ? "./*" : path;
+	path = path.empty() ? "./*" : (path[path.length() - 1] == '\\' || path[path.length() - 1] == '/' ? path.append("*") : path.append("\\*"));
 
 	if (_findfirst(path.c_str(), &fileinfo) == -1)
 	{
@@ -58,26 +58,21 @@ ETHER_API listDirectory(lua_State* L)
 	}
 	else
 	{
-		if (!(fileinfo.attrib & _A_SUBDIR))
+		lua_newtable(L);
+		if ((hFile = _findfirst(path.c_str(), &fileinfo)) != -1)
 		{
-			luaL_error(L, "bad argument #1 to 'ListDirectory' (path must be a folder, not file)");
-		}
-		else
-		{
-			path = (path[path.length() - 1] == '*' || path[path.length() - 1] == '\\' || path[path.length() - 1] == '/') ? path + "*" : path + "\\*";
-			lua_newtable(L);
-			if ((hFile = _findfirst(path.c_str(), &fileinfo)) != -1)
+			int index_file = 1;
+			do
 			{
-				int index_file = 1;
-				do
+				if (string(fileinfo.name) != "." && string(fileinfo.name) != "..")
 				{
 					lua_pushnumber(L, index_file);
 					lua_pushstring(L, fileinfo.name);
 					lua_settable(L, -3);
 					index_file++;
-				} while (!_findnext(hFile, &fileinfo));
-				_findclose(hFile);
-			}
+				}
+			} while (!_findnext(hFile, &fileinfo));
+			_findclose(hFile);
 		}
 	}
 
