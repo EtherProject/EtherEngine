@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 	lua_pushcfunction(pL, getVersion);
 	lua_setglobal(pL, "GetVersion");
 
-	if (luaL_dofile(pL, (string(SDL_GetBasePath()) + "Main.lua").c_str()))
+	if (luaL_dofile(pL, "Main.lua"))
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(pL, -1), NULL);
 	}
