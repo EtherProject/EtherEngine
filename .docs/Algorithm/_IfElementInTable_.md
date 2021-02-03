@@ -14,7 +14,10 @@ flag = IfElementInTable(element, table, type)
 
 + element [number, string]：指定元素，类型为number或string
 + table [table]：表，值类型与被判断元素类型相同
-+ type [Macro number]：元素类型
++ type [Macro number]：元素类型，可选值如下：
+    
+    + ELEMENTTYPE_NUM：number类型元素
+    + ELEMENTTYPE_STR：string类型元素
 
 ## 返回值：
 
