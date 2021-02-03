@@ -2,6 +2,10 @@
 [![](https://img.shields.io/github/stars/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/stargazers)  [![](https://img.shields.io/github/forks/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/network/members)  [![](https://img.shields.io/github/issues/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/issues)  ![](https://img.shields.io/github/license/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&label=license&message=notspecified&labelColor=3f48cc)
 > ~~更简单~~更专业的游戏引擎
 
+## 启动引擎：
+
+<font color=#DC143C> 引擎默认将相同目录的`Main.lua`文件作为入口点文件 </font>
+
 ## 跳转到指定模块API列表：
 
 + [Algorithm](.docs/Algorithm/index.md)：算法相关API
