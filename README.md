@@ -4,7 +4,7 @@
 
 ## 启动引擎：
 
-<font color=#DC143C> 引擎默认将相同目录的`Main.lua`文件作为入口点文件 </font>
+**<font color=#DC143C size=4> 引擎默认将相同目录的 `Main.lua` 文件作为入口点文件 </font>**
 
 ## 跳转到指定模块API列表：
 
