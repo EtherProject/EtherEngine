@@ -73,3 +73,7 @@
 如果在使用过程中出现任何问题或有任何建议，请直接在本仓库中提交issue。
 
 也欢迎您直接发送邮件至Voidmatrix@qq.com
+
+## 投递作品
+
+我们十分欢迎您将自己的作品投递到 [EtherEngine 作品集](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection) 仓库下！
