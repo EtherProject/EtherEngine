@@ -19,7 +19,7 @@ response = RequestGet(link [, headers])
 
 + response [table]：成功则返回Response表，表内成员如下，失败则返回nil：
 
-    + statue [number]：状态码
+    + status [number]：状态码
     + headers [table]：响应头
     + body [string]：正文
 
