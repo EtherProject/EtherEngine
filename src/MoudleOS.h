@@ -9,11 +9,23 @@
 
 #include <string>
 using namespace std;
+
 #ifdef __WINDOWS__
 #include <io.h>
 #else
 #include ""
 #endif
+
+#define FILEATTRIB_ARCH 0
+#define FILEATTRIB_HIDDEN 1
+#define FILEATTRIB_NORMAL 2
+#define FILEATTRIB_RDONLY 3
+#define FILEATTRIB_SUBDIR 4
+#define FILEATTRIB_SYSTEM 5
+
+#define PATHMODE_FILE 6
+#define PATHMODE_DIR 7
+#define PATHMODE_FILEANDDIR 8
 
 // 获取程序运行的目录
 // 0参数
@@ -96,7 +108,7 @@ ETHER_API getBasePathFromPath(lua_State* L);
 class MoudleOS : public Moudle
 {
 public:
-	MoudleOS(lua_State* L);
+	MoudleOS(lua_State* L, string name);
 	~MoudleOS() {};
 
 };

@@ -41,7 +41,7 @@ ETHER_API getCounterFrequency(lua_State * L);
 class MoudleTime : public Moudle
 {
 public:
-	MoudleTime(lua_State* L);
+	MoudleTime(lua_State* L, string name);
 	~MoudleTime() {};
 
 };

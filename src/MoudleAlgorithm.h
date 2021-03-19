@@ -10,6 +10,9 @@
 
 #include <math.h>
 
+#define ELEMENTTYPE_NUM 0
+#define ELEMENTTYPE_STR 1
+
 struct ColorHSLA
 {
 	double h;
@@ -17,6 +20,8 @@ struct ColorHSLA
 	double l;
 	double a;
 };
+
+double HLS2RGBvalue(double n1, double n2, double hue);
 
 // 将数值限制在指定区间
 // 1或3参数：被限定值（number），下限和上限（number，默认为0和1）
@@ -98,7 +103,7 @@ ETHER_API ifElementInTable(lua_State* L);
 class MoudleAlgorithm : public Moudle
 {
 public:
-	MoudleAlgorithm(lua_State* L);
+	MoudleAlgorithm(lua_State* L, string name);
 	~MoudleAlgorithm() {};
 
 };

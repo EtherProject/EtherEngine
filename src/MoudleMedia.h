@@ -8,6 +8,14 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
+#define MUSIC_TYPE_WAV 1308
+#define MUSIC_TYPE_MP3 1309
+#define MUSIC_TYPE_OGG 1310
+#define MUSIC_TYPE_CMD 1311
+#define MUSIC_TYPE_MOD 1312
+#define MUSIC_TYPE_MID 1313
+#define MUSIC_TYPE_UNKONWN 1314
+
 // 加载音乐文件
 // 1参数：音乐文件路径
 // 1返回值：成功则返回音乐数据（userdata-MUSIC），失败则返回nil
@@ -82,7 +90,7 @@ ETHER_API playSound(lua_State * L);
 class MoudleMedia : public Moudle
 {
 public:
-	MoudleMedia(lua_State* L);
+	MoudleMedia(lua_State* L, string name);
 	~MoudleMedia() {};
 
 };

@@ -1,4 +1,4 @@
-#include "Interactivity.h"
+#include "MoudleInteractivity.h"
 
 ETHER_API getCursorPosition(lua_State * L)
 {
@@ -1005,10 +1005,8 @@ ETHER_API getEventType(lua_State * L)
 }
 
 
-MoudleInteractivity::MoudleInteractivity(lua_State* L)
+MoudleInteractivity::MoudleInteractivity(lua_State* L, string name) : Moudle(L, name)
 {
-	_pL = L;
-
 	_vCMethods = {
 		{ "GetCursorPosition", getCursorPosition },
 		{ "GetScrollValue", getScrollValue },

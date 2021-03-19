@@ -1,4 +1,4 @@
-#include "OS.h"
+#include "MoudleOS.h"
 
 
 ETHER_API getBasePath(lua_State * L)
@@ -291,10 +291,8 @@ ETHER_API getBasePathFromPath(lua_State* L)
 }
 
 
-MoudleOS::MoudleOS(lua_State* L)
+MoudleOS::MoudleOS(lua_State* L, string name) : Moudle(L, name)
 {
-	_pL = L;
-
 	_vCMethods = {
 		{ "GetBasePath", getBasePath },
 		{ "SetClipboardText", setClipboardText },

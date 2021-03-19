@@ -1,4 +1,4 @@
-#include "Graphic.h"
+#include "MoudleGraphic.h"
 
 ETHER_API setCursorShow(lua_State * L)
 {
@@ -865,10 +865,8 @@ ETHER_API createUTF8TextImageBlended(lua_State * L)
 }
 
 
-MoudleGraphic::MoudleGraphic(lua_State* L)
+MoudleGraphic::MoudleGraphic(lua_State* L, string name) : Moudle(L, name)
 {
-	_pL = L;
-
 	TTF_Init();
 	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF);
 

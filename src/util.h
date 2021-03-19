@@ -47,35 +47,5 @@ SDL_Rect GetRectParam(lua_State* L, int index, const char* funName);
 /// <returns>颜色</returns>
 SDL_Color GetColorParam(lua_State* L, int index, const char* funName);
 
-/// <summary>
-/// 从链接中获取域名
-/// </summary>
-/// <param name="link">链接</param>
-/// <returns>域名</returns>
-string GetLinkDomain(string link);
-
-/// <summary>
-/// 从链接中获取路由
-/// </summary>
-/// <param name="link">链接</param>
-/// <returns>路由</returns>
-string GetLinkRoute(string link);
-
-/// <summary>
-/// 将指定的Response表压入当前Lua虚拟栈
-/// </summary>
-/// <param name="L">当前Lua虚拟机环境</param>
-/// <param name="response">Response表</param>
-void PushResponseTable(lua_State* L, shared_ptr<Response> response);
-
-/// <summary>
-/// 将宏转换为 MIME Type
-/// </summary>
-/// <param name="macro">宏</param>
-/// <returns>MIME Type</returns>
-string ConvertMacroToMIMEType(int macro);
-
-double HLS2RGBvalue(double n1, double n2, double hue);
-
 #endif // !_UTIL_H_
 

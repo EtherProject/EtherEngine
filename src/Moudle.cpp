@@ -8,9 +8,14 @@ void Moudle::OpenMoudle()
 		lua_setglobal(_pL, method.name);
 	}
 
+	lua_newtable(_pL);
+
 	for (Macro macro : _vMacros)
 	{
-		lua_pushnumber(_pL, macro.value);
-		lua_setglobal(_pL, macro.name);
+		lua_pushstring(_pL, macro.name);
+		lua_pushinteger(_pL, macro.value);
+		lua_settable(_pL, -3);
 	}
+
+	lua_setglobal(_pL, _strName.c_str());
 }

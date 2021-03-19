@@ -11,6 +11,16 @@
 #include <SDL_ttf.h>
 #include <SDL2_gfxPrimitives.h>
 
+#define FONT_STYLE_BOLD 1303
+#define FONT_STYLE_ITALIC 1304
+#define FONT_STYLE_UNDERLINE 1305
+#define FONT_STYLE_STRIKETHROUGH 1306
+#define FONT_STYLE_NORMAL 1307
+
+#define FLIP_HORIZONTAL 1010
+#define FLIP_VERTICAL 1011
+#define FLIP_NONE 1012
+
 extern SDL_Renderer* renderer;
 
 // 设置鼠标是否显示
@@ -243,15 +253,10 @@ ETHER_API createTextImageBlended(lua_State * L);
 // 1返回值：成功则返回图像数据（userdata-IMAGE），失败则返回nil
 ETHER_API createUTF8TextImageBlended(lua_State * L);
 
-// Unicode字符串转UTF8字符串
-// 1参数：Unicode字符串
-// 1返回值：UTF8字符串
-ETHER_API unicodeToUTF8(lua_State* L);
-
 class MoudleGraphic : public Moudle
 {
 public:
-	MoudleGraphic(lua_State* L);
+	MoudleGraphic(lua_State* L, string name);
 	~MoudleGraphic() {};
 
 };

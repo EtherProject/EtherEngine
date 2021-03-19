@@ -2,11 +2,27 @@
 #define _WINDOW_H_
 
 #include "Moudle.h"
-#include "Macros.h"
 #include "util.h"
 
 #include <lua.hpp>
 #include <SDL.h>
+
+#define WINDOW_POSITION_DEFAULT -2147483648
+
+#define MSGBOX_ERROR 1001
+#define MSGBOX_WARNING 1002
+#define MSGBOX_INFO 1003
+
+#define WINDOW_FULLSCREEN 1004
+#define WINDOW_FULLSCREEN_DESKTOP 1005
+#define WINDOW_BORDERLESS 1006
+#define WINDOW_RESIZABLE 1007
+#define WINDOW_MAXIMIZED 1008
+#define WINDOW_MINIMIZED 1009
+
+#define WINDOW_MODE_WINDOWED 1013
+#define WINDOW_MODE_FULLSCREEN 1014
+#define WINDOW_MODE_FULLSCREEN_DESKTOP 1015
 
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;
@@ -110,7 +126,7 @@ ETHER_API updateWindow(lua_State* L);
 class MoudleWindow : public Moudle
 {
 public:
-	MoudleWindow(lua_State* L);
+	MoudleWindow(lua_State* L, string name);
 	~MoudleWindow() {};
 
 };
