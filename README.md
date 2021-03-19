@@ -6,86 +6,59 @@
 [![](https://img.shields.io/github/contributors/VoidmatrixHeathcliff/EtherEngine)](https://github.com/VoidmatrixHeathcliff/EtherEngine/graphs/contributors)
 ![](https://img.shields.io/github/commit-activity/m/VoidmatrixHeathcliff/EtherEngine)
 
-本项目由 EtherEngine 更名为 **EtherAPI**，旨在提供一套跨平台的 Lua 接口，供游戏开发使用（目前仅支持 2D 图形），功能涵盖 **图形、声音、交互、网络** 等方面，目前仍在不断开发和完善中；API 在设计过程中首先考虑的是 **简洁** 和 **易用性**，所以对于性能要求较高的游戏，EtherAPI 或许并不是一个很好的选择；但是在对于性能并不是很敏感的应用场景（如游戏原型的设计），EtherAPI 可以帮你快速建立起几乎所有类型游戏的演示框架甚至是一个已经可以发布的游戏。如果您对本项目感兴趣，欢迎为项目贡献代码或留下您的使用建议，记得点亮右上角的小星星哦 ~  
+本项目由 EtherEngine 更名为 **EtherAPI**，旨在提供一套跨平台的 Lua 接口，供游戏开发使用（目前仅支持 2D 游戏），功能涵盖 **图形、声音、交互、网络** 等方面，目前仍在不断开发和完善中；API 在设计过程中首先考虑的是 **简洁** 和 **易用性**，所以对于性能要求较高的游戏，EtherAPI 或许并不是一个很好的选择；但是在对于性能并不是很敏感的应用场景（如游戏原型的设计），EtherAPI 可以帮你快速建立起几乎所有类型游戏的演示框架甚至是一个已经可以直接发布的游戏。如果您对本项目感兴趣，欢迎为项目贡献代码或留下您的使用建议，记得点亮右上角的小星星哦 ~  
 
-This project is renamed as **EtherAPI** from EtherEngine, which aims to provide a set of cross platform Lua interface for game development (currently only supports 2D graphics), with functions covering **graphics, sound, media, interaction, network** and other aspects, and is still under continuous development and improvement; the first consideration in the design process of API is **SIMPLICITY** and **EASE OF USE**, so EtherAPI may not be a good choice for games with high performance requirements. However, in application scenarios that are not very sensitive to performance (such as the design of game prototypes), etherapi can help you quickly build up the performance framework of almost all kinds of games, even a game that can be released. If you are interested in this project, you are welcome to contribute code to the project or leave your suggestions. Remember to light up the little star in the upper right corner~
+This project is renamed as **EtherAPI** from EtherEngine, which aims to provide a set of cross platform Lua interface for game development (currently only supports 2D game), with functions covering **graphics, sound, media, interaction, network** and other aspects, and is still under continuous development and improvement; the first consideration in the design process of API is **SIMPLICITY** and **EASE OF USE**, so EtherAPI may not be a good choice for games with high performance requirements. However, in application scenarios that are not very sensitive to performance (such as the design of game prototypes), EtherAPI can help you quickly build up the performance framework of almost all kinds of games, even a game that can be released directly. If you are interested in this project, you are welcome to contribute code to the project or leave your suggestions. Remember to light up the little star in the upper right corner~
 
-## 启动引擎：
+## 本地编译 · Building
 
-**<font color=#DC143C size=4> 引擎默认将相同目录的 `Main.lua` 文件作为入口点文件 </font>**
+由于 EtherAPI 基于 SDL 和 Lua 等库实现，所以您可能需要先本地编译相关的库进行支持。  
+您可以在以下网址处找到这些依赖适合您所使用的平台的发布版本或源码： 
 
-## 跳转到指定模块API列表：
+Since EtherAPI is implemented based on SDL, Lua and other libraries, you may need to compile the relevant libraries for support first.
+You can find the release version or source code of these dependencies for the platform you are using at the following address:   
 
-+ [Algorithm](.docs/Algorithm/index.md)：算法相关API
++ **Lua5.4：**[http://www.lua.org/download.html](http://www.lua.org/download.html)
++ **SDL2：**[https://www.libsdl.org/download-2.0.php](https://www.libsdl.org/download-2.0.php)  
++ **SDL_image：**[https://www.libsdl.org/projects/SDL_image/](https://www.libsdl.org/projects/SDL_image/) 
++ **SDL_gfx：**[https://sourceforge.net/projects/sdlgfx/](https://sourceforge.net/projects/sdlgfx/) 
++ **SDL_mixer：**[https://www.libsdl.org/projects/SDL_mixer/](https://www.libsdl.org/projects/SDL_mixer/) 
++ **SDL_ttf：**[https://www.libsdl.org/projects/SDL_ttf/](https://www.libsdl.org/projects/SDL_ttf/) 
++ **cpp-httplib：**[https://github.com/yhirose/cpp-httplib](https://github.com/yhirose/cpp-httplib) 
++ **cJSON：**[https://github.com/VoidmatrixHeathcliff/cJSON](https://github.com/VoidmatrixHeathcliff/cJSON) 
 
-+ [Graphic](.docs/Graphic/index.md)：图形相关API
+然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherAPI 加载器，它将自动加载同一目录下的 `Main.lua`（文件名大小写不敏感）文件作为入口文件。  
+另外，您可以在 `Macros.h` 文件中决定是否禁用 `_ETHER_DEBUG_` 宏来开启 Release 模式；在 Release 模式下，EtherAPI 将跳过部分严格的类型检查，来确保更加高效的运行，同时，在 Windows 平台下，此模式将意味着程序所使用的子系统为 `windows` 而非 `console` ，程序将不会显示控制台，通过 `print()` 等操作输出的调试信息可能会被隐藏。
 
-+ [Interactivity](.docs/Interactivity/index.md)：交互相关API
+Then add all source files in the `src` folder to your project and compile them to get the Ethernet API loader suitable for your current development platform, which will automatically load the `Main.lua` (file name case insensitive) file in the same directory as entry file.
+In addition, you can decide whether to disable `_ETHER_DEBUG_` Macro in the `macro.h` file to open release mode; in release mode, etherapi will skip some strict type check to ensure more efficient operation. Meanwhile, under Windows platform, this mode will mean that the subsystem used by the program is `windows` instead of `console`. The program will not show the console. Debugging information output through operation such as `print()` may be hidden.
 
-+ [Media](.docs/Media/index.md)：媒体相关API
+## 文档 · Documentation：
 
-+ [Network](.docs/Network/index.md)：网络相关API
+当前发布的 EtherAPI 提供两个版本的开发者文档： 
 
-+ [OS](.docs/OS/index.md)：操作系统相关API
+There are two versions of the developer's documentation for the currently released EtherAPI:
 
-+ [String](.docs/String/index.md)：字符串相关API
++ [快速开始]()：在这里您可以快速上手 EtherAPI ，文档将演示如 **窗口建立、按键交互、图像渲染、音乐播放** 等内容。  
++ [QuickStart](): Here you can quickly start the EtherAPI, and the document will demonstrate the contents such as **window startup, key interaction, image rendering, music playback** and so on.
 
-+ [Time](.docs/Time/index.md)：时间相关API
++ [完全参考手册](docs/index.md)：这里将包含 EtherAPI 的全部内容和详细介绍。  
++ [CompleteReferenceManual](docs/index.md): Here will contain all the contents and detailed introduction of EtherAPI.
 
-+ [Window](.docs/Window/index.md)：窗口相关API
+我们建议您从 `快速开始` 开始接触 EtherAPI ，其中包含的实例将极大地减少您上手开发时的难度；尽管如此，`快速开始` 部分并不会对 EtherAPI 的全部内容进行详尽的介绍，所展示的内容也可能仅仅是您所需要的一部分，阅读 `完全参考手册` 来获取更多内容。
 
-## 其他API：
+We suggest that you start to contact the EtherAPI from the `QuickStart`, and the examples contained in it will greatly reduce the difficulty when you start the development. However, the `QuickStart` section will not give a detailed introduction to all the contents of the EtherAPI, and the contents displayed may only be part of what you need. Read the `CompleteReferenceManual` for more information.
 
-+ UsingMoudle(name)
+## 联系开发组 · Contact Me
 
-    + 功能：启用指定模块
-    + 参数：模块名，传入字符串 "All" 表示启用所有模块
-    + 返回值：无
+如果在使用过程中出现任何问题或有任何建议，欢迎在本仓库中提交 issue 或直接发送邮件至 Voidmatrix@qq.com
 
-+ GetVersion()
+If there are any problems or suggestions during use, please submit issue in our depository or send email to Voidmatrix@qq.com directly.
 
-    + 功能：获取当前引擎版本号
-    + 参数：无
-    + 返回值：当前引擎版本号
+## 投递作品 · Delivery Your Works
 
-## 附录：
+我们十分欢迎您将自己的作品投递到 [EtherAPI 作品集](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection) 仓库下！  
+关于投递规范和协议等更多内容详见 [此处](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection/blob/main/README.md)。
 
-> 常用表结构内部成员简介
-
-+ 矩形：
-
-    + x [number]：矩形左上角顶点x坐标
-    + y [number]：矩形左上角顶点y坐标
-    + w [number]：矩形宽度
-    + h [number]：矩形高度
-
-+ 点：
-
-    + x [number]：点x坐标
-    + y [number]：点y坐标
-
-+ 颜色：
-
-    + RGBA 颜色空间：
-
-        + r [number]：颜色的红色分量
-        + g [number]：颜色的绿色分量
-        + b [number]：颜色的蓝色分量
-        + a [number]：颜色的透明度
-
-    + HSLA 颜色空间：
-        
-        + h [number]：颜色的色相
-        + s [number]：颜色的饱和度
-        + l [number]：颜色的亮度
-        + a [number]：颜色的透明度
-
-## 联系开发组
-
-如果在使用过程中出现任何问题或有任何建议，请直接在本仓库中提交issue。
-
-也欢迎您直接发送邮件至Voidmatrix@qq.com
-
-## 投递作品
-
-我们十分欢迎您将自己的作品投递到 [EtherEngine 作品集](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection) 仓库下！
+We welcome you to send your works to the depository of EtherAPI works collection!  
+Please refer to [HERE](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection/blob/main/README.md) for more details about delivery specifications and licenses.
