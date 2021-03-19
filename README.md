@@ -18,14 +18,14 @@ This project is renamed as **EtherAPI** from EtherEngine, which aims to provide 
 Since EtherAPI is implemented based on SDL, Lua and other libraries, you may need to compile the relevant libraries for support first.
 You can find the release version or source code of these dependencies for the platform you are using at the following address:   
 
-+ **Lua5.4：**[http://www.lua.org/download.html](http://www.lua.org/download.html)
-+ **SDL2：**[https://www.libsdl.org/download-2.0.php](https://www.libsdl.org/download-2.0.php)  
-+ **SDL_image：**[https://www.libsdl.org/projects/SDL_image/](https://www.libsdl.org/projects/SDL_image/) 
-+ **SDL_gfx：**[https://sourceforge.net/projects/sdlgfx/](https://sourceforge.net/projects/sdlgfx/) 
-+ **SDL_mixer：**[https://www.libsdl.org/projects/SDL_mixer/](https://www.libsdl.org/projects/SDL_mixer/) 
-+ **SDL_ttf：**[https://www.libsdl.org/projects/SDL_ttf/](https://www.libsdl.org/projects/SDL_ttf/) 
-+ **cpp-httplib：**[https://github.com/yhirose/cpp-httplib](https://github.com/yhirose/cpp-httplib) 
-+ **cJSON：**[https://github.com/VoidmatrixHeathcliff/cJSON](https://github.com/VoidmatrixHeathcliff/cJSON) 
++ **Lua - 5.4.0：**[http://www.lua.org/download.html](http://www.lua.org/download.html)
++ **SDL - 2.0.14：**[https://www.libsdl.org/download-2.0.php](https://www.libsdl.org/download-2.0.php)  
++ **SDL_image - 2.0.5：**[https://www.libsdl.org/projects/SDL_image/](https://www.libsdl.org/projects/SDL_image/) 
++ **SDL_gfx - 1.0.4：**[https://sourceforge.net/projects/sdlgfx/](https://sourceforge.net/projects/sdlgfx/) 
++ **SDL_mixer - 2.0.4：**[https://www.libsdl.org/projects/SDL_mixer/](https://www.libsdl.org/projects/SDL_mixer/) 
++ **SDL_ttf - 2.0.15：**[https://www.libsdl.org/projects/SDL_ttf/](https://www.libsdl.org/projects/SDL_ttf/) 
++ **cpp-httplib - 0.8.4：**[https://github.com/yhirose/cpp-httplib](https://github.com/yhirose/cpp-httplib) 
++ **cJSON - 1.7.14：**[https://github.com/VoidmatrixHeathcliff/cJSON](https://github.com/VoidmatrixHeathcliff/cJSON) 
 
 然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherAPI 加载器，它将自动加载同一目录下的 `Main.lua`（文件名大小写不敏感）文件作为入口文件。  
 另外，您可以在 `Macros.h` 文件中决定是否禁用 `_ETHER_DEBUG_` 宏来开启 Release 模式；在 Release 模式下，EtherAPI 将跳过部分严格的类型检查，来确保更加高效的运行，同时，在 Windows 平台下，此模式将意味着程序所使用的子系统为 `windows` 而非 `console` ，程序将不会显示控制台，通过 `print()` 等操作输出的调试信息可能会被隐藏。
