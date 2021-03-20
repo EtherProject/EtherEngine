@@ -3,9 +3,14 @@
 
 ETHER_API loadMusic(lua_State * L)
 {
-	const char* path = luaL_checkstring(L, 1);
-	Mix_Music* music = Mix_LoadMUS(path);
-	music ? lua_pushlightuserdata(L, music) : lua_pushnil(L);
+	Mix_Music* music = Mix_LoadMUS(luaL_checkstring(L, 1));
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, music, 1, "load music failed");
+#endif
+	Mix_Music** uppMusic = (Mix_Music**)lua_newuserdata(L, sizeof(Mix_Music*));
+	*uppMusic = music;
+	luaL_getmetatable(L, METANAME_MUSIC);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -13,16 +18,12 @@ ETHER_API loadMusic(lua_State * L)
 
 ETHER_API unloadMusic(lua_State * L)
 {
-	Mix_Music* music = (Mix_Music*)lua_touserdata(L, 1);
-	if (!music)
-	{
-		luaL_error(L, "bad argument #1 to 'UnloadMusic' (userdata-MUSIC expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		Mix_FreeMusic(music);
-		music = NULL;
-	}
+	GetMusicDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckMusicDataAtFirstPos();
+#endif
+	Mix_FreeMusic(music);
+	music = nullptr;
 
 	return 0;
 }
@@ -30,15 +31,11 @@ ETHER_API unloadMusic(lua_State * L)
 
 ETHER_API playMusic(lua_State * L)
 {
-	Mix_Music* music = (Mix_Music*)lua_touserdata(L, 1);
-	if (!music)
-	{
-		luaL_error(L, "bad argument #1 to 'PlayMusic' (userdata-MUSIC expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		Mix_PlayMusic(music, luaL_checknumber(L, 2));
-	}
+	GetMusicDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckMusicDataAtFirstPos();
+#endif
+	Mix_PlayMusic(music, luaL_checknumber(L, 2));
 
 	return 0;
 }
@@ -46,15 +43,11 @@ ETHER_API playMusic(lua_State * L)
 
 ETHER_API fadeInMusic(lua_State * L)
 {
-	Mix_Music* music = (Mix_Music*)lua_touserdata(L, 1);
-	if (!music)
-	{
-		luaL_error(L, "bad argument #1 to 'PlayMusic' (userdata-MUSIC expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		Mix_FadeInMusic(music, luaL_checknumber(L, 2), luaL_checknumber(L, 3));
-	}
+	GetMusicDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckMusicDataAtFirstPos();
+#endif
+	Mix_FadeInMusic(music, luaL_checknumber(L, 2), luaL_checknumber(L, 3));
 
 	return 0;
 }
@@ -110,7 +103,10 @@ ETHER_API rewindMusic(lua_State * L)
 
 ETHER_API getMusicType(lua_State * L)
 {
-	Mix_Music* music = (Mix_Music*)lua_touserdata(L, 1);
+	GetMusicDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckMusicDataAtFirstPos();
+#endif
 	switch (Mix_GetMusicType(music))
 	{
 	case MUS_WAV:
@@ -142,9 +138,14 @@ ETHER_API getMusicType(lua_State * L)
 
 ETHER_API loadSound(lua_State * L)
 {
-	const char* path = lua_tostring(L, 1);
-	Mix_Chunk* sound = Mix_LoadWAV(path);
-	sound ? lua_pushlightuserdata(L, sound) : lua_pushnil(L);
+	Mix_Chunk* sound = Mix_LoadWAV(luaL_checkstring(L, 1));
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, sound, 1, "load sound failed");
+#endif
+	Mix_Chunk** uppSound = (Mix_Chunk**)lua_newuserdata(L, sizeof(Mix_Chunk*));
+	*uppSound = sound;
+	luaL_getmetatable(L, METANAME_SOUND);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -152,16 +153,12 @@ ETHER_API loadSound(lua_State * L)
 
 ETHER_API unloadSound(lua_State * L)
 {
-	Mix_Chunk* sound = (Mix_Chunk*)lua_touserdata(L, 1);
-	if (!sound)
-	{
-		luaL_error(L, "bad argument #1 to 'UnloadSound' (userdata-SOUND expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		Mix_FreeChunk(sound);
-		sound = NULL;
-	}
+	GetSoundDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckSoundDataAtFirstPos();
+#endif
+	Mix_FreeChunk(sound);
+	sound = nullptr;
 
 	return 0;
 }
@@ -169,15 +166,9 @@ ETHER_API unloadSound(lua_State * L)
 
 ETHER_API playSound(lua_State * L)
 {
-	Mix_Chunk* sound = (Mix_Chunk*)lua_touserdata(L, 1);
-	if (!sound)
-	{
-		luaL_error(L, "bad argument #1 to 'PlaySound' (userdata-SOUND expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		Mix_PlayChannel(-1, sound, luaL_checknumber(L, 2));
-	}
+	GetSoundDataAtFirstPos();
+	CheckSoundDataAtFirstPos();
+	Mix_PlayChannel(-1, sound, luaL_checknumber(L, 2));
 
 	return 0;
 }
@@ -187,6 +178,9 @@ MoudleMedia::MoudleMedia(lua_State* L, string name) : Moudle(L, name)
 {
 	Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	luaL_newmetatable(L, METANAME_MUSIC);
+	luaL_newmetatable(L, METANAME_SOUND);
 
 	_vCMethods = {
 		{ "LoadMusic", loadMusic },

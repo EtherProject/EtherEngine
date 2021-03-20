@@ -2,12 +2,12 @@
 #define _WINDOW_H_
 
 #include "Moudle.h"
-#include "util.h"
+#include "Utils.h"
 
 #include <lua.hpp>
 #include <SDL.h>
 
-#define WINDOW_POSITION_DEFAULT -2147483648
+#define WINDOW_POSITION_DEFAULT INT_MIN
 
 #define MSGBOX_ERROR 1001
 #define MSGBOX_WARNING 1002

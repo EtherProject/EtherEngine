@@ -10,9 +10,14 @@ ETHER_API setCursorShow(lua_State * L)
 
 ETHER_API loadImage(lua_State * L)
 {
-	const char* path = luaL_checkstring(L, 1);
-	SDL_Surface* surface = IMG_Load(path);
-	surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
+	SDL_Surface* pSurface = IMG_Load(luaL_checkstring(L, 1));
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pSurface, 1, "load image failed");
+#endif
+	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
+	*uppSurface = pSurface;
+	luaL_getmetatable(L, METANAME_IMAGE);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -20,17 +25,17 @@ ETHER_API loadImage(lua_State * L)
 
 ETHER_API setImageColorKey(lua_State * L)
 {
-	SDL_Surface* surface = (SDL_Surface*)lua_touserdata(L, 1);
-
-	if (!surface)
-	{
-		luaL_error(L, "bad argument #1 to 'SetColorKey' (userdata-IMAGE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Color color = GetColorParam(L, 3, "SetImageColorKey");
-		SDL_SetColorKey(surface, lua_toboolean(L, 2), SDL_MapRGBA(surface->format, color.r, color.g, color.b, color.a));
-	}
+	GetImageDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckImageDataAtFirstPos();
+#endif
+	SDL_Color color;
+#ifdef _ETHER_DEBUG_
+	CheckColorParam(L, 3, color);
+#else
+	GetColorParam(L, 3, color);
+#endif
+	SDL_SetColorKey(surface, lua_toboolean(L, 2), SDL_MapRGBA(surface->format, color.r, color.g, color.b, color.a));
 
 	return 0;
 }
@@ -38,16 +43,12 @@ ETHER_API setImageColorKey(lua_State * L)
 
 ETHER_API unloadImage(lua_State * L)
 {
-	SDL_Surface* surface = (SDL_Surface*)lua_touserdata(L, 1);
-	if (!surface)
-	{
-		luaL_error(L, "bad argument #1 to 'UnloadImage' (userdata-IMAGE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_FreeSurface(surface);
-		surface = NULL;
-	}
+	GetImageDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckImageDataAtFirstPos();
+#endif
+	SDL_FreeSurface(surface);
+	surface = nullptr;
 
 	return 0;
 }
@@ -55,20 +56,20 @@ ETHER_API unloadImage(lua_State * L)
 
 ETHER_API createTexture(lua_State * L)
 {
-	SDL_Surface* surface = (SDL_Surface*)lua_touserdata(L, 1);
-	if (!surface)
-	{
-		luaL_error(L, "bad argument #1 to 'CreateTexture' (userdata-IMAGE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		if (!renderer)
-		{
-			luaL_error(L, "Texture creation must be done after the window creation operation");
-		}
-		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-		lua_pushlightuserdata(L, texture);
-	}
+	GetImageDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckImageDataAtFirstPos();
+	if (!renderer)
+		luaL_error(L, "Texture creation must be done after the window creation operation");
+#endif
+	SDL_Texture* pTexture = SDL_CreateTextureFromSurface(renderer, surface);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pTexture, 1, "create texture failed");
+#endif
+	SDL_Texture** uppTexture = (SDL_Texture**)lua_newuserdata(L, sizeof(SDL_Texture*));
+	*uppTexture = pTexture;
+	luaL_getmetatable(L, METANAME_TEXTURE);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -76,16 +77,12 @@ ETHER_API createTexture(lua_State * L)
 
 ETHER_API destroyTexture(lua_State * L)
 {
-	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
-	if (!texture)
-	{
-		luaL_error(L, "bad argument #1 to 'DestroyTexture' (userdata-TEXTURE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_DestroyTexture(texture);
-		texture = NULL;
-	}
+	GetTextureDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckTextureDataAtFirstPos();
+#endif
+	SDL_DestroyTexture(texture);
+	texture = nullptr;
 
 	return 0;
 }
@@ -93,17 +90,13 @@ ETHER_API destroyTexture(lua_State * L)
 
 ETHER_API setTextureAlpha(lua_State * L)
 {
-	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
-	if (!texture)
-	{
-		luaL_error(L, "bad argument #1 to 'SetTextureAlpha' (userdata-TEXTURE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-		SDL_SetTextureAlphaMod(texture, luaL_checknumber(L, 2));
-		lua_pushlightuserdata(L, texture);
-	}
+	GetTextureDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckTextureDataAtFirstPos();
+#endif
+	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureAlphaMod(texture, luaL_checknumber(L, 2));
+	lua_pushlightuserdata(L, texture);
 
 	return 0;
 }
@@ -111,16 +104,12 @@ ETHER_API setTextureAlpha(lua_State * L)
 
 ETHER_API getImageSize(lua_State * L)
 {
-	SDL_Surface* surface = (SDL_Surface*)lua_touserdata(L, 1);
-	if (!surface)
-	{
-		luaL_error(L, "bad argument #1 to 'GetImageSize' (userdata-IMAGE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		lua_pushnumber(L, surface->w);
-		lua_pushnumber(L, surface->h);
-	}
+	GetImageDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckImageDataAtFirstPos();
+#endif
+	lua_pushnumber(L, surface->w);
+	lua_pushnumber(L, surface->h);
 
 	return 2;
 }
@@ -128,16 +117,17 @@ ETHER_API getImageSize(lua_State * L)
 
 ETHER_API copyTexture(lua_State * L)
 {
-	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
-	if (!texture)
-	{
-		luaL_error(L, "bad argument #1 to 'CopyTexture' (userdata-TEXTURE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Rect rect = GetRectParam(L, 2, "CopyTexture");
-		SDL_RenderCopy(renderer, texture, NULL, &rect);
-	}
+	GetTextureDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckTextureDataAtFirstPos();
+#endif
+	SDL_Rect rect;
+#ifdef _ETHER_DEBUG_
+	CheckRectParam(L, 2, rect);
+#else
+	GetRectParam(L, 2, rect);
+#endif
+	SDL_RenderCopy(renderer, texture, nullptr, &rect);
 
 	return 0;
 }
@@ -145,56 +135,53 @@ ETHER_API copyTexture(lua_State * L)
 
 ETHER_API copyRotateTexture(lua_State * L)
 {
-	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
-	if (!texture)
+	GetTextureDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckTextureDataAtFirstPos();
+#endif
+	SDL_Point flipCenter;
+	SDL_Rect showRect;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 3, flipCenter);
+	CheckRectParam(L, 5, showRect);
+#else
+	GetPointParam(L, 3, flipCenter);
+	GetRectParam(L, 5, showRect);
+#endif
+	SDL_RendererFlip flip;
+#ifdef _ETHER_DEBUG_
+	CheckTableParam(L, 4);
+#endif
+	lua_pushnil(L);
+	while (lua_next(L, 4))
 	{
-		luaL_error(L, "bad argument #1 to 'CopyRotateTexture' (userdata-TEXTURE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Point flipCenter = GetPointParam(L, 3, "CopyRotateTexture");
-
-		SDL_Rect showRect = GetRectParam(L, 5, "CopyRotateTexture");
-
-		SDL_RendererFlip flip;
-		if (!lua_istable(L, 4))
+		lua_pushvalue(L, -2);
+		if (!lua_isnumber(L, -2))
 		{
-			luaL_error(L, "bad argument #4 to 'CopyRotateTexture' (table expected, got %s)", luaL_typename(L, 4));
+			luaL_error(L, "bad argument #4 to 'CopyRotateTexture' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
 		}
 		else
 		{
-			lua_pushnil(L);
-			while (lua_next(L, 4))
+			switch ((int)lua_tonumber(L, -2))
 			{
-				lua_pushvalue(L, -2);
-				if (!lua_isnumber(L, -2))
-				{
-					luaL_error(L, "bad argument #4 to 'CopyRotateTexture' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
-				}
-				else
-				{
-					switch ((int)lua_tonumber(L, -2))
-					{
-					case FLIP_HORIZONTAL:
-						flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
-						break;
-					case FLIP_VERTICAL:
-						flip = (SDL_RendererFlip)(flip | SDL_FLIP_VERTICAL);
-						break;
-					case FLIP_NONE:
-						flip = (SDL_RendererFlip)(flip | SDL_FLIP_NONE);
-						break;
-					default:
-						luaL_error(L, "bad argument #4 to 'CopyRotateTexture' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
-						break;
-					}
-				}
-				lua_pop(L, 2);
+			case FLIP_HORIZONTAL:
+				flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
+				break;
+			case FLIP_VERTICAL:
+				flip = (SDL_RendererFlip)(flip | SDL_FLIP_VERTICAL);
+				break;
+			case FLIP_NONE:
+				flip = (SDL_RendererFlip)(flip | SDL_FLIP_NONE);
+				break;
+			default:
+				luaL_error(L, "bad argument #4 to 'CopyRotateTexture' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
+				break;
 			}
 		}
-
-		SDL_RenderCopyEx(renderer, texture, NULL, &showRect, luaL_checknumber(L, 2), &flipCenter, flip);
+		lua_pop(L, 2);
 	}
+
+	SDL_RenderCopyEx(renderer, texture, nullptr, &showRect, luaL_checknumber(L, 2), &flipCenter, flip);
 
 	return 0;
 }
@@ -202,19 +189,20 @@ ETHER_API copyRotateTexture(lua_State * L)
 
 ETHER_API copyReshapeTexture(lua_State * L)
 {
-	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
-	if (!texture)
-	{
-		luaL_error(L, "bad argument #1 to 'CopyReshapeTexture' (userdata-TEXTURE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Rect reshapeRect = GetRectParam(L, 2, "CopyReshapeTexture");
+	GetTextureDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckTextureDataAtFirstPos();
+#endif
+	SDL_Rect reshapeRect, showRect;
+#ifdef _ETHER_DEBUG_
+	CheckRectParam(L, 2, reshapeRect);
+	CheckRectParam(L, 3, showRect);
+#else
+	GetRectParam(L, 2, reshapeRect);
+	GetRectParam(L, 3, showRect);
+#endif
 
-		SDL_Rect showRect = GetRectParam(L, 3, "CopyReshapeTexture");
-
-		SDL_RenderCopy(renderer, texture, &reshapeRect, &showRect);
-	}
+	SDL_RenderCopy(renderer, texture, &reshapeRect, &showRect);
 
 	return 0;
 }
@@ -222,56 +210,56 @@ ETHER_API copyReshapeTexture(lua_State * L)
 
 ETHER_API copyRotateReshapeTexture(lua_State * L)
 {
-	SDL_Texture* texture = (SDL_Texture*)lua_touserdata(L, 1);
-	if (!texture)
-	{
-		luaL_error(L, "bad argument #1 to 'CopyRotateReshapeTexture' (userdata-TEXTURE expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Point flipCenter = GetPointParam(L, 3, "CopyRotateReshapeTexture");
-		SDL_Rect reshapeRect = GetRectParam(L, 5, "CopyRotateReshapeTexture");
-		SDL_Rect showRect = GetRectParam(L, 6, "CopyRotateReshapeTexture");
+	GetTextureDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckTextureDataAtFirstPos();
+#endif
+	SDL_Point flipCenter;
+	SDL_Rect reshapeRect, showRect;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 3, flipCenter);
+	CheckRectParam(L, 5, reshapeRect);
+	CheckRectParam(L, 6, showRect);
+#else
+	GetPointParam(L, 3, flipCenter);
+	GetRectParam(L, 5, reshapeRect);
+	GetRectParam(L, 6, showRect);
+#endif
 
-		SDL_RendererFlip flip;
-		if (!lua_istable(L, 4))
+	SDL_RendererFlip flip;
+#ifdef _ETHER_DEBUG_
+	CheckTableParam(L, 4);
+#endif
+	lua_pushnil(L);
+	while (lua_next(L, 4))
+	{
+		lua_pushvalue(L, -2);
+		if (!lua_isnumber(L, -2))
 		{
-			luaL_error(L, "bad argument #4 to 'CopyRotateReshapeTexture' (table expected, got %s)", luaL_typename(L, 4));
+			luaL_error(L, "bad argument #4 to 'CopyRotateReshapeTexture' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
 		}
 		else
 		{
-			lua_pushnil(L);
-			while (lua_next(L, 4))
+			switch ((int)lua_tonumber(L, -2))
 			{
-				lua_pushvalue(L, -2);
-				if (!lua_isnumber(L, -2))
-				{
-					luaL_error(L, "bad argument #4 to 'CopyRotateReshapeTexture' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
-				}
-				else
-				{
-					switch ((int)lua_tonumber(L, -2))
-					{
-					case FLIP_HORIZONTAL:
-						flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
-						break;
-					case FLIP_VERTICAL:
-						flip = (SDL_RendererFlip)(flip | SDL_FLIP_VERTICAL);
-						break;
-					case FLIP_NONE:
-						flip = (SDL_RendererFlip)(flip | SDL_FLIP_NONE);
-						break;
-					default:
-						luaL_error(L, "bad argument #4 to 'CopyRotateReshapeTexture' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
-						break;
-					}
-				}
-				lua_pop(L, 2);
+			case FLIP_HORIZONTAL:
+				flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
+				break;
+			case FLIP_VERTICAL:
+				flip = (SDL_RendererFlip)(flip | SDL_FLIP_VERTICAL);
+				break;
+			case FLIP_NONE:
+				flip = (SDL_RendererFlip)(flip | SDL_FLIP_NONE);
+				break;
+			default:
+				luaL_error(L, "bad argument #4 to 'CopyRotateReshapeTexture' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
+				break;
 			}
 		}
-
-		SDL_RenderCopyEx(renderer, texture, &reshapeRect, &showRect, luaL_checknumber(L, 2), &flipCenter, flip);
+		lua_pop(L, 2);
 	}
+
+	SDL_RenderCopyEx(renderer, texture, &reshapeRect, &showRect, luaL_checknumber(L, 2), &flipCenter, flip);
 
 	return 0;
 }
@@ -279,7 +267,12 @@ ETHER_API copyRotateReshapeTexture(lua_State * L)
 
 ETHER_API setDrawColor(lua_State * L)
 {
-	SDL_Color color = GetColorParam(L, 1, "SetDrawColor");
+	SDL_Color color;
+#ifdef _ETHER_DEBUG_
+	CheckColorParam(L, 1, color);
+#else
+	GetColorParam(L, 1, color);
+#endif
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
@@ -313,7 +306,12 @@ ETHER_API getDrawColor(lua_State * L)
 
 ETHER_API point(lua_State * L)
 {
-	SDL_Point point = GetPointParam(L, 1, "Point");
+	SDL_Point point;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, point);
+#else
+	GetPointParam(L, 1, point);
+#endif
 
 	SDL_RenderDrawPoint(renderer, point.x, point.y);
 
@@ -323,9 +321,14 @@ ETHER_API point(lua_State * L)
 
 ETHER_API singleline(lua_State * L)
 {
-	SDL_Point startPoint = GetPointParam(L, 1, "Line");
-
-	SDL_Point endPoint = GetPointParam(L, 2, "Line");
+	SDL_Point startPoint, endPoint;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, startPoint);
+	CheckPointParam(L, 2, endPoint);
+#else
+	GetPointParam(L, 1, startPoint);
+	GetPointParam(L, 2, endPoint);
+#endif
 
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
@@ -337,9 +340,14 @@ ETHER_API singleline(lua_State * L)
 
 ETHER_API thickLine(lua_State * L)
 {
-	SDL_Point startPoint = GetPointParam(L, 1, "ThickLine");
-
-	SDL_Point endPoint = GetPointParam(L, 2, "ThickLine");
+	SDL_Point startPoint, endPoint;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, startPoint);
+	CheckPointParam(L, 2, endPoint);
+#else
+	GetPointParam(L, 1, startPoint);
+	GetPointParam(L, 2, endPoint);
+#endif
 
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
@@ -351,8 +359,12 @@ ETHER_API thickLine(lua_State * L)
 
 ETHER_API rectangle(lua_State * L)
 {
-	SDL_Rect rect = GetRectParam(L, 1, "Rectangle");
-
+	SDL_Rect rect;
+#ifdef _ETHER_DEBUG_
+	CheckRectParam(L, 1, rect);
+#else
+	GetRectParam(L, 1, rect);
+#endif
 	SDL_RenderDrawRect(renderer, &rect);
 
 	return 0;
@@ -361,8 +373,12 @@ ETHER_API rectangle(lua_State * L)
 
 ETHER_API fillRectangle(lua_State * L)
 {
-	SDL_Rect rect = GetRectParam(L, 1, "FillRectangle");
-
+	SDL_Rect rect;
+#ifdef _ETHER_DEBUG_
+	CheckRectParam(L, 1, rect);
+#else
+	GetRectParam(L, 1, rect);
+#endif
 	SDL_RenderFillRect(renderer, &rect);
 
 	return 0;
@@ -371,8 +387,12 @@ ETHER_API fillRectangle(lua_State * L)
 
 ETHER_API roundRectangle(lua_State * L)
 {
-	SDL_Rect rect = GetRectParam(L, 1, "RoundRectangle");
-
+	SDL_Rect rect;
+#ifdef _ETHER_DEBUG_
+	CheckRectParam(L, 1, rect);
+#else
+	GetRectParam(L, 1, rect);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	roundedRectangleRGBA(renderer, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
@@ -383,8 +403,12 @@ ETHER_API roundRectangle(lua_State * L)
 
 ETHER_API fillRoundRectangle(lua_State * L)
 {
-	SDL_Rect rect = GetRectParam(L, 1, "FillRoundRectangle");
-
+	SDL_Rect rect;
+#ifdef _ETHER_DEBUG_
+	CheckRectParam(L, 1, rect);
+#else
+	GetRectParam(L, 1, rect);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	roundedBoxRGBA(renderer, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
@@ -395,8 +419,12 @@ ETHER_API fillRoundRectangle(lua_State * L)
 
 ETHER_API circle(lua_State * L)
 {
-	SDL_Point point = GetPointParam(L, 1, "Circle");
-	
+	SDL_Point point;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, point);
+#else
+	GetPointParam(L, 1, point);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	aacircleRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
@@ -407,8 +435,12 @@ ETHER_API circle(lua_State * L)
 
 ETHER_API fillCircle(lua_State * L)
 {
-	SDL_Point point = GetPointParam(L, 1, "FillCircle");
-	
+	SDL_Point point;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, point);
+#else
+	GetPointParam(L, 1, point);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	filledCircleRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), color.r, color.g, color.b, color.a);
@@ -419,8 +451,12 @@ ETHER_API fillCircle(lua_State * L)
 
 ETHER_API ellipse(lua_State * L)
 {
-	SDL_Point point = GetPointParam(L, 1, "Ellipse");
-
+	SDL_Point point;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, point);
+#else
+	GetPointParam(L, 1, point);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	aaellipseRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), color.r, color.g, color.b, color.a);
@@ -431,8 +467,12 @@ ETHER_API ellipse(lua_State * L)
 
 ETHER_API fillEllipse(lua_State * L)
 {
-	SDL_Point point = GetPointParam(L, 1, "FillEllipse");
-
+	SDL_Point point;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, point);
+#else
+	GetPointParam(L, 1, point);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	filledEllipseRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), color.r, color.g, color.b, color.a);
@@ -442,8 +482,12 @@ ETHER_API fillEllipse(lua_State * L)
 
 ETHER_API pie(lua_State * L)
 {
-	SDL_Point point = GetPointParam(L, 1, "Pie");
-	
+	SDL_Point point;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, point);
+#else
+	GetPointParam(L, 1, point);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	pieRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), luaL_checknumber(L, 4), color.r, color.g, color.b, color.a);
@@ -453,8 +497,12 @@ ETHER_API pie(lua_State * L)
 
 ETHER_API fillPie(lua_State * L)
 {
-	SDL_Point point = GetPointParam(L, 1, "FillPie");
-
+	SDL_Point point;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, point);
+#else
+	GetPointParam(L, 1, point);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	filledPieRGBA(renderer, point.x, point.y, luaL_checknumber(L, 2), luaL_checknumber(L, 3), luaL_checknumber(L, 4), color.r, color.g, color.b, color.a);
@@ -464,10 +512,16 @@ ETHER_API fillPie(lua_State * L)
 
 ETHER_API triangle(lua_State * L)
 {
-	SDL_Point point_1 = GetPointParam(L, 1, "Triangle");
-	SDL_Point point_2 = GetPointParam(L, 2, "Triangle");
-	SDL_Point point_3 = GetPointParam(L, 3, "Triangle");
-
+	SDL_Point point_1, point_2, point_3;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, point_1);
+	CheckPointParam(L, 2, point_2);
+	CheckPointParam(L, 3, point_3);
+#else
+	GetPointParam(L, 1, point_1);
+	GetPointParam(L, 2, point_2);
+	GetPointParam(L, 3, point_3);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	aatrigonRGBA(renderer, point_1.x, point_1.y, point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a);
@@ -477,10 +531,16 @@ ETHER_API triangle(lua_State * L)
 
 ETHER_API fillTriangle(lua_State * L)
 {
-	SDL_Point point_1 = GetPointParam(L, 1, "Triangle");
-	SDL_Point point_2 = GetPointParam(L, 2, "Triangle");
-	SDL_Point point_3 = GetPointParam(L, 3, "Triangle");
-
+	SDL_Point point_1, point_2, point_3;
+#ifdef _ETHER_DEBUG_
+	CheckPointParam(L, 1, point_1);
+	CheckPointParam(L, 2, point_2);
+	CheckPointParam(L, 3, point_3);
+#else
+	GetPointParam(L, 1, point_1);
+	GetPointParam(L, 2, point_2);
+	GetPointParam(L, 3, point_3);
+#endif
 	SDL_Color color;
 	SDL_GetRenderDrawColor(renderer, &(color.r), &(color.g), &(color.b), &(color.a));
 	filledTrigonRGBA(renderer, point_1.x, point_1.y, point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a);
@@ -491,10 +551,14 @@ ETHER_API fillTriangle(lua_State * L)
 
 ETHER_API loadFont(lua_State * L)
 {
-	const char* path = luaL_checkstring(L, 1);
-	int size = luaL_checknumber(L, 2);
-	TTF_Font* font = TTF_OpenFont(path, size);
-	font ? lua_pushlightuserdata(L, font) : lua_pushnil(L);
+	TTF_Font* pFont = TTF_OpenFont(luaL_checkstring(L, 1), luaL_checknumber(L, 2));
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pFont, 1, "load font failed");
+#endif
+	TTF_Font** uppFont = (TTF_Font**)lua_newuserdata(L, sizeof(TTF_Font*));
+	*uppFont = pFont;
+	luaL_getmetatable(L, METANAME_FONT);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -502,16 +566,12 @@ ETHER_API loadFont(lua_State * L)
 
 ETHER_API unloadFont(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'UnloadFont' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		TTF_CloseFont(font);
-		font = NULL;
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	TTF_CloseFont(font);
+	font = nullptr;
 
 	return 0;
 }
@@ -519,52 +579,48 @@ ETHER_API unloadFont(lua_State * L)
 
 ETHER_API getFontStyle(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	lua_newtable(L);
+	int style = TTF_GetFontStyle(font);
+	if (style == TTF_STYLE_NORMAL)
 	{
-		luaL_error(L, "bad argument #1 to 'GetFontStyle' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
+		lua_pushnumber(L, 1);
+		lua_pushnumber(L, FONT_STYLE_NORMAL);
+		lua_settable(L, -3);
 	}
 	else
 	{
-		lua_newtable(L);
-		int style = TTF_GetFontStyle(font);
-		if (style == TTF_STYLE_NORMAL)
+		int index = 1;
+		if (style & TTF_STYLE_BOLD)
 		{
-			lua_pushnumber(L, 1);
-			lua_pushnumber(L, FONT_STYLE_NORMAL);
+			lua_pushnumber(L, index);
+			lua_pushnumber(L, FONT_STYLE_BOLD);
 			lua_settable(L, -3);
+			index++;
 		}
-		else
+		if (style & TTF_STYLE_ITALIC)
 		{
-			int index = 1;
-			if (style & TTF_STYLE_BOLD)
-			{
-				lua_pushnumber(L, index);
-				lua_pushnumber(L, FONT_STYLE_BOLD);
-				lua_settable(L, -3);
-				index++;
-			}
-			if (style & TTF_STYLE_ITALIC)
-			{
-				lua_pushnumber(L, index);
-				lua_pushnumber(L, FONT_STYLE_ITALIC);
-				lua_settable(L, -3);
-				index++;
-			}
-			if (style & TTF_STYLE_UNDERLINE)
-			{
-				lua_pushnumber(L, index);
-				lua_pushnumber(L, FONT_STYLE_UNDERLINE);
-				lua_settable(L, -3);
-				index++;
-			}
-			if (style & FONT_STYLE_STRIKETHROUGH)
-			{
-				lua_pushnumber(L, index);
-				lua_pushnumber(L, FONT_STYLE_STRIKETHROUGH);
-				lua_settable(L, -3);
-				index++;
-			}
+			lua_pushnumber(L, index);
+			lua_pushnumber(L, FONT_STYLE_ITALIC);
+			lua_settable(L, -3);
+			index++;
+		}
+		if (style & TTF_STYLE_UNDERLINE)
+		{
+			lua_pushnumber(L, index);
+			lua_pushnumber(L, FONT_STYLE_UNDERLINE);
+			lua_settable(L, -3);
+			index++;
+		}
+		if (style & FONT_STYLE_STRIKETHROUGH)
+		{
+			lua_pushnumber(L, index);
+			lua_pushnumber(L, FONT_STYLE_STRIKETHROUGH);
+			lua_settable(L, -3);
+			index++;
 		}
 	}
 
@@ -574,58 +630,46 @@ ETHER_API getFontStyle(lua_State * L)
 
 ETHER_API setFontStyle(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+	CheckTableParam(L, 2);
+#endif
+	int style = 0;
+	lua_pushnil(L);
+	while (lua_next(L, 2))
 	{
-		luaL_error(L, "bad argument #1 to 'SetFontStyle' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		if (!lua_istable(L, 2))
-		{
-			luaL_error(L, "bad argument #2 to 'SetFontStyle' (table expected, got %s)", luaL_typename(L, 2));
-		}
+		lua_pushvalue(L, -2);
+		if (!lua_isnumber(L, -2))
+			luaL_error(L, "bad argument #2 to 'SetFontStyle' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
 		else
 		{
-			int style = 0;
-			lua_pushnil(L);
-			while (lua_next(L, 2))
+			switch ((int)lua_tonumber(L, -2))
 			{
-				lua_pushvalue(L, -2);
-				if (!lua_isnumber(L, -2))
-				{
-					luaL_error(L, "bad argument #2 to 'SetFontStyle' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
-				}
-				else
-				{
-					switch ((int)lua_tonumber(L, -2))
-					{
-					case FONT_STYLE_BOLD:
-						style |= TTF_STYLE_BOLD;
-						break;
-					case FONT_STYLE_ITALIC:
-						style |= TTF_STYLE_ITALIC;
-						break;
-					case FONT_STYLE_UNDERLINE:
-						style |= TTF_STYLE_UNDERLINE;
-						break;
-					case FONT_STYLE_STRIKETHROUGH:
-						style |= TTF_STYLE_STRIKETHROUGH;
-						break;
-					case FONT_STYLE_NORMAL:
-						style |= TTF_STYLE_NORMAL;
-						break;
-					default:
-						luaL_error(L, "bad argument #2 to 'SetFontStyle' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
-						break;
-					}
-				}
-				lua_pop(L, 2);
+			case FONT_STYLE_BOLD:
+				style |= TTF_STYLE_BOLD;
+				break;
+			case FONT_STYLE_ITALIC:
+				style |= TTF_STYLE_ITALIC;
+				break;
+			case FONT_STYLE_UNDERLINE:
+				style |= TTF_STYLE_UNDERLINE;
+				break;
+			case FONT_STYLE_STRIKETHROUGH:
+				style |= TTF_STYLE_STRIKETHROUGH;
+				break;
+			case FONT_STYLE_NORMAL:
+				style |= TTF_STYLE_NORMAL;
+				break;
+			default:
+				luaL_error(L, "bad argument #2 to 'SetFontStyle' (table elements must be MACRO number, got %s)", luaL_typename(L, -2));
+				break;
 			}
-
-			TTF_SetFontStyle(font, style);
 		}
+		lua_pop(L, 2);
 	}
+
+	TTF_SetFontStyle(font, style);
 
 	return 0;
 }
@@ -633,15 +677,11 @@ ETHER_API setFontStyle(lua_State * L)
 
 ETHER_API getFontOutlineWidth(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'GetFontOutlineWidth' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		lua_pushnumber(L, TTF_GetFontOutline(font));
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	lua_pushnumber(L, TTF_GetFontOutline(font));
 
 	return 1;
 }
@@ -649,15 +689,11 @@ ETHER_API getFontOutlineWidth(lua_State * L)
 
 ETHER_API setFontOutlineWidth(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'SetFontOutlineWidth' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		TTF_SetFontOutline(font, luaL_checknumber(L, 2));
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	TTF_SetFontOutline(font, luaL_checknumber(L, 2));
 
 	return 0;
 }
@@ -665,15 +701,11 @@ ETHER_API setFontOutlineWidth(lua_State * L)
 
 ETHER_API getFontKerning(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'GetFontKerning' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		lua_pushnumber(L, TTF_GetFontKerning(font));
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	lua_pushnumber(L, TTF_GetFontKerning(font));
 
 	return 1;
 }
@@ -681,15 +713,11 @@ ETHER_API getFontKerning(lua_State * L)
 
 ETHER_API setFontKerning(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'SetFontKerning' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		TTF_SetFontKerning(font, luaL_checknumber(L, 2));
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	TTF_SetFontKerning(font, luaL_checknumber(L, 2));
 
 	return 0;
 }
@@ -697,15 +725,11 @@ ETHER_API setFontKerning(lua_State * L)
 
 ETHER_API getFontHeight(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'GetFontHeight' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		lua_pushnumber(L, TTF_FontHeight(font));
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	lua_pushnumber(L, TTF_FontHeight(font));
 
 	return 1;
 }
@@ -713,18 +737,14 @@ ETHER_API getFontHeight(lua_State * L)
 
 ETHER_API getTextSize(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'GetTextSize' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		int width, height;
-		TTF_SizeText(font, luaL_checkstring(L, 2), &width, &height);
-		lua_pushnumber(L, width);
-		lua_pushnumber(L, height);
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	int width, height;
+	TTF_SizeText(font, luaL_checkstring(L, 2), &width, &height);
+	lua_pushnumber(L, width);
+	lua_pushnumber(L, height);
 
 	return 1;
 }
@@ -732,18 +752,14 @@ ETHER_API getTextSize(lua_State * L)
 
 ETHER_API getUTF8TextSize(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'GetUTF8TextSize' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		int width, height;
-		TTF_SizeUTF8(font, luaL_checkstring(L, 2), &width, &height);
-		lua_pushnumber(L, width);
-		lua_pushnumber(L, height);
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	int width, height;
+	TTF_SizeUTF8(font, luaL_checkstring(L, 2), &width, &height);
+	lua_pushnumber(L, width);
+	lua_pushnumber(L, height);
 
 	return 1;
 }
@@ -751,18 +767,24 @@ ETHER_API getUTF8TextSize(lua_State * L)
 
 ETHER_API createTextImageSolid(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'CreateTextImageSolid' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Color color = GetColorParam(L, 3, "CreateTextImageSolid");
-
-		SDL_Surface* surface = TTF_RenderText_Solid(font, luaL_checkstring(L, 2), color);
-		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	SDL_Color color;
+#ifdef _ETHER_DEBUG_
+	CheckColorParam(L, 3, color);
+#else
+	GetColorParam(L, 3, color);
+#endif
+	SDL_Surface* pSurface = TTF_RenderText_Solid(font, luaL_checkstring(L, 2), color);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pSurface, 1, "load image failed");
+#endif
+	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
+	*uppSurface = pSurface;
+	luaL_getmetatable(L, METANAME_IMAGE);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -770,18 +792,24 @@ ETHER_API createTextImageSolid(lua_State * L)
 
 ETHER_API createUTF8TextImageSolid(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'CreateUTF8TextImageSolid' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Color color = GetColorParam(L, 3, "CreateUTF8TextImageSolid");
-		
-		SDL_Surface* surface = TTF_RenderUTF8_Solid(font, luaL_checkstring(L, 2), color);
-		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	SDL_Color color;
+#ifdef _ETHER_DEBUG_
+	CheckColorParam(L, 3, color);
+#else
+	GetColorParam(L, 3, color);
+#endif
+	SDL_Surface* pSurface = TTF_RenderUTF8_Solid(font, luaL_checkstring(L, 2), color);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pSurface, 1, "load image failed");
+#endif
+	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
+	*uppSurface = pSurface;
+	luaL_getmetatable(L, METANAME_IMAGE);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -789,19 +817,26 @@ ETHER_API createUTF8TextImageSolid(lua_State * L)
 
 ETHER_API createTextImageShaded(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'CreateTextImageShaded' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Color fgColor = GetColorParam(L, 3, "CreateTextImageShaded");
-		SDL_Color bgColor = GetColorParam(L, 4, "CreateTextImageShaded");
-
-		SDL_Surface* surface = TTF_RenderText_Shaded(font, luaL_checkstring(L, 2), fgColor, bgColor);
-		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	SDL_Color fgColor, bgColor;
+#ifdef _ETHER_DEBUG_
+	CheckColorParam(L, 3, fgColor);
+	CheckColorParam(L, 4, bgColor);
+#else
+	GetColorParam(L, 3, fgColor);
+	GetColorParam(L, 4, bgColor);
+#endif
+	SDL_Surface* pSurface = TTF_RenderText_Shaded(font, luaL_checkstring(L, 2), fgColor, bgColor);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pSurface, 1, "load image failed");
+#endif
+	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
+	*uppSurface = pSurface;
+	luaL_getmetatable(L, METANAME_IMAGE);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -809,19 +844,26 @@ ETHER_API createTextImageShaded(lua_State * L)
 
 ETHER_API createUTF8TextImageShaded(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'CreateUTF8TextImageShaded' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Color fgColor = GetColorParam(L, 3, "CreateUTF8TextImageShaded");
-		SDL_Color bgColor = GetColorParam(L, 4, "CreateUTF8TextImageShaded");
-
-		SDL_Surface* surface = TTF_RenderUTF8_Shaded(font, luaL_checkstring(L, 2), fgColor, bgColor);
-		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	SDL_Color fgColor, bgColor;
+#ifdef _ETHER_DEBUG_
+	CheckColorParam(L, 3, fgColor);
+	CheckColorParam(L, 4, bgColor);
+#else
+	GetColorParam(L, 3, fgColor);
+	GetColorParam(L, 4, bgColor);
+#endif
+	SDL_Surface* pSurface = TTF_RenderUTF8_Shaded(font, luaL_checkstring(L, 2), fgColor, bgColor);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pSurface, 1, "load image failed");
+#endif
+	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
+	*uppSurface = pSurface;
+	luaL_getmetatable(L, METANAME_IMAGE);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -829,18 +871,24 @@ ETHER_API createUTF8TextImageShaded(lua_State * L)
 
 ETHER_API createTextImageBlended(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'CreateTextImageBlended' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Color color = GetColorParam(L, 3, "CreateTextImageBlended");
-
-		SDL_Surface* surface = TTF_RenderText_Blended(font, luaL_checkstring(L, 2), color);
-		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	SDL_Color color;
+#ifdef _ETHER_DEBUG_
+	CheckColorParam(L, 3, color);
+#else
+	GetColorParam(L, 3, color);
+#endif
+	SDL_Surface* pSurface = TTF_RenderText_Blended(font, luaL_checkstring(L, 2), color);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pSurface, 1, "load image failed");
+#endif
+	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
+	*uppSurface = pSurface;
+	luaL_getmetatable(L, METANAME_IMAGE);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -848,18 +896,24 @@ ETHER_API createTextImageBlended(lua_State * L)
 
 ETHER_API createUTF8TextImageBlended(lua_State * L)
 {
-	TTF_Font* font = (TTF_Font*)lua_touserdata(L, 1);
-	if (!font)
-	{
-		luaL_error(L, "bad argument #1 to 'CreateUTF8TextImageBlended' (userdata-FONT expected, got %s)", luaL_typename(L, 1));
-	}
-	else
-	{
-		SDL_Color color = GetColorParam(L, 3, "CreateUTF8TextImageBlended");
-
-		SDL_Surface* surface = TTF_RenderUTF8_Blended(font, luaL_checkstring(L, 2), color);
-		surface ? lua_pushlightuserdata(L, surface) : lua_pushnil(L);
-	}
+	GetFontDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckFontDataAtFirstPos();
+#endif
+	SDL_Color color;
+#ifdef _ETHER_DEBUG_
+	CheckColorParam(L, 3, color);
+#else
+	GetColorParam(L, 3, color);
+#endif
+	SDL_Surface* pSurface = TTF_RenderUTF8_Blended(font, luaL_checkstring(L, 2), color);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pSurface, 1, "load image failed");
+#endif
+	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
+	*uppSurface = pSurface;
+	luaL_getmetatable(L, METANAME_IMAGE);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
@@ -869,6 +923,9 @@ MoudleGraphic::MoudleGraphic(lua_State* L, string name) : Moudle(L, name)
 {
 	TTF_Init();
 	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF);
+
+	luaL_newmetatable(L, METANAME_IMAGE);
+	luaL_newmetatable(L, METANAME_TEXTURE);
 
 	_vCMethods = {
 		{ "SetCursorShow", setCursorShow },

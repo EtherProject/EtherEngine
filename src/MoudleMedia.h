@@ -16,6 +16,15 @@
 #define MUSIC_TYPE_MID 1313
 #define MUSIC_TYPE_UNKONWN 1314
 
+#define METANAME_MUSIC "Graphic.Music"
+#define METANAME_SOUND "Graphic.Sound"
+
+#define GetMusicDataAtFirstPos() Mix_Music* music = (Mix_Music*)(*(void**)luaL_checkudata(L, 1, METANAME_MUSIC))
+#define GetSoundDataAtFirstPos() Mix_Chunk* sound = (Mix_Chunk*)(*(void**)luaL_checkudata(L, 1, METANAME_SOUND))
+
+#define CheckMusicDataAtFirstPos() luaL_argcheck(L, music, 1, "get music data failed")
+#define CheckSoundDataAtFirstPos() luaL_argcheck(L, sound, 1, "get sound data failed")
+
 // 加载音乐文件
 // 1参数：音乐文件路径
 // 1返回值：成功则返回音乐数据（userdata-MUSIC），失败则返回nil

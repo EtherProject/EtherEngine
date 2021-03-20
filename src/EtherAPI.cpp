@@ -158,7 +158,6 @@ ETHER_API usingMoudle(lua_State* L)
 	return 0;
 }
 
-
 ETHER_API getVersion(lua_State* L)
 {
 	lua_pushstring(L, _VERSION_);

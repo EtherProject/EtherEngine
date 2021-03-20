@@ -23,14 +23,8 @@ ETHER_API getScrollValue(lua_State * L)
 
 ETHER_API updateEvent(lua_State * L)
 {
-	if (SDL_PollEvent(&event))
-	{
-		lua_pushboolean(L, true);
-	}
-	else
-	{
-		lua_pushboolean(L, false);
-	}
+	lua_pushboolean(L, SDL_PollEvent(&event));
+
 	return 1;
 }
 
