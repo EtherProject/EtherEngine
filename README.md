@@ -60,5 +60,5 @@ If there are any problems or suggestions during use, please submit issue in our 
 我们十分欢迎您将自己的作品投递到 [EtherAPI 作品集](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection) 仓库下！  
 关于投递规范和协议等更多内容详见 [此处](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection/blob/main/README.md)。
 
-We welcome you to send your works to the depository of EtherAPI works collection!  
+We welcome you to send your works to the depository of [EtherWorkCollection](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection)!  
 Please refer to [HERE](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection/blob/main/README.md) for more details about delivery specifications and licenses.
