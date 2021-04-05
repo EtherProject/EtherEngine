@@ -779,7 +779,7 @@ ETHER_API createTextImageSolid(lua_State * L)
 #endif
 	SDL_Surface* pSurface = TTF_RenderText_Solid(font, luaL_checkstring(L, 2), color);
 #ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, pSurface, 1, "load image failed");
+	luaL_argcheck(L, pSurface, 1, "create text image failed");
 #endif
 	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
 	*uppSurface = pSurface;
@@ -804,7 +804,7 @@ ETHER_API createUTF8TextImageSolid(lua_State * L)
 #endif
 	SDL_Surface* pSurface = TTF_RenderUTF8_Solid(font, luaL_checkstring(L, 2), color);
 #ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, pSurface, 1, "load image failed");
+	luaL_argcheck(L, pSurface, 1, "create text image failed");
 #endif
 	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
 	*uppSurface = pSurface;
@@ -831,7 +831,7 @@ ETHER_API createTextImageShaded(lua_State * L)
 #endif
 	SDL_Surface* pSurface = TTF_RenderText_Shaded(font, luaL_checkstring(L, 2), fgColor, bgColor);
 #ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, pSurface, 1, "load image failed");
+	luaL_argcheck(L, pSurface, 1, "create text image failed");
 #endif
 	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
 	*uppSurface = pSurface;
@@ -858,7 +858,7 @@ ETHER_API createUTF8TextImageShaded(lua_State * L)
 #endif
 	SDL_Surface* pSurface = TTF_RenderUTF8_Shaded(font, luaL_checkstring(L, 2), fgColor, bgColor);
 #ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, pSurface, 1, "load image failed");
+	luaL_argcheck(L, pSurface, 1, "create text image failed");
 #endif
 	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
 	*uppSurface = pSurface;
@@ -883,7 +883,7 @@ ETHER_API createTextImageBlended(lua_State * L)
 #endif
 	SDL_Surface* pSurface = TTF_RenderText_Blended(font, luaL_checkstring(L, 2), color);
 #ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, pSurface, 1, "load image failed");
+	luaL_argcheck(L, pSurface, 1, "create text image failed");
 #endif
 	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
 	*uppSurface = pSurface;
@@ -908,7 +908,7 @@ ETHER_API createUTF8TextImageBlended(lua_State * L)
 #endif
 	SDL_Surface* pSurface = TTF_RenderUTF8_Blended(font, luaL_checkstring(L, 2), color);
 #ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, pSurface, 1, "load image failed");
+	luaL_argcheck(L, pSurface, 1, "create text image failed");
 #endif
 	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
 	*uppSurface = pSurface;
