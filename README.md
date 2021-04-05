@@ -41,7 +41,7 @@ In addition, you can decide whether to disable `_ETHER_DEBUG_` Macro in the `mac
 There are two versions of the developer's documentation for the currently released EtherAPI:
 
 + [快速开始](docs/quick-start.md)：在这里您可以快速上手 EtherAPI ，文档将演示如 **窗口建立、按键交互、图像渲染、音乐播放** 等内容。  
-+ [QuickStart](docs/quick-start.md): Here you can quickly start the EtherAPI, and the document will demonstrate the contents such as **window startup, key interaction, image rendering, music playback** and so on.
++ [QuickStart](docs/quick-start_en.md): Here you can quickly start the EtherAPI, and the document will demonstrate the contents such as **window startup, key interaction, image rendering, music playback** and so on.
 
 + [完全参考手册](docs/index.md)：这里将包含 EtherAPI 的全部内容和详细介绍。  
 + [CompleteReferenceManual](docs/index.md): Here will contain all the contents and detailed introduction of EtherAPI.

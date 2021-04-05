@@ -1,5 +1,7 @@
 # EtherAPI 快速入门
 
+简体中文 | [English](quick-start_en.md) | [日本語](quick-start_ja.md)
+
 EtherAPI 由一套轻量级的 Lua 游戏开发接口，它基于许多 C/C++ 的开源项目发展而来，供游戏开发者快速搭建游戏原型或进行各种概念性测试；同样，它也支持各类游戏（当前版本仅支持 2D 游戏）的开发和发布版本的制作。  
 
 这里是 EtherAPI 的快速入门指南，其目的是帮助您能够快速上手使用该接口库；故本文档只会对常用的接口内容进行介绍，许多重要的功能只会简单的介绍甚至未能提及。有关更多完整信息，您应阅读 [EtherAPI 完整手册](index.md)。
@@ -76,6 +78,68 @@ CreateWindow(
 
 ## 图像渲染
 
-`Graphic` 模块
+`Graphic` 模块提供了与图像渲染相关的操作。需要注意的是，这些操作是基于上述所建立的窗口的，所以如果在未建立窗口的情况下调用部分 API，可能导致引擎报错（Debug 模式下）或出现不可预料的结果（Release 模式下）。  
+
+### 图片渲染
+
+游戏中最常见的操作便是加载并绘制图片，所以 EtherAPI 提供了一套极度简明且高效的接口：
+
++ 首先，`LoadImage()` 函数负责将图片文件从硬盘加载到内存，其参数是 string 类型的图片文件路径，返回值为 Image 类型的 userdata，若图片在 Debug 模式下加载失败则会导致引擎报错。
+
++ 然后，通过 `CreateTexture()` 函数将上步返回的 Image 数据渲染为可被显示的纹理数据，并返回 Texture 类型的 userdata，若纹理在 Debug 模式下创建失败则会导致引擎报错。
+
++ 最后，`CopyTexture()` 函数可以将上步创建的纹理拷贝至渲染缓冲区内，这个函数接受两个参数，分别是 Texture 类型的 userdata 和一个用以描述图片再窗口坐标系中的位置和尺寸的矩形结构体。需要注意的是，`CopyTexture()` 函数仅仅是将纹理数据拷贝到了渲染缓冲区，而并没有真正刷新显示到屏幕上，所以我们需要在接下来的步骤中调用 `Window` 模块中的 `UpdateWindow()` 函数来将渲染缓冲区的内容显示到屏幕上。
+
+也就是说，只需要如下的寥寥几行代码便可以将图片显示出来：
+
+```lua
+-- 引入 Window 和 Graphic 模块
+UsingMoudle("Window")
+UsingMoudle("Graphic")
+
+-- 创建绘图窗口
+CreateWindow(
+    "HelloWorld",
+    {
+        x = Window.WINDOW_POSITION_DEFAULT, 
+        y = Window.WINDOW_POSITION_DEFAULT, 
+        w = 1280, 
+        h = 720
+    },
+    {
+        Window.WINDOW_RESIZABLE,
+        Window.WINDOW_MAXIMIZED
+    }
+)
+
+-- 加载 Player.png 图片文件
+image = LoadImage("Player.png")
+
+-- 将上步加载的图片数据渲染为纹理数据
+texture = CreateTexture(image)
+
+-- 将纹理数据拷贝到渲染缓冲区中
+CopyTexture(texture, {x = 0, y = 0, w = 1280, h = 720})
+
+-- 将渲染缓冲区的数据冲刷到窗口上
+UpdateWindow()
+```
+
+需要明确的是，在窗口坐标系中，坐标系原点位于窗口左上角，水平方向向右为 x 轴正方向，竖直方向向下为 y 轴正方向。
+
+另外，如果需要对图片裁剪或旋绕显示，则只需要在拷贝纹理至渲染缓冲区时调用指定的函数，如：  
++ [`CopyReshapeTexture()`](Graphic/_CopyReshapeTexture_.md) 函数可以将首先对纹理进行裁剪再进行拷贝  
++ [`CopyRotateTexture()`](Graphic/_CopyReshapeTexture_.md) 函数可以将首先对纹理进行旋转再进行拷贝  
++ [`CopyRotateReshapeTexture()`](Graphic/_CopyReshapeTexture_.md) 函数则会将纹理旋转并裁剪后才进行拷贝  
+
+关于这些函数的描述，详见 [完整手册：Graphic 模块](Graphic/index.md)
+
+### 文本渲染
+
+类似的，如果想将文本内容渲染到屏幕上，也需要执行和显示图片相似的步骤，所有需要显示的文本内容最终都需要被渲染为文本纹理才能显示到屏幕上，具体步骤如下：
+
++ 首先，需要使用 `LoadFont()` 函数将字体文件加载到内存中，函数所需要的第一个参数便是字体文件的路径，由于一个字体文件中可能包含多种不同尺寸的字体，所以必须通过第二个参数指定我们所需要的字体字号索引；与 `LoadImage()` 函数类似，如函数将返回 Font 类型的 userdata，若在 Debug 模式下加载失败则会导致引擎报错。
+
++ 其次，使用如 `CreateTextImageBlended()` 等文本贴图渲染函数可以将文本字符串渲染为 Image 类型的 userdata 进行返回，`CreateTextImageBlended()` 函数接受三个参数，分别为 userdata 类型的字体数据、string 类型的文本内容 和 用以描述字体颜色的 RGBA 色彩空间结构体。
 
 ## 事件交互
