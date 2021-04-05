@@ -1,6 +1,6 @@
 # EtherEngine 开发者文档
 
-## 跳转到指定模块API列表：
+## 目录
 
 + [Algorithm](Algorithm/index.md)：算法相关API
 
@@ -20,7 +20,7 @@
 
 + [Window](Window/index.md)：窗口相关API
 
-## 其他API：
+## 全局 API
 
 + UsingMoudle(name)
 
@@ -34,9 +34,9 @@
     + 参数：无
     + 返回值：当前引擎版本号
 
-## 附录：
+## 附录
 
-> 常用表结构内部成员简介
+> 常用结构体内部成员简介
 
 + 矩形：
 

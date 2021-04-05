@@ -28,7 +28,7 @@ You can find the release version or source code of these dependencies for the pl
 + **cpp-httplib - 0.8.4：**[https://github.com/yhirose/cpp-httplib](https://github.com/yhirose/cpp-httplib) 
 + **cJSON - 1.7.14：**[https://github.com/VoidmatrixHeathcliff/cJSON](https://github.com/VoidmatrixHeathcliff/cJSON) 
 
-然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherAPI 加载器，它将自动加载同一目录下的 `Main.lua`（文件名大小写不敏感）文件作为入口文件。  
+然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherAPI 启动器，它将自动加载同一目录下的 `Main.lua`（文件名大小写不敏感）文件作为入口文件。  
 另外，您可以在 `Macros.h` 文件中决定是否禁用 `_ETHER_DEBUG_` 宏来开启 Release 模式；在 Release 模式下，EtherAPI 将跳过部分严格的类型检查，来确保更加高效的运行，同时，在 Windows 平台下，此模式将意味着程序所使用的子系统为 `windows` 而非 `console` ，程序将不会显示控制台，通过 `print()` 等操作输出的调试信息可能会被隐藏。
 
 Then add all source files in the `src` folder to your project and compile them to get the Ethernet API loader suitable for your current development platform, which will automatically load the `Main.lua` (file name case insensitive) file in the same directory as entry file.
@@ -40,8 +40,8 @@ In addition, you can decide whether to disable `_ETHER_DEBUG_` Macro in the `mac
 
 There are two versions of the developer's documentation for the currently released EtherAPI:
 
-+ [快速开始]()：在这里您可以快速上手 EtherAPI ，文档将演示如 **窗口建立、按键交互、图像渲染、音乐播放** 等内容。  
-+ [QuickStart](): Here you can quickly start the EtherAPI, and the document will demonstrate the contents such as **window startup, key interaction, image rendering, music playback** and so on.
++ [快速开始](docs/quick-start.md)：在这里您可以快速上手 EtherAPI ，文档将演示如 **窗口建立、按键交互、图像渲染、音乐播放** 等内容。  
++ [QuickStart](docs/quick-start.md): Here you can quickly start the EtherAPI, and the document will demonstrate the contents such as **window startup, key interaction, image rendering, music playback** and so on.
 
 + [完全参考手册](docs/index.md)：这里将包含 EtherAPI 的全部内容和详细介绍。  
 + [CompleteReferenceManual](docs/index.md): Here will contain all the contents and detailed introduction of EtherAPI.
