@@ -142,4 +142,107 @@ UpdateWindow()
 
 + 其次，使用如 `CreateTextImageBlended()` 等文本贴图渲染函数可以将文本字符串渲染为 Image 类型的 userdata 进行返回，`CreateTextImageBlended()` 函数接受三个参数，分别为 userdata 类型的字体数据、string 类型的文本内容 和 用以描述字体颜色的 RGBA 色彩空间结构体。
 
++ 最后，和显示图片的后两步相同，只需要通过 `CreateTexture()` 函数创建纹理并使用 `CopyTexture()` 函数拷贝纹理便可以完成文本渲染的全部过程。
+
+示例代码如下：
+
+```lua
+UsingMoudle("Window")
+UsingMoudle("Graphic")
+
+-- 创建绘图窗口
+CreateWindow(
+    "HelloWorld",
+    {
+        x = Window.WINDOW_POSITION_DEFAULT, 
+        y = Window.WINDOW_POSITION_DEFAULT, 
+        w = 1280, 
+        h = 720
+    },
+    {
+        Window.WINDOW_RESIZABLE,
+        Window.WINDOW_MAXIMIZED
+    }
+)
+
+-- 加载指定字号的字体文件
+font = LoadFont("GameFont.ttf", 50)
+
+-- 将文本使用已加载的字体文件渲染为文本贴图
+text_image = CreateTextImageBlended(
+    font,
+    "This is My-Game!",
+    -- 字体颜色为红色
+    {r = 255, g = 0, b = 0, a = 255}
+)
+
+-- 将文本贴图渲染为纹理数据
+text_texture = CreateTexture(text_image)
+
+-- 将纹理数据拷贝到渲染缓冲区中
+CopyTexture(text_texture, {x = 0, y = 0, w = 1280, h = 720})
+
+-- 将渲染缓冲区的数据冲刷到窗口上
+UpdateWindow() 
+```
+
+在第二步渲染文本贴图过程中，还有许多函数支持不同的文本渲染方式和不同的文本编码格式；除此之外，开发者还可以通过使用诸如 [`SetFontStyle()`](Graphic/_SetFontStyle_.md) 等函数对字体样式进行设置，更多内容详见 [完整手册：Graphic 模块](Graphic/index.md)
+
+### 几何绘图
+
+EtherAPI 也提供了大量的几何绘图 API，如点、线、矩形、三角形和圆等基本几何图元的绘制函数，以及对于其填充图形的绘制，示例代码如下：
+
+```lua
+UsingMoudle("Window")
+UsingMoudle("Graphic")
+
+-- 创建绘图窗口
+CreateWindow(
+    "HelloWorld",
+    {
+        x = Window.WINDOW_POSITION_DEFAULT, 
+        y = Window.WINDOW_POSITION_DEFAULT, 
+        w = 1280, 
+        h = 720
+    },
+    {
+        Window.WINDOW_RESIZABLE,
+        Window.WINDOW_MAXIMIZED
+    }
+)
+
+-- 设置窗口的绘图颜色为红色
+SetDrawColor({r = 255, g = 0, b = 0, a = 255})
+
+-- 在屏幕中心绘制半径为 25 个像素的空心圆
+Circle({x = 640, y = 360}, 25)
+
+-- 设置窗口绘图颜色为蓝色
+SetDrawColor({r = 0, g = 0, b = 255, a = 255})
+
+-- 在屏幕左上角绘制长和宽均为 50 个像素的填充矩形
+FillRectangle({x = 0, y = 0, w = 50, h = 50})
+
+-- 将渲染缓冲区的数据冲刷到窗口上
+UpdateWindow() 
+```
+
+通过 `SetDrawColor()` 函数可以设置窗口的绘图颜色，接下来的所有几何图元的绘制都将使用此颜色作为绘图色和填充色。
+
+需要注意的是，所有的几何绘制同样在渲染缓冲区中进行，所以在绘制过程完毕后，依然需要调用 `UpdateWindow()` 函数来冲刷缓冲区。
+
+更多几何绘图 API 详见 [完整手册：Graphic 模块](Graphic/index.md)
+
 ## 事件交互
+
+
+
+## 内存管理  
+
+内存管理在游戏开发中的角色可谓是重要至极，EtherAPI 对于已加载和渲染出的数据的内存卸载提供了简单且高效的 API，简介如下：  
+
++ [`UnloadImage()`](Graphic/_UnloadImage_.md) 函数用来释放从文件中加载的图片数据或渲染出的文本贴图数据，即 Image 类型的 userdata 数据  
++ [`UnloadFont()`](Graphic/_UnloadFont_.md) 函数用来释放从文件中加载的字体数据，即 Image 类型的 userdata 数据 
++ [`DestroyTexture()`](Graphic/_DestroyTexture_.md) 函数用来销毁从渲染得到的纹理数据，即 Font 类型的 userdata 数据  
+
+特别注意的是，这些 userdata 类型数据的销毁释放过程并未参与到 Lua 的自动内存管理中，简单地解除这些变量的引用或将变量设置为 nil 并不能完全释放其内部的数据，必须调用上述的内存释放 API 进行销毁，这样的设计保证了开发者更直接地对内存数据进行管理，防止游戏过程中 Lua 的内存管理策略并不完全适合开发者意图的情况出现。
