@@ -32,6 +32,6 @@
 
 + [RGBAToHSLA(color)](_RGBAToHSLA_.md)：RGBA颜色空间转HSLA颜色空间
 
-+ [HSLAToRGBA(color)](_HSLATORGBA_.md)：HSLA颜色空间转RGBA颜色空间
++ [HSLAToRGBA(color)](_HSLAToRGBA_.md)：HSLA颜色空间转RGBA颜色空间
 
 + [IfElementInTable(element, table, type)](_IfElementInTable_.md)：判断指定元素是否位于表值中

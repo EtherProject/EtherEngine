@@ -16,6 +16,8 @@
 
 + [String](String/index.md)：字符串相关API
 
++ [JSON](JSON/index.md)：JSON 格式数据相关API
+
 + [Time](Time/index.md)：时间相关API
 
 + [Window](Window/index.md)：窗口相关API

@@ -57,8 +57,11 @@ EtherAPI 中的 `宏` 在本质上为 number 类型的变量，常用作函数�
 所以，创建一个标题为 `HelloWorld` 并且显示在默认位置的可拉伸窗口便可以写为如下代码：
 
 ```lua
+-- 引入 Window 模块
 UsingMoudle("Window")
 
+-- 创建一个尺寸为 1280 x 720 的大小可变窗口
+-- 标题为 "HelloWorld" 且显示在屏幕的默认位置上（通常为居中位置）
 CreateWindow(
     "HelloWorld",
     {
@@ -72,6 +75,9 @@ CreateWindow(
         Window.WINDOW_MAXIMIZED
     }
 )
+
+-- 死循环防止窗口退出
+while true do end
 ```
 
 当然，由于 EtherAPI 并没有提供游戏的主循环，所以如果在创建窗口后进行其他操作，程序退出后窗口将自动关闭，你可以通过 [事件循环](#事件交互) 阻止窗口退出，这同样是在游戏开发过程中普遍使用的方式。
@@ -121,8 +127,10 @@ texture = CreateTexture(image)
 -- 将纹理数据拷贝到渲染缓冲区中
 CopyTexture(texture, {x = 0, y = 0, w = 1280, h = 720})
 
--- 将渲染缓冲区的数据冲刷到窗口上
-UpdateWindow()
+while true do
+    -- 将渲染缓冲区的数据冲刷到窗口上
+    UpdateWindow() 
+end
 ```
 
 需要明确的是，在窗口坐标系中，坐标系原点位于窗口左上角，水平方向向右为 x 轴正方向，竖直方向向下为 y 轴正方向。
@@ -182,8 +190,10 @@ text_texture = CreateTexture(text_image)
 -- 将纹理数据拷贝到渲染缓冲区中
 CopyTexture(text_texture, {x = 0, y = 0, w = 1280, h = 720})
 
--- 将渲染缓冲区的数据冲刷到窗口上
-UpdateWindow() 
+while true do
+    -- 将渲染缓冲区的数据冲刷到窗口上
+    UpdateWindow() 
+end
 ```
 
 在第二步渲染文本贴图过程中，还有许多函数支持不同的文本渲染方式和不同的文本编码格式；除此之外，开发者还可以通过使用诸如 [`SetFontStyle()`](Graphic/_SetFontStyle_.md) 等函数对字体样式进行设置，更多内容详见 [完整手册：Graphic 模块](Graphic/index.md)
@@ -223,8 +233,10 @@ SetDrawColor({r = 0, g = 0, b = 255, a = 255})
 -- 在屏幕左上角绘制长和宽均为 50 个像素的填充矩形
 FillRectangle({x = 0, y = 0, w = 50, h = 50})
 
--- 将渲染缓冲区的数据冲刷到窗口上
-UpdateWindow() 
+while true do
+    -- 将渲染缓冲区的数据冲刷到窗口上
+    UpdateWindow() 
+end
 ```
 
 通过 `SetDrawColor()` 函数可以设置窗口的绘图颜色，接下来的所有几何图元的绘制都将使用此颜色作为绘图色和填充色。
@@ -233,9 +245,83 @@ UpdateWindow()
 
 更多几何绘图 API 详见 [完整手册：Graphic 模块](Graphic/index.md)
 
+## 媒体播控  
+
+声音作为游戏必不可少的一部分，在 EtherAPI 中也提供了几近完美的实现：EtherAPI 中的声音分为 `音乐` 和 `音效` 两类，音乐常用作全局的背景声音；音效则是用于战斗、动作等的环境音。在某种程度上，音乐和音效是等同可互换的，但是对于二者的内存加载策略和播控 API 可能并不相同。
+
+所有声音的播放都是异步的，所以我们无需担心音乐和音效的播放会阻塞游戏的主线程，但是需要注意的是，在程序没有进行事件循环来确保程序持续运行的情况下，程序运行结束退出后音乐也会停止播放（与上述的窗口自动退出同理）
+
+下面是一份简单的媒体播放样例代码：
+
+```lua
+-- 引入 Media 模块
+UsingMoudle("Media")
+
+-- 加载 BGM.mp3 音乐文件
+music = LoadMusic("BGM.mp3")
+
+-- 使用淡入效果循环播放音乐，淡入效果持续时间为 1.5 秒
+FadeInMusic(music, -1, 1500)
+
+-- 死循环防止程序退出
+while true do end
+```
+更多的媒体播控 API 详见 [完整手册：Media 模块](Media/index.md)
+
 ## 事件交互
 
+交互性是游戏的重要组成部分，EtherAPI 的 `Interactivity` 模块提供了简洁轻便的交互事件处理机制，常用的事件交互处理 API 如下：
 
++ [`UpdateEvent()`](Interactivity/_UpdateEvent_.md)：更新事件队列，如果当前事件队列有新的未处理事件，则返回 `true` ，否则返回 `false` 。
++ [`GetEventType()`](Interactivity/_GetEventType_.md)：获取事件队列未处理事件类型。 
++ [`GetCursorPosition()`](Interactivity/_GetCursorPosition_.md)：获取当前鼠标位置，返回值为描述鼠标在当前窗口坐标系中位置的点结构体。 
++ [`GetScrollValue()`](Interactivity/_GetScrollValue_.md)：获取鼠标滚轮的滚动距离，返回值分别为水平方向的滚动距离和垂直方向的滚动距离。 
+
+故一个通用的事件循环可以写为如下代码：
+
+```lua
+UsingMoudle("Interactivity")
+
+-- 创建游戏窗口
+CreateWindow(
+    "HelloWorld",
+    {
+        x = Window.WINDOW_POSITION_DEFAULT, 
+        y = Window.WINDOW_POSITION_DEFAULT, 
+        w = 1280, 
+        h = 720
+    },
+    {
+        Window.WINDOW_RESIZABLE,
+        Window.WINDOW_MAXIMIZED
+    }
+)
+
+while true do
+    -- 更新事件队列，若存在未处理事件则进行分支判断处理 
+    if UpdateEvent() then
+        -- 获取当前未处理事件类型
+        local _event = GetEventType()
+        -- 若事件类型为退出事件，则跳出游戏主循环
+        -- 此处的宏使用方式只适用于 3.0.x 及以上版本
+        if _event == Interactivity.EVENT_QUIT then
+            break
+        -- 若事件类型为鼠标移动事件，则输出当前鼠标位置
+        -- 此处的宏使用方式只适用于 3.0.x 及以上版本
+        else if _event == Interactivity.EVENT_MOUSEMOTION then
+            local _cursor_pos = GetCursorPosition()
+            print("CursorPosition: ", _cursor_pos.x, _cursor_pos.y)
+        end
+    end
+
+    -- 将渲染缓冲区的数据冲刷到窗口上
+    UpdateWindow() 
+end
+```
+
+在一般情况下，如果一个窗口没有持续接收并更新事件，则会被系统认为此窗口进入异常的 `无响应` 状态，显而易见的，由于这个窗口不会对事件作出响应，故也无法拖拽移动、最小化或关闭窗口；所以，在游戏的主循环中持续调用 `UpdateEvent()` 函数时必要的。 
+
+更多的交互事件类型详见 [完整手册：Interactivity 模块附录](Interactivity/appendix.md)
 
 ## 内存管理  
 
@@ -244,5 +330,37 @@ UpdateWindow()
 + [`UnloadImage()`](Graphic/_UnloadImage_.md) 函数用来释放从文件中加载的图片数据或渲染出的文本贴图数据，即 Image 类型的 userdata 数据  
 + [`UnloadFont()`](Graphic/_UnloadFont_.md) 函数用来释放从文件中加载的字体数据，即 Image 类型的 userdata 数据 
 + [`DestroyTexture()`](Graphic/_DestroyTexture_.md) 函数用来销毁从渲染得到的纹理数据，即 Font 类型的 userdata 数据  
++ [`UnloadMusic()`](Media/_UnloadMusic_.md) 函数用来释放从文件中加载的音乐数据，即 Music 类型的 userdata 数据 
++ [`UnloadSound()`](Media/_UnloadSound_.md) 函数用来释放从文件中加载的音效数据，即 Sound 类型的 userdata 数据 
 
-特别注意的是，这些 userdata 类型数据的销毁释放过程并未参与到 Lua 的自动内存管理中，简单地解除这些变量的引用或将变量设置为 nil 并不能完全释放其内部的数据，必须调用上述的内存释放 API 进行销毁，这样的设计保证了开发者更直接地对内存数据进行管理，防止游戏过程中 Lua 的内存管理策略并不完全适合开发者意图的情况出现。
+特别注意的是，这些 userdata 类型数据的销毁释放过程并未参与到 Lua 的自动内存管理中，简单地解除这些变量的引用或将变量设置为 `nil` 并不能完全释放其内部的数据，必须调用上述的内存释放 API 进行销毁，这样的设计保证了开发者更直接地对内存数据进行管理，防止游戏过程中 Lua 的内存管理策略并不完全适合开发者意图的情况出现。
+
+## 工具模块
+
+工具模块是一类对算法和系统层面封装的、用以辅助游戏开发的模块，涵盖了 算法、网络、时间、JSON解析、字符串编码、操作系统 等模块，下面只放置其目录索引，并不会对其进行详细介绍，具体内容请查看 [完整手册](index.md#目录) 的对应部分：
+
++ [算法模块](Algorithm/index.md)：封装了 数值限定、基础碰撞检测、色彩空间转换 等常用算法
++ [网络模块](Network/index.md)：提供了 主机地址和路由分离、HTTP请求 等操作
++ [时间模块](Time/index.md)：涵盖了 程序暂停、延时、动态延时、高分辨率计时 等功能
++ [JSON模块](JSON/index.md)：提供了 JSON 格式数据 编码 和 解码 等操作
++ [字符串模块](String/index.md)：为不同编码字符串相互转换提供了便捷操作
++ [操作系统模块](OS/index.md)：封装了 系统信息获取、平台相关文件系统 API 、剪切板操作等功能
+
+## 协议
+
+EtherAPI 是根据 MIT 许可协议进行发布的  
+
+```
+版权所有（c）2020-2021 Voidmatrix
+
+本协议授予所有人免费的许可  
+获取此软件和相关文档的副本
+
+本协议不限制代码本身及其衍生物的使用权，
+支持对源代码或其副本进行任意复制、修改、合并、发布、再许可或出售
+
+但是使用者必须遵守如下规定：
+软件按源码提供，不提供任何形式的保证，包括但不限于代码质量
+软件作者保留版权，但不对任何使用者担负任何责任
+您可以在开源或私有的软件中自由使用本软件，但是必须保证标注您使用过本软件
+```
