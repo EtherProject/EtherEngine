@@ -308,7 +308,7 @@ while true do
             break
         -- 若事件类型为鼠标移动事件，则输出当前鼠标位置
         -- 此处的宏使用方式只适用于 3.0.x 及以上版本
-        else if _event == Interactivity.EVENT_MOUSEMOTION then
+        elseif _event == Interactivity.EVENT_MOUSEMOTION then
             local _cursor_pos = GetCursorPosition()
             print("CursorPosition: ", _cursor_pos.x, _cursor_pos.y)
         end
