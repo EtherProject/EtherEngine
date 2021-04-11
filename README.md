@@ -50,6 +50,16 @@ There are two versions of the developer's documentation for the currently releas
 
 We suggest that you start to contact the EtherAPI from the `QuickStart`, and the examples contained in it will greatly reduce the difficulty when you start the development. However, the `QuickStart` section will not give a detailed introduction to all the contents of the EtherAPI, and the contents displayed may only be part of what you need. Read the `CompleteReferenceManual` for more information.
 
+## 特别鸣谢 · Special Thanks
+
++ [HandamardMatrix](https://github.com/HandamardMatrix)：感谢我的小可爱，为引擎算法提供灵感并且陪我度过了最寒冷的冬天
++ [LHR1926](https://github.com/LHR1926)：感谢我的战友，为引擎的第一份 API 文档做出贡献
++ [VisualDust](https://github.com/VisualDust)：感谢素未谋面的大佬，能够在百忙之中为引擎文档提供英文译本
+
++ [HandamardMatrix](https://github.com/HandamardMatrix)：Thank my sweet for providing inspiration for engine algorithm and accompanying me through the coldest winter
++ [LHR1926](https://github.com/LHR1926)：Thank my comrades in arms for contributing to the first version of API document of the engine
++ [VisualDust](https://github.com/VisualDust)：Thank the mogul we haven't met before for providing English translation for engine documents in your busy time
+
 ## 联系开发组 · Contact Me
 
 如果在使用过程中出现任何问题或有任何建议，欢迎在本仓库中提交 issue 或直接发送邮件至 Voidmatrix@qq.com
