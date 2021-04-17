@@ -406,17 +406,26 @@ Tool module is a kind of module that encapsulates algorithm and system level to 
 EtherAPI is released under the MIT license agreement
 
 ```
-版权所有（c）2020-2021 Voidmatrix
+MIT License
 
-本协议授予所有人免费的许可  
-获取此软件和相关文档的副本
+Copyright (c) 2020 Voidmatrix
 
-本协议不限制代码本身及其衍生物的使用权，
-支持对源代码或其副本进行任意复制、修改、合并、发布、再许可或出售
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-但是使用者必须遵守如下规定：
-软件按源码提供，不提供任何形式的保证，包括但不限于代码质量
-软件作者保留版权，但不对任何使用者担负任何责任
-您可以在开源或私有的软件中自由使用本软件，但是必须保证标注您使用过本软件
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
 
