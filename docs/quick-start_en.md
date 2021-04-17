@@ -118,11 +118,11 @@ The most common operation in the game is to load and draw pictures, so EtherAPI 
 In other words, only a few lines of code as follows can display the picture:
 
 ```lua
--- 引入 Window 和 Graphic 模块
+-- importing Window and Graphic module
 UsingMoudle("Window")
 UsingMoudle("Graphic")
 
--- 创建绘图窗口
+-- creating window
 CreateWindow(
     "HelloWorld",
     {
@@ -137,17 +137,17 @@ CreateWindow(
     }
 )
 
--- 加载 Player.png 图片文件
+-- loading Player.png
 image = LoadImage("Player.png")
 
--- 将上步加载的图片数据渲染为纹理数据
+-- convert into texture
 texture = CreateTexture(image)
 
--- 将纹理数据拷贝到渲染缓冲区中
+-- copying into buffer
 CopyTexture(texture, {x = 0, y = 0, w = 1280, h = 720})
 
 while true do
-    -- 将渲染缓冲区的数据冲刷到窗口上
+    -- do update on window
     UpdateWindow() 
 end
 ```
@@ -180,7 +180,7 @@ The sample code is as follows:
 UsingMoudle("Window")
 UsingMoudle("Graphic")
 
--- 创建绘图窗口
+-- creating wondow
 CreateWindow(
     "HelloWorld",
     {
@@ -195,25 +195,25 @@ CreateWindow(
     }
 )
 
--- 加载指定字号的字体文件
+-- loading font file(ttf)
 font = LoadFont("GameFont.ttf", 50)
 
--- 将文本使用已加载的字体文件渲染为文本贴图
+-- convert into renderable material
 text_image = CreateTextImageBlended(
     font,
     "This is My-Game!",
-    -- 字体颜色为红色
+    -- set color red
     {r = 255, g = 0, b = 0, a = 255}
 )
 
--- 将文本贴图渲染为纹理数据
+-- convert into texture
 text_texture = CreateTexture(text_image)
 
--- 将纹理数据拷贝到渲染缓冲区中
+-- copying into buffer
 CopyTexture(text_texture, {x = 0, y = 0, w = 1280, h = 720})
 
 while true do
-    -- 将渲染缓冲区的数据冲刷到窗口上
+    -- do update on window
     UpdateWindow() 
 end
 ```
@@ -230,7 +230,7 @@ EtherAPI also provides a large number of geometric drawing APIs, such as the dra
 UsingMoudle("Window")
 UsingMoudle("Graphic")
 
--- 创建绘图窗口
+-- creating wondow
 CreateWindow(
     "HelloWorld",
     {
@@ -245,20 +245,20 @@ CreateWindow(
     }
 )
 
--- 设置窗口的绘图颜色为红色
+-- set window default draWing color to red
 SetDrawColor({r = 255, g = 0, b = 0, a = 255})
 
--- 在屏幕中心绘制半径为 25 个像素的空心圆
+-- Draw a hollow circle with a radius of 25 pixels in the center of the screen
 Circle({x = 640, y = 360}, 25)
 
--- 设置窗口绘图颜色为蓝色
+-- set window default draWing color to blue
 SetDrawColor({r = 0, g = 0, b = 255, a = 255})
 
--- 在屏幕左上角绘制长和宽均为 50 个像素的填充矩形
+-- Draw a filled rectangle with 50 pixels in length and width in the upper left corner of the screen
 FillRectangle({x = 0, y = 0, w = 50, h = 50})
 
 while true do
-    -- 将渲染缓冲区的数据冲刷到窗口上
+    -- do update on window
     UpdateWindow() 
 end
 ```
@@ -284,16 +284,16 @@ All sounds are played asynchronously, so we don’t need to worry that the playi
 The following is a simple sample code for media playback:
 
 ```lua
--- 引入 Media 模块
+-- importing module Media
 UsingMoudle("Media")
 
--- 加载 BGM.mp3 音乐文件
+-- load music file BGM.mp3
 music = LoadMusic("BGM.mp3")
 
--- 使用淡入效果循环播放音乐，淡入效果持续时间为 1.5 秒
+-- Use the fade-in effect to play music in a loop, the duration of the fade-in effect is 1.5 seconds
 FadeInMusic(music, -1, 1500)
 
--- 死循环防止程序退出
+-- dive into loop
 while true do end
 ```
 
@@ -319,7 +319,7 @@ Therefore, a general event loop can be written as the following code:
 ```lua
 UsingMoudle("Interactivity")
 
--- 创建游戏窗口
+-- creating window
 CreateWindow(
     "HelloWorld",
     {
@@ -335,23 +335,23 @@ CreateWindow(
 )
 
 while true do
-    -- 更新事件队列，若存在未处理事件则进行分支判断处理 
+    -- Update the event category, if there is an unprocessed event, perform partition judgment processing
     if UpdateEvent() then
-        -- 获取当前未处理事件类型
+        -- Get the current unprocessed event type
         local _event = GetEventType()
-        -- 若事件类型为退出事件，则跳出游戏主循环
-        -- 此处的宏使用方式只适用于 3.0.x 及以上版本
+        -- If the event type is an exit event, it will jump out of the main loop of the game
+        -- The macro usage method here only applies to 3.0.x and above
         if _event == Interactivity.EVENT_QUIT then
             break
-        -- 若事件类型为鼠标移动事件，则输出当前鼠标位置
-        -- 此处的宏使用方式只适用于 3.0.x 及以上版本
+        -- If the event type is a mouse movement event, output the current mouse position
+        -- The macro usage method here only applies to 3.0.x and above
         elseif _event == Interactivity.EVENT_MOUSEMOTION then
             local _cursor_pos = GetCursorPosition()
             print("CursorPosition: ", _cursor_pos.x, _cursor_pos.y)
         end
     end
 
-    -- 将渲染缓冲区的数据冲刷到窗口上
+    -- do update on window
     UpdateWindow() 
 end
 ```
