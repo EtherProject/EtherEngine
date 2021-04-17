@@ -89,7 +89,7 @@ CreateWindow(
     }
 )
 
--- 死循环防止窗口退出
+-- dive into loop
 while true do end
 ```
 
