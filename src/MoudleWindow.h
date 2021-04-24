@@ -6,6 +6,7 @@
 
 #include <lua.hpp>
 #include <SDL.h>
+#include <SDL_image.h>
 
 #define WINDOW_POSITION_DEFAULT INT_MIN
 

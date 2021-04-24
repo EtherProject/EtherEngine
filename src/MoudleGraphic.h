@@ -21,18 +21,6 @@
 #define FLIP_VERTICAL 1011
 #define FLIP_NONE 1012
 
-#define METANAME_IMAGE "Graphic.Image"
-#define METANAME_TEXTURE "Graphic.Texture"
-#define METANAME_FONT "Graphic.Font"
-
-#define GetImageDataAtFirstPos() SDL_Surface* surface = (SDL_Surface*)(*(void**)luaL_checkudata(L, 1, METANAME_IMAGE))
-#define GetTextureDataAtFirstPos() SDL_Texture* texture = (SDL_Texture*)(*(void**)luaL_checkudata(L, 1, METANAME_TEXTURE))
-#define GetFontDataAtFirstPos() TTF_Font* font = (TTF_Font*)(*(void**)luaL_checkudata(L, 1, METANAME_FONT))
-
-#define CheckImageDataAtFirstPos() luaL_argcheck(L, surface, 1, "get image data failed")
-#define CheckTextureDataAtFirstPos() luaL_argcheck(L, texture, 1, "get texture data failed")
-#define CheckFontDataAtFirstPos() luaL_argcheck(L, font, 1, "get font data failed")
-
 extern SDL_Renderer* renderer;
 
 // 设置鼠标是否显示
