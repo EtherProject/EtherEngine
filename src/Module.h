@@ -1,5 +1,5 @@
-#ifndef _MOUDLE_H_
-#define _MOUDLE_H_
+#ifndef _MODULE_H_
+#define _MODULE_H_
 
 #include "Macros.h"
 
@@ -9,12 +9,12 @@
 #include <vector>
 using namespace std;
 
-class Moudle
+class Module
 {
 public:
-	Moudle(lua_State* L, string name) : _pL(L), _strName(name) {};
-	~Moudle() {};
-	void OpenMoudle(void);
+	Module(lua_State* L, string name) : _pL(L), _strName(name) {};
+	~Module() {};
+	void OpenModule(void);
 
 protected:
 	string _strName;
@@ -23,4 +23,4 @@ protected:
 	vector<Macro> _vMacros;
 };
 
-#endif // !_MOUDLE_H_
+#endif // !_MODULE_H_

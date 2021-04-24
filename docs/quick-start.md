@@ -10,18 +10,18 @@ EtherAPI 由一套轻量级的 Lua 游戏开发接口，它基于许多 C/C++ �
 
 默认状态下，EtherAPI 启动器将自动加载同一目录下的 `Main.lua` 文件作为入口文件，虽然我们建议使用 `Main.lua` 作为入口文件的名称，但是文件名并不是大小写敏感的，如 `main.lua` 甚至是 `mAIn.lua` 都是合法的。
 
-另外，所有使用相对路径引用的模块，都将以启动器所在根目录为根目录，如 `moudle = require("mods/moudle_name")` 只有当在启动器所在目录下存在 `mods` 文件夹且文件夹中存在名为 `moudle_name` 的 Lua 模块文件时才会执行成功。当然，通过修改 `package.path` 或 `package.cpath` 来自定义模块加载路径的方法同样有效。
+另外，所有使用相对路径引用的模块，都将以启动器所在根目录为根目录，如 `module = require("mods/module_name")` 只有当在启动器所在目录下存在 `mods` 文件夹且文件夹中存在名为 `module_name` 的 Lua 模块文件时才会执行成功。当然，通过修改 `package.path` 或 `package.cpath` 来自定义模块加载路径的方法同样有效。
 
 ## 引入模块
 
-为了方便命名空间管理及优化引擎自动速度，我们将是否启用指定模块的权限交付给了开发者，开发者可以通过 `UsingMoudle()` 函数启用指定名称的模块，支持的模块名称参数见 [完整手册：目录](index.md#目录)，特殊的，传入字符串 `All` 表示引擎将启用全部模块，在测试时可以通过此方式避免冗杂的导包代码，除此以外，除非这些模块所包含的API都将在程序内被需要，我们不建议您这样做。  
+为了方便命名空间管理及优化引擎自动速度，我们将是否启用指定模块的权限交付给了开发者，开发者可以通过 `UsingModule()` 函数启用指定名称的模块，支持的模块名称参数见 [完整手册：目录](index.md#目录)，特殊的，传入字符串 `All` 表示引擎将启用全部模块，在测试时可以通过此方式避免冗杂的导包代码，除此以外，除非这些模块所包含的API都将在程序内被需要，我们不建议您这样做。  
 
-与 Lua 的标准库函数 `require()` 不同的是，函数 `UsingMoudle()` 并不会将 table 类型的模块作为返回值返回，而是将制定模块中包含的函数压入全局空间，其自身的返回值为 `nil` 。需要注意的是，在 EtherAPI 3.0.x 以下所支持 `UsingMoudle()` 函数的版本中，引入模块会将模块所包含的宏一同引入全局空间，而 EtherAPI 3.0.x 及以上版本中，`UsingMoudle()` 函数会将宏放入与模块名相同的全局 table 中，相关的差异性示例代码如下：
+与 Lua 的标准库函数 `require()` 不同的是，函数 `UsingModule()` 并不会将 table 类型的模块作为返回值返回，而是将制定模块中包含的函数压入全局空间，其自身的返回值为 `nil` 。需要注意的是，在 EtherAPI 3.0.x 以下所支持 `UsingModule()` 函数的版本中，引入模块会将模块所包含的宏一同引入全局空间，而 EtherAPI 3.0.x 及以上版本中，`UsingModule()` 函数会将宏放入与模块名相同的全局 table 中，相关的差异性示例代码如下：
 
 ```lua
 -- 3.0.x 以下版本
 
-UsingMoudle("Window")
+UsingModule("Window")
 
 CreateWindow(
     "HelloWorld",
@@ -31,7 +31,7 @@ CreateWindow(
 
 -- 3.0.x 及以上版本
 
-UsingMoudle("Window")
+UsingModule("Window")
 
 CreateWindow(
     "HelloWorld",
@@ -58,7 +58,7 @@ EtherAPI 中的 `宏` 在本质上为 number 类型的变量，常用作函数�
 
 ```lua
 -- 引入 Window 模块
-UsingMoudle("Window")
+UsingModule("Window")
 
 -- 创建一个尺寸为 1280 x 720 的大小可变窗口
 -- 标题为 "HelloWorld" 且显示在屏幕的默认位置上（通常为居中位置）
@@ -100,8 +100,8 @@ while true do end
 
 ```lua
 -- 引入 Window 和 Graphic 模块
-UsingMoudle("Window")
-UsingMoudle("Graphic")
+UsingModule("Window")
+UsingModule("Graphic")
 
 -- 创建绘图窗口
 CreateWindow(
@@ -155,8 +155,8 @@ end
 示例代码如下：
 
 ```lua
-UsingMoudle("Window")
-UsingMoudle("Graphic")
+UsingModule("Window")
+UsingModule("Graphic")
 
 -- 创建绘图窗口
 CreateWindow(
@@ -203,8 +203,8 @@ end
 EtherAPI 也提供了大量的几何绘图 API，如点、线、矩形、三角形和圆等基本几何图元的绘制函数，以及对于其填充图形的绘制，示例代码如下：
 
 ```lua
-UsingMoudle("Window")
-UsingMoudle("Graphic")
+UsingModule("Window")
+UsingModule("Graphic")
 
 -- 创建绘图窗口
 CreateWindow(
@@ -255,7 +255,7 @@ end
 
 ```lua
 -- 引入 Media 模块
-UsingMoudle("Media")
+UsingModule("Media")
 
 -- 加载 BGM.mp3 音乐文件
 music = LoadMusic("BGM.mp3")
@@ -280,7 +280,7 @@ while true do end
 故一个通用的事件循环可以写为如下代码：
 
 ```lua
-UsingMoudle("Interactivity")
+UsingModule("Interactivity")
 
 -- 创建游戏窗口
 CreateWindow(

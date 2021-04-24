@@ -1,4 +1,4 @@
-#include "MoudleNetwork.h"
+#include "ModuleNetwork.h"
 
 string GetLinkDomain(string link)
 {
@@ -259,7 +259,7 @@ ETHER_API requestPost(lua_State* L)
 }
 
 
-MoudleNetwork::MoudleNetwork(lua_State* L, string name) : Moudle(L, name)
+ModuleNetwork::ModuleNetwork(lua_State* L, string name) : Module(L, name)
 {
 	_vCMethods = {
 		{ "GetLinkDomain", getLinkDomain },

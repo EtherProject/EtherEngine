@@ -5,155 +5,155 @@ SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 lua_State* pL = luaL_newstate();
 
-MoudleWindow* moudleWindow;
-MoudleGraphic* moudleGraphic;
-MoudleAlgorithm* moudleAlgorithm;
-MoudleInteractivity* moudleInteractivity;
-MoudleMedia* moudleMedia;
-MoudleNetwork* moudleNetwork;
-MoudleOS* moudleOS;
-MoudleTime* moudleTime;
-MoudleString* moudleString;
-MoudleJSON* moudleJSON;
+ModuleWindow* moduleWindow;
+ModuleGraphic* moduleGraphic;
+ModuleAlgorithm* moduleAlgorithm;
+ModuleInteractivity* moduleInteractivity;
+ModuleMedia* moduleMedia;
+ModuleNetwork* moduleNetwork;
+ModuleOS* moduleOS;
+ModuleTime* moduleTime;
+ModuleString* moduleString;
+ModuleJSON* moduleJSON;
 
-ETHER_API usingMoudle(lua_State* L)
+ETHER_API usingModule(lua_State* L)
 {
-	string moudleName = luaL_checkstring(L, 1);
-	if (moudleName == MOUDLENAME_ALL)
+	string moduleName = luaL_checkstring(L, 1);
+	if (moduleName == MODULENAME_ALL)
 	{
-		if (!moudleWindow)
+		if (!moduleWindow)
 		{
-			moudleWindow = new MoudleWindow(L, MOUDLENAME_WINDOW);
-			moudleWindow->OpenMoudle();
+			moduleWindow = new ModuleWindow(L, MODULENAME_WINDOW);
+			moduleWindow->OpenModule();
 		}
-		if (!moudleGraphic)
+		if (!moduleGraphic)
 		{
-			moudleGraphic = new MoudleGraphic(L, MOUDLENAME_GRAPHIC);
-			moudleGraphic->OpenMoudle();
+			moduleGraphic = new ModuleGraphic(L, MODULENAME_GRAPHIC);
+			moduleGraphic->OpenModule();
 		}
-		if (!moudleAlgorithm)
+		if (!moduleAlgorithm)
 		{
-			moudleAlgorithm = new MoudleAlgorithm(L, MOUDLENAME_ALGORITHM);
-			moudleAlgorithm->OpenMoudle();
+			moduleAlgorithm = new ModuleAlgorithm(L, MODULENAME_ALGORITHM);
+			moduleAlgorithm->OpenModule();
 		}
-		if (!moudleInteractivity)
+		if (!moduleInteractivity)
 		{
-			moudleInteractivity = new MoudleInteractivity(L, MOUDLENAME_INTERACTIVITY);
-			moudleInteractivity->OpenMoudle();
+			moduleInteractivity = new ModuleInteractivity(L, MODULENAME_INTERACTIVITY);
+			moduleInteractivity->OpenModule();
 		}
-		if (!moudleMedia)
+		if (!moduleMedia)
 		{
-			moudleMedia = new MoudleMedia(L, MOUDLENAME_MEDIA);
-			moudleMedia->OpenMoudle();
+			moduleMedia = new ModuleMedia(L, MODULENAME_MEDIA);
+			moduleMedia->OpenModule();
 		}
-		if (!moudleNetwork)
+		if (!moduleNetwork)
 		{
-			moudleNetwork = new MoudleNetwork(L, MOUDLENAME_NETWORK);
-			moudleNetwork->OpenMoudle();
+			moduleNetwork = new ModuleNetwork(L, MODULENAME_NETWORK);
+			moduleNetwork->OpenModule();
 		}
-		if (!moudleOS)
+		if (!moduleOS)
 		{
-			moudleOS = new MoudleOS(L, MOUDLENAME_OS);
-			moudleOS->OpenMoudle();
+			moduleOS = new ModuleOS(L, MODULENAME_OS);
+			moduleOS->OpenModule();
 		}
-		if (!moudleTime)
+		if (!moduleTime)
 		{
-			moudleTime = new MoudleTime(L, MOUDLENAME_TIME);
-			moudleTime->OpenMoudle();
+			moduleTime = new ModuleTime(L, MODULENAME_TIME);
+			moduleTime->OpenModule();
 		}
-		if (!moudleString)
+		if (!moduleString)
 		{
-			moudleString = new MoudleString(L, MOUDLENAME_STRING);
-			moudleString->OpenMoudle();
+			moduleString = new ModuleString(L, MODULENAME_STRING);
+			moduleString->OpenModule();
 		}
-		if (!moudleJSON)
+		if (!moduleJSON)
 		{
-			moudleJSON = new MoudleJSON(L, MOUDLENAME_JSON);
-			moudleJSON->OpenMoudle();
+			moduleJSON = new ModuleJSON(L, MODULENAME_JSON);
+			moduleJSON->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_WINDOW)
+	else if (moduleName == MODULENAME_WINDOW)
 	{
-		if (!moudleWindow)
+		if (!moduleWindow)
 		{
-			moudleWindow = new MoudleWindow(L, moudleName);
-			moudleWindow->OpenMoudle();
+			moduleWindow = new ModuleWindow(L, moduleName);
+			moduleWindow->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_GRAPHIC)
+	else if (moduleName == MODULENAME_GRAPHIC)
 	{
-		if (!moudleGraphic)
+		if (!moduleGraphic)
 		{
-			moudleGraphic = new MoudleGraphic(L, moudleName);
-			moudleGraphic->OpenMoudle();
+			moduleGraphic = new ModuleGraphic(L, moduleName);
+			moduleGraphic->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_ALGORITHM)
+	else if (moduleName == MODULENAME_ALGORITHM)
 	{
-		if (!moudleAlgorithm)
+		if (!moduleAlgorithm)
 		{
-			moudleAlgorithm = new MoudleAlgorithm(L, moudleName);
-			moudleAlgorithm->OpenMoudle();
+			moduleAlgorithm = new ModuleAlgorithm(L, moduleName);
+			moduleAlgorithm->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_INTERACTIVITY)
+	else if (moduleName == MODULENAME_INTERACTIVITY)
 	{
-		if (!moudleInteractivity)
+		if (!moduleInteractivity)
 		{
-			moudleInteractivity = new MoudleInteractivity(L, moudleName);
-			moudleInteractivity->OpenMoudle();
+			moduleInteractivity = new ModuleInteractivity(L, moduleName);
+			moduleInteractivity->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_MEDIA)
+	else if (moduleName == MODULENAME_MEDIA)
 	{
-		if (!moudleMedia)
+		if (!moduleMedia)
 		{
-			moudleMedia = new MoudleMedia(L, moudleName);
-			moudleMedia->OpenMoudle();
+			moduleMedia = new ModuleMedia(L, moduleName);
+			moduleMedia->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_NETWORK)
+	else if (moduleName == MODULENAME_NETWORK)
 	{
-		if (!moudleNetwork)
+		if (!moduleNetwork)
 		{
-			moudleNetwork = new MoudleNetwork(L, moudleName);
-			moudleNetwork->OpenMoudle();
+			moduleNetwork = new ModuleNetwork(L, moduleName);
+			moduleNetwork->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_OS)
+	else if (moduleName == MODULENAME_OS)
 	{
-		if (!moudleOS)
+		if (!moduleOS)
 		{
-			moudleOS = new MoudleOS(L, moudleName);
-			moudleOS->OpenMoudle();
+			moduleOS = new ModuleOS(L, moduleName);
+			moduleOS->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_TIME)
+	else if (moduleName == MODULENAME_TIME)
 	{
-		if (!moudleTime)
+		if (!moduleTime)
 		{
-			moudleTime = new MoudleTime(L, moudleName);
-			moudleTime->OpenMoudle();
+			moduleTime = new ModuleTime(L, moduleName);
+			moduleTime->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_STRING)
+	else if (moduleName == MODULENAME_STRING)
 	{
-		if (!moudleString)
+		if (!moduleString)
 		{
-			moudleString = new MoudleString(L, moudleName);
-			moudleString->OpenMoudle();
+			moduleString = new ModuleString(L, moduleName);
+			moduleString->OpenModule();
 		}
 	}
-	else if (moudleName == MOUDLENAME_JSON)
+	else if (moduleName == MODULENAME_JSON)
 	{
-		if (!moudleJSON)
+		if (!moduleJSON)
 		{
-			moudleJSON = new MoudleJSON(L, MOUDLENAME_JSON);
-			moudleJSON->OpenMoudle();
+			moduleJSON = new ModuleJSON(L, MODULENAME_JSON);
+			moduleJSON->OpenModule();
 		}
 	}
 	else
-		luaL_error(L, "moudle '%s' not found", moudleName);
+		luaL_error(L, "module '%s' not found", moduleName);
 
 	return 0;
 }
@@ -173,8 +173,8 @@ int main(int argc, char** argv)
 
 	_PushArgs(pL, argc, argv);
 
-	lua_pushcfunction(pL, usingMoudle);
-	lua_setglobal(pL, "UsingMoudle");
+	lua_pushcfunction(pL, usingModule);
+	lua_setglobal(pL, "UsingModule");
 	lua_pushcfunction(pL, getVersion);
 	lua_setglobal(pL, "GetVersion");
 

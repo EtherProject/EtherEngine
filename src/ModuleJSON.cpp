@@ -1,4 +1,4 @@
-#include "MoudleJSON.h"
+#include "ModuleJSON.h"
 
 bool CheckArrary(lua_State* L, int iIndex)
 {
@@ -225,7 +225,7 @@ ETHER_API api_DumpJSONToFile(lua_State* L)
 	return 0;
 }
 
-MoudleJSON::MoudleJSON(lua_State* L, string name) : Moudle(L, name)
+ModuleJSON::ModuleJSON(lua_State* L, string name) : Module(L, name)
 {
 	_vCMethods = {
 		{ "LoadJSON", api_LoadJSON },

@@ -1,7 +1,7 @@
 #ifndef _JSON_H_
 #define _JSON_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Macros.h"
 
 #include <lua.hpp>
@@ -71,11 +71,11 @@ ETHER_API api_DumpJSON(lua_State* L);
 */
 ETHER_API api_DumpJSONToFile(lua_State* L);
 
-class MoudleJSON : public Moudle
+class ModuleJSON : public Module
 {
 public:
-	MoudleJSON(lua_State* L, string name);
-	~MoudleJSON() {};
+	ModuleJSON(lua_State* L, string name);
+	~ModuleJSON() {};
 
 };
 

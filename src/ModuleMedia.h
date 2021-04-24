@@ -1,7 +1,7 @@
 #ifndef _MEDIA_H_
 #define _MEDIA_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Macros.h"
 
 #include <lua.hpp>
@@ -96,11 +96,11 @@ ETHER_API unloadSound(lua_State * L);
 ETHER_API playSound(lua_State * L);
 
 
-class MoudleMedia : public Moudle
+class ModuleMedia : public Module
 {
 public:
-	MoudleMedia(lua_State* L, string name);
-	~MoudleMedia() {};
+	ModuleMedia(lua_State* L, string name);
+	~ModuleMedia() {};
 
 };
 

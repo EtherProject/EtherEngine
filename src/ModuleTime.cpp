@@ -1,4 +1,4 @@
-#include "MoudleTime.h"
+#include "ModuleTime.h"
 
 
 ETHER_API pause(lua_State * L)
@@ -54,7 +54,7 @@ ETHER_API getCounterFrequency(lua_State * L)
 }
 
 
-MoudleTime::MoudleTime(lua_State* L, string name) : Moudle(L, name)
+ModuleTime::ModuleTime(lua_State* L, string name) : Module(L, name)
 {
 	_vCMethods = {
 		{ "Pause", pause },

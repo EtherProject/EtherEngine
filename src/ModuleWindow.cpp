@@ -1,4 +1,4 @@
-#include "MoudleWindow.h"
+#include "ModuleWindow.h"
 
 ETHER_API showMessageBox(lua_State* L)
 {
@@ -315,7 +315,7 @@ ETHER_API updateWindow(lua_State* L)
 }
 
 
-MoudleWindow::MoudleWindow(lua_State* L, string name) : Moudle(L, name)
+ModuleWindow::ModuleWindow(lua_State* L, string name) : Module(L, name)
 {
 	_vCMethods = {
 		{ "ShowMessageBox", showMessageBox},

@@ -1,4 +1,4 @@
-#include "MoudleString.h"
+#include "ModuleString.h"
 
 template<class Facet>
 struct deletable_facet : Facet
@@ -202,7 +202,7 @@ ETHER_API utf8ToGBK(lua_State* L)
 }
 
 
-MoudleString::MoudleString(lua_State* L, string name) : Moudle(L, name)
+ModuleString::ModuleString(lua_State* L, string name) : Module(L, name)
 {
 	_vCMethods = {
 		{ "GBKToUTF8", gbkToUTF8 },

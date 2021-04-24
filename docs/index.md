@@ -24,7 +24,7 @@
 
 ## 全局 API
 
-+ UsingMoudle(name)
++ UsingModule(name)
 
     + 功能：启用指定模块
     + 参数：模块名，传入字符串 "All" 表示启用所有模块

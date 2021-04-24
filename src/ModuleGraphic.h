@@ -1,7 +1,7 @@
 #ifndef _GRAPHIC_H_
 #define _GRAPHIC_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Macros.h"
 #include "Utils.h"
 
@@ -253,11 +253,11 @@ ETHER_API createTextImageBlended(lua_State * L);
 // 1返回值：成功则返回图像数据（userdata-IMAGE），失败则返回nil
 ETHER_API createUTF8TextImageBlended(lua_State * L);
 
-class MoudleGraphic : public Moudle
+class ModuleGraphic : public Module
 {
 public:
-	MoudleGraphic(lua_State* L, string name);
-	~MoudleGraphic() {};
+	ModuleGraphic(lua_State* L, string name);
+	~ModuleGraphic() {};
 
 };
 

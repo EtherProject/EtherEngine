@@ -1,7 +1,7 @@
 #ifndef _WINDOW_H_
 #define _WINDOW_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Utils.h"
 
 #include <lua.hpp>
@@ -124,11 +124,11 @@ ETHER_API clearWindow(lua_State * L);
 ETHER_API updateWindow(lua_State* L);
 
 
-class MoudleWindow : public Moudle
+class ModuleWindow : public Module
 {
 public:
-	MoudleWindow(lua_State* L, string name);
-	~MoudleWindow() {};
+	ModuleWindow(lua_State* L, string name);
+	~ModuleWindow() {};
 
 };
 

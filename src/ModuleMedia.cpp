@@ -1,4 +1,4 @@
-#include "MoudleMedia.h"
+#include "ModuleMedia.h"
 
 
 ETHER_API loadMusic(lua_State * L)
@@ -174,7 +174,7 @@ ETHER_API playSound(lua_State * L)
 }
 
 
-MoudleMedia::MoudleMedia(lua_State* L, string name) : Moudle(L, name)
+ModuleMedia::ModuleMedia(lua_State* L, string name) : Module(L, name)
 {
 	Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);

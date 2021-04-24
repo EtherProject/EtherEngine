@@ -1,6 +1,6 @@
-#include "Moudle.h"
+#include "Module.h"
 
-void Moudle::OpenMoudle()
+void Module::OpenModule()
 {
 	for (luaL_Reg method : _vCMethods)
 	{

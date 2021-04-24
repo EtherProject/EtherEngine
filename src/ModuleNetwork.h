@@ -1,7 +1,7 @@
 #ifndef _NETWORK_H_
 #define _NETWORK_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Macros.h"
 
 #include <lua.hpp>
@@ -118,11 +118,11 @@ ETHER_API requestGet(lua_State* L);
 ETHER_API requestPost(lua_State* L);
 
 
-class MoudleNetwork : public Moudle
+class ModuleNetwork : public Module
 {
 public:
-	MoudleNetwork(lua_State* L, string name);
-	~MoudleNetwork() {};
+	ModuleNetwork(lua_State* L, string name);
+	~ModuleNetwork() {};
 
 };
 

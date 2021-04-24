@@ -1,7 +1,7 @@
 #ifndef _INTERACTIVITY_H_
 #define _INTERACTIVITY_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Macros.h"
 
 #include <lua.hpp>
@@ -321,11 +321,11 @@ ETHER_API updateEvent(lua_State * L);
 ETHER_API getEventType(lua_State * L);
 
 
-class MoudleInteractivity : public Moudle
+class ModuleInteractivity : public Module
 {
 public:
-	MoudleInteractivity(lua_State* L, string name);
-	~MoudleInteractivity() {};
+	ModuleInteractivity(lua_State* L, string name);
+	~ModuleInteractivity() {};
 
 };
 

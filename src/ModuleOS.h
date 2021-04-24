@@ -1,7 +1,7 @@
 #ifndef _OS_H_
 #define _OS_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Macros.h"
 
 #include <lua.hpp>
@@ -105,11 +105,11 @@ ETHER_API getFileNameFromPath(lua_State* L);
 */
 ETHER_API getBasePathFromPath(lua_State* L);
 
-class MoudleOS : public Moudle
+class ModuleOS : public Module
 {
 public:
-	MoudleOS(lua_State* L, string name);
-	~MoudleOS() {};
+	ModuleOS(lua_State* L, string name);
+	~ModuleOS() {};
 
 };
 

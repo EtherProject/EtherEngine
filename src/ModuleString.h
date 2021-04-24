@@ -1,7 +1,7 @@
 #ifndef _STRING_H_
 #define _STRING_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Macros.h"
 
 #include <lua.hpp>
@@ -53,11 +53,11 @@ ETHER_API gbkToUTF8(lua_State* L);
 */
 ETHER_API utf8ToGBK(lua_State* L);
 
-class MoudleString : public Moudle
+class ModuleString : public Module
 {
 public:
-	MoudleString(lua_State* L, string name);
-	~MoudleString() {};
+	ModuleString(lua_State* L, string name);
+	~ModuleString() {};
 
 };
 

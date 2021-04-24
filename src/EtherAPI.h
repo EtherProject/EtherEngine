@@ -2,16 +2,16 @@
 #define _MAIN_H_
 
 #include "Macros.h"
-#include "MoudleWindow.h"
-#include "MoudleGraphic.h"
-#include "MoudleMedia.h"
-#include "MoudleInteractivity.h"
-#include "MoudleTime.h"
-#include "MoudleOS.h"
-#include "MoudleAlgorithm.h"
-#include "MoudleNetwork.h"
-#include "MoudleString.h"
-#include "MoudleJSON.h"
+#include "ModuleWindow.h"
+#include "ModuleGraphic.h"
+#include "ModuleMedia.h"
+#include "ModuleInteractivity.h"
+#include "ModuleTime.h"
+#include "ModuleOS.h"
+#include "ModuleAlgorithm.h"
+#include "ModuleNetwork.h"
+#include "ModuleString.h"
+#include "ModuleJSON.h"
 
 #include <lua.hpp>
 #include <SDL.h>
@@ -27,23 +27,23 @@
 #endif
 #endif
 
-#define MOUDLENAME_ALL "All"
-#define MOUDLENAME_ALGORITHM "Algorithm"
-#define MOUDLENAME_GRAPHIC "Graphic"
-#define MOUDLENAME_INTERACTIVITY "Interactivity"
-#define MOUDLENAME_MEDIA "Media"
-#define MOUDLENAME_NETWORK "Network"
-#define MOUDLENAME_OS "OS"
-#define MOUDLENAME_TIME "Time"
-#define MOUDLENAME_WINDOW "Window"
-#define MOUDLENAME_STRING "String"
-#define MOUDLENAME_JSON "JSON"
+#define MODULENAME_ALL "All"
+#define MODULENAME_ALGORITHM "Algorithm"
+#define MODULENAME_GRAPHIC "Graphic"
+#define MODULENAME_INTERACTIVITY "Interactivity"
+#define MODULENAME_MEDIA "Media"
+#define MODULENAME_NETWORK "Network"
+#define MODULENAME_OS "OS"
+#define MODULENAME_TIME "Time"
+#define MODULENAME_WINDOW "Window"
+#define MODULENAME_STRING "String"
+#define MODULENAME_JSON "JSON"
 
 void _PushArgs(lua_State* l, int argc, char** argv);
 
 void _HandleQuit();
 
-ETHER_API usingMoudle(lua_State* L);
+ETHER_API usingModule(lua_State* L);
 
 ETHER_API getVersion(lua_State* L);
 

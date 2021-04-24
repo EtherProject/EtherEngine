@@ -12,7 +12,7 @@ Here is a quick start guide for EtherAPI, its purpose is to help you quickly get
 
 The EtherAPI launcher will automatically load the `Main.lua` file in the current directory as the entry file as default. Although we recommend using `Main.lua` as the entry file, the file name is not case sensitive, such as `main.lua` and even `mAIn.lua` are both legal.
 
-In addition, all modules referenced by relative paths will use the root directory of the launcher as the root directory, such as `moudle = require("mods/moudle_name")` only when the `mods` folder exists in the directory where the launcher is located and The execution will be successful only when there is a Lua module file named `moudle_name` in the folder. Of course, the method of customizing the module loading path by modifying `package.path` or `package.cpath` is also effective.
+In addition, all modules referenced by relative paths will use the root directory of the launcher as the root directory, such as `module = require("mods/module_name")` only when the `mods` folder exists in the directory where the launcher is located and The execution will be successful only when there is a Lua module file named `module_name` in the folder. Of course, the method of customizing the module loading path by modifying `package.path` or `package.cpath` is also effective.
 
 ---
 
@@ -20,14 +20,14 @@ In addition, all modules referenced by relative paths will use the root director
 
 ## Importing Modules
 
-In order to facilitate namespace management and optimize the speed of the engine, we have given the developer the authority to enable the specified module. Developers can enable the module with the specified name through the `UsingMoudle()` function. The supported module name parameters are shown in [Complete Manual : Directory](index.md#directory), special, the incoming string `All` means that the engine will enable all modules, and this method can be used to avoid cumbersome package guide code during testing. In addition, unless these modules are The included API will be needed in the program, we do not recommend you to do this.
+In order to facilitate namespace management and optimize the speed of the engine, we have given the developer the authority to enable the specified module. Developers can enable the module with the specified name through the `UsingModule()` function. The supported module name parameters are shown in [Complete Manual : Directory](index.md#directory), special, the incoming string `All` means that the engine will enable all modules, and this method can be used to avoid cumbersome package guide code during testing. In addition, unless these modules are The included API will be needed in the program, we do not recommend you to do this.
 
-Differing from the  Lua's standard library function `require()`, the function `UsingMoudle()` does not return the table type module as the return value, but pushes the functions contained in the specified module into the global space. The return value is `nil`. It should be noted that in the versions of the `UsingMoudle()` function supported by EtherAPI 3.0.x and below, the introduction of the module will introduce the macros contained in the module into the global space, while in EtherAPI 3.0.x and above, `UsingMoudle( )` The function puts the macro into the global table with the same name as the module. The relevant difference sample code is as follows:
+Differing from the  Lua's standard library function `require()`, the function `UsingModule()` does not return the table type module as the return value, but pushes the functions contained in the specified module into the global space. The return value is `nil`. It should be noted that in the versions of the `UsingModule()` function supported by EtherAPI 3.0.x and below, the introduction of the module will introduce the macros contained in the module into the global space, while in EtherAPI 3.0.x and above, `UsingModule( )` The function puts the macro into the global table with the same name as the module. The relevant difference sample code is as follows:
 
 ```lua
 -- below the version of 3.0
 
-UsingMoudle("Window")
+UsingModule("Window")
 
 CreateWindow(
     "HelloWorld",
@@ -37,7 +37,7 @@ CreateWindow(
 
 -- above the version of 3.0
 
-UsingMoudle("Window")
+UsingModule("Window")
 
 CreateWindow(
     "HelloWorld",
@@ -71,7 +71,7 @@ Therefore, creating a stretchable window with the title `HelloWorld` and display
 
 ```lua
 -- import window
-UsingMoudle("Window")
+UsingModule("Window")
 
 -- Create a resizable window of 1280 x 720
 -- using the title "HelloWorld" and show on default position (usually on the middle of the screen)
@@ -119,8 +119,8 @@ In other words, only a few lines of code as follows can display the picture:
 
 ```lua
 -- importing Window and Graphic module
-UsingMoudle("Window")
-UsingMoudle("Graphic")
+UsingModule("Window")
+UsingModule("Graphic")
 
 -- creating window
 CreateWindow(
@@ -177,8 +177,8 @@ Stuff like that, if you want to render text content to the screen, you also need
 The sample code is as follows:
 
 ```lua
-UsingMoudle("Window")
-UsingMoudle("Graphic")
+UsingModule("Window")
+UsingModule("Graphic")
 
 -- creating wondow
 CreateWindow(
@@ -227,8 +227,8 @@ In the second step of rendering text maps, there are many functions that support
 EtherAPI also provides a large number of geometric drawing APIs, such as the drawing functions of basic geometric primitives such as points, lines, rectangles, triangles and circles, as well as the drawing of their filled graphics. The sample code is as follows:
 
 ```lua
-UsingMoudle("Window")
-UsingMoudle("Graphic")
+UsingModule("Window")
+UsingModule("Graphic")
 
 -- creating wondow
 CreateWindow(
@@ -285,7 +285,7 @@ The following is a simple sample code for media playback:
 
 ```lua
 -- importing module Media
-UsingMoudle("Media")
+UsingModule("Media")
 
 -- load music file BGM.mp3
 music = LoadMusic("BGM.mp3")
@@ -317,7 +317,7 @@ Interactivity is an important part of the game. The `Interactivity` module of Et
 Therefore, a general event loop can be written as the following code:
 
 ```lua
-UsingMoudle("Interactivity")
+UsingModule("Interactivity")
 
 -- creating window
 CreateWindow(

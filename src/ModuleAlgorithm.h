@@ -1,7 +1,7 @@
 #ifndef _ALGORITHM_H_
 #define _ALGORITHM_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Macros.h"
 #include "Utils.h"
 
@@ -100,11 +100,11 @@ ETHER_API hslaToRGBA(lua_State* L);
 */
 ETHER_API ifElementInTable(lua_State* L);
 
-class MoudleAlgorithm : public Moudle
+class ModuleAlgorithm : public Module
 {
 public:
-	MoudleAlgorithm(lua_State* L, string name);
-	~MoudleAlgorithm() {};
+	ModuleAlgorithm(lua_State* L, string name);
+	~ModuleAlgorithm() {};
 
 };
 

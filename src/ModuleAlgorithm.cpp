@@ -1,4 +1,4 @@
-#include "MoudleAlgorithm.h"
+#include "ModuleAlgorithm.h"
 
 double HLS2RGBvalue(double n1, double n2, double hue)
 {
@@ -425,7 +425,7 @@ ETHER_API ifElementInTable(lua_State* L)
 }
 
 
-MoudleAlgorithm::MoudleAlgorithm(lua_State* L, string name) : Moudle(L, name)
+ModuleAlgorithm::ModuleAlgorithm(lua_State* L, string name) : Module(L, name)
 {
 	_vCMethods = {
 		{ "Clamp", clamp },

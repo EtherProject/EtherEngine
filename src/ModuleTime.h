@@ -1,7 +1,7 @@
 #ifndef _TIME_H_
 #define _TIME_H_
 
-#include "Moudle.h"
+#include "Module.h"
 #include "Macros.h"
 
 #include <lua.hpp>
@@ -38,11 +38,11 @@ ETHER_API getAccurateCount(lua_State * L);
 ETHER_API getCounterFrequency(lua_State * L);
 
 
-class MoudleTime : public Moudle
+class ModuleTime : public Module
 {
 public:
-	MoudleTime(lua_State* L, string name);
-	~MoudleTime() {};
+	ModuleTime(lua_State* L, string name);
+	~ModuleTime() {};
 
 };
 
