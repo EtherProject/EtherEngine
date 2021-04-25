@@ -39,7 +39,11 @@
 #define MODULENAME_STRING "String"
 #define MODULENAME_JSON "JSON"
 
-void _PushArgs(lua_State* l, int argc, char** argv);
+#ifndef __WINDOWS__
+extern char** environ;
+#endif
+
+void _PushArgs(lua_State* l, int argc, char** argv, char** envp);
 
 void _HandleQuit();
 

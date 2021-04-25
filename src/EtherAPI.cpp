@@ -171,7 +171,7 @@ int main(int argc, char** argv)
 	
 	luaL_openlibs(pL);
 
-	_PushArgs(pL, argc, argv);
+	_PushArgs(pL, argc, argv, environ);
 
 	lua_pushcfunction(pL, usingModule);
 	lua_setglobal(pL, "UsingModule");
@@ -179,9 +179,7 @@ int main(int argc, char** argv)
 	lua_setglobal(pL, "GetVersion");
 
 	if (luaL_dofile(pL, "Main.lua"))
-	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(pL, -1), NULL);
-	}
 
 	_HandleQuit();
 
@@ -189,7 +187,7 @@ int main(int argc, char** argv)
 }
 
 
-void _PushArgs(lua_State* l, int argc, char** argv)
+void _PushArgs(lua_State* l, int argc, char** argv, char** envp)
 {
 	lua_pushnumber(l, argc);
 	lua_setglobal(l, "_argc");
@@ -202,6 +200,17 @@ void _PushArgs(lua_State* l, int argc, char** argv)
 		lua_settable(l, -3);
 	}
 	lua_setglobal(l, "_argv");
+
+	lua_newtable(l);
+	for (int i = 1; envp[i - 1]; i++)
+	{
+		string strEnvp = envp[i - 1];
+		size_t stIndexEq = strEnvp.find_first_of('=');
+		lua_pushstring(l, strEnvp.substr(0, stIndexEq).c_str());
+		lua_pushstring(l, strEnvp.substr(stIndexEq + 1).c_str());
+		lua_settable(l, -3);
+	}
+	lua_setglobal(l, "_envp");
 }
 
 
