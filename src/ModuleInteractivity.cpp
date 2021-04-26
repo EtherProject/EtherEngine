@@ -138,6 +138,9 @@ ETHER_API getEventType(lua_State * L)
 			break;
 		}
 		break;
+	case SDL_TEXTINPUT:
+		lua_pushnumber(L, EVENT_TEXTINPUT);
+		break;
 	case SDL_KEYDOWN:
 		switch (event.key.keysym.sym)
 		{
