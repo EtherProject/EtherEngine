@@ -21,6 +21,27 @@ ETHER_API getScrollValue(lua_State * L)
 }
 
 
+ETHER_API startTextInput(lua_State* L)
+{
+	SDL_StartTextInput();
+	return 0;
+}
+
+
+ETHER_API stopTextInput(lua_State* L)
+{
+	SDL_StopTextInput();
+	return 0;
+}
+
+
+ETHER_API getInputText(lua_State* L)
+{
+	lua_pushstring(L, event.text.text);
+	return 1;
+}
+
+
 ETHER_API updateEvent(lua_State * L)
 {
 	lua_pushboolean(L, SDL_PollEvent(&event));
@@ -1004,6 +1025,9 @@ ModuleInteractivity::ModuleInteractivity(lua_State* L, string name) : Module(L, 
 	_vCMethods = {
 		{ "GetCursorPosition", getCursorPosition },
 		{ "GetScrollValue", getScrollValue },
+		{ "StartTextInput", startTextInput },
+		{ "StopTextInput", stopTextInput },
+		{ "GetInputText", getInputText },
 		{ "UpdateEvent", updateEvent },
 		{ "GetEventType", getEventType },
 	};
@@ -1299,5 +1323,7 @@ ModuleInteractivity::ModuleInteractivity(lua_State* L, string name) : Module(L, 
 		{ "EVENT_KEYUP_DBLVERTICALBAR", EVENT_KEYUP_DBLVERTICALBAR },
 		{ "EVENT_KEYUP_WWW", EVENT_KEYUP_WWW },
 		{ "EVENT_KEYUP_EMAIL", EVENT_KEYUP_EMAIL },
+
+		{ "EVENT_TEXTINPUT", EVENT_TEXTINPUT },
 	};
 }

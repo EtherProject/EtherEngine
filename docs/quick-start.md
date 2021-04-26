@@ -339,6 +339,32 @@ end
 
 在一般情况下，如果一个窗口没有持续接收并更新事件，则会被系统认为此窗口进入异常的 `无响应` 状态，显而易见的，由于这个窗口不会对事件作出响应，故也无法拖拽移动、最小化或关闭窗口；所以，在游戏的主循环中持续调用 `UpdateEvent()` 函数时必要的。 
 
+另外，如果我们想获取窗口内的文本输入事件，则需要首启用文本输入事件，并在触发输入事件时获取文本输入内容，相关示例代码如下：
+
+```lua
+UsingModule("Interactivity")
+
+-- 窗口创建等代码……
+
+-- 开始接收窗口内文本输入
+StartTextInput()
+
+while true do
+    if UpdateEvent() then
+        local _event = GetEventType()
+        -- 若事件类型为文本输入事件，则获取文本输入内容
+        if _event == Interactivity.EVENT_TEXTINPUT then
+            local text = GetInputText()
+        end
+    end
+end
+
+-- 结束接收窗口内文本输入
+StopTextInput()
+```
+
+在如 `Windows` 等平台上，不使用 `StartTextInput()` 开启文本输入可能同样可以通过 `GetInputText()` 获取到文本输入事件，但是为了保证程序的通用性和稳定性，请在尝试获取文本输入之前使用 `StartTextInput()` 启用文本接收，并在输入过程完毕时使用 `StopTextInput()` 结束文本输入；在如 `Android` 等平台上，`StartTextInput()` 的调用可能会激活显示屏幕键盘
+
 更多的交互事件类型详见 [完整手册：Interactivity 模块附录](Interactivity/appendix.md)
 
 ## 内存管理  

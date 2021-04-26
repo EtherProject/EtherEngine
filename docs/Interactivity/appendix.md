@@ -291,3 +291,4 @@
 |  EVENT_KEYUP_DBLVERTICALBAR  | 抬起键位：DBLVERTICALBAR |
 |       EVENT_KEYUP_WWW        |      抬起键位：WWW       |
 |      EVENT_KEYUP_EMAIL       |     抬起键位：EMAIL      |
+|       EVENT_TEXTINPUT        |         文本输入         |

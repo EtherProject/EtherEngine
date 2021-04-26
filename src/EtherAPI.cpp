@@ -4,8 +4,8 @@ string strNameEntry = DEFAULTNAME_ENTRY;
 vector<string> vStrPathList, vStrCPathList, vStrCmdList;
 
 SDL_Event event;
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL;
+SDL_Window* window = nullptr;
+SDL_Renderer* renderer = nullptr;
 
 lua_State* pL = luaL_newstate();
 
@@ -226,7 +226,7 @@ int _LoadConfig()
 	}
 
 	cJSON* pJSONEntry, * pJSONPackage, * pJSONPath, * pJSONCPath, * pJSONCommand;
-	if ((pJSONEntry = cJSON_GetObjectItem(pJSONRoot, "entry")) && pJSONEntry->type == cJSON_String)
+	if ((pJSONEntry = cJSON_GetObjectItem(pJSONRoot, "entry")) && pJSONEntry->type == cJSON_String && !string(pJSONEntry->valuestring).empty())
 		strNameEntry = pJSONEntry->valuestring;
 	else
 	{
@@ -300,6 +300,7 @@ int _LoadConfig()
 	string strCPath = lua_tostring(pL, -1);
 	for (string cpath : vStrCPathList)
 		strCPath.append(";" + cpath);
+	vector<string>().swap(vStrCPathList);
 	lua_pushstring(pL, strCPath.c_str());
 	lua_setfield(pL, -3, "cpath");
 	lua_pop(pL, 2);
@@ -326,6 +327,7 @@ void _PushArgs(lua_State* l, int argc, char** argv, char** envp)
 		lua_pushstring(l, argv[i - vStrCmdList.size() - 1]);
 		lua_settable(l, -3);
 	}
+	vector<string>().swap(vStrCmdList);
 	lua_setglobal(l, "_argv");
 
 	lua_newtable(l);
@@ -349,11 +351,11 @@ void _HandleQuit()
 	TTF_Quit();
 
 	SDL_DestroyRenderer(renderer);
-	renderer = NULL;
+	renderer = nullptr;
 
 	if (window)
 	{
 		SDL_DestroyWindow(window);
-		window = NULL;
+		window = nullptr;
 	}
 }
