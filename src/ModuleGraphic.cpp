@@ -926,6 +926,7 @@ ModuleGraphic::ModuleGraphic(lua_State* L, string name) : Module(L, name)
 
 	luaL_newmetatable(L, METANAME_IMAGE);
 	luaL_newmetatable(L, METANAME_TEXTURE);
+	luaL_newmetatable(L, METANAME_FONT);
 
 	_vCMethods = {
 		{ "SetCursorShow", setCursorShow },
