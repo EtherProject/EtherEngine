@@ -10,9 +10,27 @@ Here is a quick start guide for EtherAPI, its purpose is to help you quickly get
 
 ## Launching
 
-The EtherAPI launcher will automatically load the `Main.lua` file in the current directory as the entry file as default. Although we recommend using `Main.lua` as the entry file, the file name is not case sensitive, such as `main.lua` and even `mAIn.lua` are both legal.
+The EtherAPI launcher will automatically load the `config.json` as a configuration file, the configuration file describes various information such as the entry file and add in path. A possible configuration file is as follows:
 
-In addition, all modules referenced by relative paths will use the root directory of the launcher as the root directory, such as `module = require("mods/module_name")` only when the `mods` folder exists in the directory where the launcher is located and The execution will be successful only when there is a Lua module file named `module_name` in the folder. Of course, the method of customizing the module loading path by modifying `package.path` or `package.cpath` is also effective.
+```json
+{
+    "entry": "scripts/Main.lua",
+    "package": {
+        "path": [
+            "scripts/?.lua",
+            "modules/?.lua"            
+        ],
+        "cpath": [
+            "modules/?.dll"
+        ]
+    },
+    "command": [
+        "--debug"
+    ]
+}
+```
+
+For more information, see [Complete Manual: Configuration](index.md#Configuration).
 
 ---
 

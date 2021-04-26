@@ -1,8 +1,12 @@
 #include "EtherAPI.h"
 
+string strNameEntry = DEFAULTNAME_ENTRY;
+vector<string> vStrPathList, vStrCPathList, vStrCmdList;
+
 SDL_Event event;
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
+
 lua_State* pL = luaL_newstate();
 
 ModuleWindow* moduleWindow;
@@ -167,9 +171,25 @@ ETHER_API getVersion(lua_State* L)
 
 int main(int argc, char** argv)
 {
-	SDL_Init(SDL_INIT_EVERYTHING);
-	
 	luaL_openlibs(pL);
+
+#ifdef _ETHER_DEBUG_
+	switch (_LoadConfig())
+	{
+	case CONFIGERROR_LOADING:
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Load Configuration Failed", "Failed to load configuration file.\nProgram will run with the default configuration.\nDisable _ETHER_DEBUG_ to hide this warning.", nullptr);
+		break;
+	case CONFIGERROR_PARSING:
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Parse Configuration Failed", "Failed to parse configuration file.\nProgram will run with the default configuration.\nDisable _ETHER_DEBUG_ to hide this warning.", nullptr);
+		break;
+	default:
+		break;
+	}
+#else
+	_LoadConfig();
+#endif	
+
+	SDL_Init(SDL_INIT_EVERYTHING);
 
 	_PushArgs(pL, argc, argv, environ);
 
@@ -178,8 +198,8 @@ int main(int argc, char** argv)
 	lua_pushcfunction(pL, getVersion);
 	lua_setglobal(pL, "GetVersion");
 
-	if (luaL_dofile(pL, "Main.lua"))
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(pL, -1), NULL);
+	if (luaL_dofile(pL, strNameEntry.c_str()))
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(pL, -1), nullptr);
 
 	_HandleQuit();
 
@@ -187,16 +207,123 @@ int main(int argc, char** argv)
 }
 
 
+int _LoadConfig()
+{
+	ifstream fin("config.json");
+	if (!fin.good()) 
+		return CONFIGERROR_LOADING;
+
+	stringstream ssContent;
+	ssContent << fin.rdbuf();
+	fin.close(); fin.clear();
+
+	cJSON* pJSONRoot = cJSON_Parse(ssContent.str().c_str());
+	ssContent.clear();
+	if (!(pJSONRoot && pJSONRoot->type == cJSON_Object))
+	{
+		cJSON_Delete(pJSONRoot);
+		return CONFIGERROR_PARSING;
+	}
+
+	cJSON* pJSONEntry, * pJSONPackage, * pJSONPath, * pJSONCPath, * pJSONCommand;
+	if ((pJSONEntry = cJSON_GetObjectItem(pJSONRoot, "entry")) && pJSONEntry->type == cJSON_String)
+		strNameEntry = pJSONEntry->valuestring;
+	else
+	{
+		cJSON_Delete(pJSONRoot);
+		return CONFIGERROR_PARSING;
+	}
+
+	if ((pJSONPackage = cJSON_GetObjectItem(pJSONRoot, "package")) && pJSONPackage->type == cJSON_Object)
+	{
+		if ((pJSONPath = cJSON_GetObjectItem(pJSONPackage, "path")) && pJSONPath->type == cJSON_Array)
+			for (int i = 0; i < cJSON_GetArraySize(pJSONPath); i++)
+			{
+				cJSON* item = cJSON_GetArrayItem(pJSONPath, i);
+				if (item && item->type == cJSON_String)
+					vStrPathList.push_back(item->valuestring);
+				else
+				{
+					cJSON_Delete(pJSONRoot);
+					return CONFIGERROR_PARSING;
+				}
+			}
+		if ((pJSONCPath = cJSON_GetObjectItem(pJSONPackage, "cpath")) && pJSONCPath->type == cJSON_Array)
+			for (int i = 0; i < cJSON_GetArraySize(pJSONCPath); i++)
+			{
+				cJSON* item = cJSON_GetArrayItem(pJSONCPath, i);
+				if (item && item->type == cJSON_String)
+					vStrCPathList.push_back(item->valuestring);
+				else
+				{
+					cJSON_Delete(pJSONRoot);
+					return CONFIGERROR_PARSING;
+				}
+			}
+	}
+	else
+	{
+		cJSON_Delete(pJSONRoot);
+		return CONFIGERROR_PARSING;
+	}
+
+	if ((pJSONCommand = cJSON_GetObjectItem(pJSONRoot, "command")) && pJSONCommand->type == cJSON_Array)
+		for (int i = 0; i < cJSON_GetArraySize(pJSONCommand); i++)
+		{
+			cJSON* item = cJSON_GetArrayItem(pJSONCommand, i);
+			if (item && item->type == cJSON_String)
+				vStrCmdList.push_back(item->valuestring);
+			else
+			{
+				cJSON_Delete(pJSONRoot);
+				return CONFIGERROR_PARSING;
+			}
+		}
+	else
+	{
+		cJSON_Delete(pJSONRoot);
+		return CONFIGERROR_PARSING;
+	}
+
+	lua_getglobal(pL, "package");
+
+	lua_getfield(pL, -1, "path");
+	string strPath = lua_tostring(pL, -1);
+	for (string path : vStrPathList)
+		strPath.append(";" + path);
+	vector<string>().swap(vStrPathList);
+	lua_pushstring(pL, strPath.c_str());
+	lua_setfield(pL, -3, "path");
+	lua_pop(pL, 1);
+
+	lua_getfield(pL, -1, "cpath");
+	string strCPath = lua_tostring(pL, -1);
+	for (string cpath : vStrCPathList)
+		strCPath.append(";" + cpath);
+	lua_pushstring(pL, strCPath.c_str());
+	lua_setfield(pL, -3, "cpath");
+	lua_pop(pL, 2);
+
+	return CONFIGSUCCESS;
+}
+
+
 void _PushArgs(lua_State* l, int argc, char** argv, char** envp)
 {
-	lua_pushnumber(l, argc);
+	lua_pushnumber(l, vStrCmdList.size() + argc);
 	lua_setglobal(l, "_argc");
 
 	lua_newtable(l);
-	for (int i = 1; i < argc + 1; i++)
+	for (int i = 1; i < vStrCmdList.size() + 1; i++)
 	{
 		lua_pushnumber(l, i);
-		lua_pushstring(l, argv[i - 1]);
+		lua_pushstring(l, vStrCmdList[i - 1].c_str());
+		lua_settable(l, -3);
+	}
+	for (int i = vStrCmdList.size() + 1; i < vStrCmdList.size() + argc + 1; i++)
+	{
+		lua_pushnumber(l, i);
+		lua_pushstring(l, argv[i - vStrCmdList.size() - 1]);
 		lua_settable(l, -3);
 	}
 	lua_setglobal(l, "_argv");
