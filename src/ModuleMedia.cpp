@@ -1,6 +1,47 @@
 #include "ModuleMedia.h"
 
 
+ModuleMedia& ModuleMedia::Instance()
+{
+	static ModuleMedia* _instance = new ModuleMedia();
+	return *_instance;
+}
+
+
+ModuleMedia::ModuleMedia()
+{
+	Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	_vCMethods = {
+		{ "LoadMusic", loadMusic },
+		{ "UnloadMusic", unloadMusic },
+		{ "PlayMusic", playMusic },
+		{ "FadeInMusic", fadeInMusic },
+		{ "FadeOutMusic", fadeOutMusic },
+		{ "SetMusicVolume", setMusicVolume },
+		{ "GetMusicVolume", getMusicVolume },
+		{ "PauseMusic", pauseMusic },
+		{ "ResumeMusic", resumeMusic },
+		{ "RewindMusic", rewindMusic },
+		{ "GetMusicType", getMusicType },
+		{ "LoadSound", loadSound },
+		{ "UnloadSound", unloadSound },
+		{ "PlaySound", playSound },
+	};
+
+	_vMacros = {
+		{ "MUSIC_TYPE_WAV", MUSIC_TYPE_WAV },
+		{ "MUSIC_TYPE_MP3", MUSIC_TYPE_MP3 },
+		{ "MUSIC_TYPE_OGG", MUSIC_TYPE_OGG },
+		{ "MUSIC_TYPE_CMD", MUSIC_TYPE_CMD },
+		{ "MUSIC_TYPE_MOD", MUSIC_TYPE_MOD },
+		{ "MUSIC_TYPE_MID", MUSIC_TYPE_MID },
+		{ "MUSIC_TYPE_UNKONWN", MUSIC_TYPE_UNKONWN },
+	};
+}
+
+
 ETHER_API loadMusic(lua_State * L)
 {
 	Mix_Music* music = Mix_LoadMUS(luaL_checkstring(L, 1));
@@ -171,41 +212,4 @@ ETHER_API playSound(lua_State * L)
 	Mix_PlayChannel(-1, sound, luaL_checknumber(L, 2));
 
 	return 0;
-}
-
-
-ModuleMedia::ModuleMedia(lua_State* L, string name) : Module(L, name)
-{
-	Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
-	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-
-	luaL_newmetatable(L, METANAME_MUSIC);
-	luaL_newmetatable(L, METANAME_SOUND);
-
-	_vCMethods = {
-		{ "LoadMusic", loadMusic },
-		{ "UnloadMusic", unloadMusic },
-		{ "PlayMusic", playMusic },
-		{ "FadeInMusic", fadeInMusic },
-		{ "FadeOutMusic", fadeOutMusic },
-		{ "SetMusicVolume", setMusicVolume },
-		{ "GetMusicVolume", getMusicVolume },
-		{ "PauseMusic", pauseMusic },
-		{ "ResumeMusic", resumeMusic },
-		{ "RewindMusic", rewindMusic },
-		{ "GetMusicType", getMusicType },
-		{ "LoadSound", loadSound },
-		{ "UnloadSound", unloadSound },
-		{ "PlaySound", playSound },
-	};
-
-	_vMacros = {
-		{ "MUSIC_TYPE_WAV", MUSIC_TYPE_WAV },
-		{ "MUSIC_TYPE_MP3", MUSIC_TYPE_MP3 },
-		{ "MUSIC_TYPE_OGG", MUSIC_TYPE_OGG },
-		{ "MUSIC_TYPE_CMD", MUSIC_TYPE_CMD },
-		{ "MUSIC_TYPE_MOD", MUSIC_TYPE_MOD },
-		{ "MUSIC_TYPE_MID", MUSIC_TYPE_MID },
-		{ "MUSIC_TYPE_UNKONWN", MUSIC_TYPE_UNKONWN },
-	};
 }

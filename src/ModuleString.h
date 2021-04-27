@@ -10,6 +10,17 @@
 #include <locale>
 #include <string>
 
+class ModuleString : public Module
+{
+public:
+	static ModuleString& Instance();
+	~ModuleString() {};
+
+private:
+	ModuleString();
+
+};
+
 class EncodingConversion
 {
 public:
@@ -52,13 +63,5 @@ ETHER_API gbkToUTF8(lua_State* L);
 * 1·µ»ØÖµ£ºGBK±àÂë×Ö·û´®£¨string£©
 */
 ETHER_API utf8ToGBK(lua_State* L);
-
-class ModuleString : public Module
-{
-public:
-	ModuleString(lua_State* L, string name);
-	~ModuleString() {};
-
-};
 
 #endif // !_STRING_H_

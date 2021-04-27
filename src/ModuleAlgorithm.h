@@ -9,9 +9,22 @@
 #include <SDL.h>
 
 #include <math.h>
+#include <string>
+using namespace std;
 
 #define ELEMENTTYPE_NUM 0
 #define ELEMENTTYPE_STR 1
+
+class ModuleAlgorithm : public Module
+{
+public:
+	static ModuleAlgorithm& Instance();
+	~ModuleAlgorithm() {};
+
+private:
+	ModuleAlgorithm();
+
+};
 
 struct ColorHSLA
 {
@@ -99,14 +112,6 @@ ETHER_API hslaToRGBA(lua_State* L);
 * 1参数：是否存在（boolean）
 */
 ETHER_API ifElementInTable(lua_State* L);
-
-class ModuleAlgorithm : public Module
-{
-public:
-	ModuleAlgorithm(lua_State* L, string name);
-	~ModuleAlgorithm() {};
-
-};
 
 #endif // !_ALGORITHM_H_
 

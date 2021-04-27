@@ -300,6 +300,17 @@
 
 #define EVENT_TEXTINPUT					1303
 
+class ModuleInteractivity : public Module
+{
+public:
+	static ModuleInteractivity& Instance();
+	~ModuleInteractivity() {};
+
+private:
+	ModuleInteractivity();
+
+};
+
 extern SDL_Event event;
 
 // 获取当前鼠标位置
@@ -336,14 +347,5 @@ ETHER_API updateEvent(lua_State * L);
 // 0参数
 // 1返回值：事件类型（MACRO number）
 ETHER_API getEventType(lua_State * L);
-
-
-class ModuleInteractivity : public Module
-{
-public:
-	ModuleInteractivity(lua_State* L, string name);
-	~ModuleInteractivity() {};
-
-};
 
 #endif // !_INTERACTIVITY_H_

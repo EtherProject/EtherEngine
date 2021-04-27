@@ -1,6 +1,26 @@
 #include "ModuleTime.h"
 
 
+ModuleTime& ModuleTime::Instance()
+{
+	static ModuleTime* _instance = new ModuleTime();
+	return *_instance;
+}
+
+
+ModuleTime::ModuleTime()
+{
+	_vCMethods = {
+		{ "Pause", pause },
+		{ "Sleep", sleep },
+		{ "DynamicSleep", dynamicSleep },
+		{ "GetInitTime", getInitTime },
+		{ "GetAccurateCount", getAccurateCount },
+		{ "GetCounterFrequency", getCounterFrequency },
+	};
+}
+
+
 ETHER_API pause(lua_State * L)
 {
 	system("pause");
@@ -8,14 +28,12 @@ ETHER_API pause(lua_State * L)
 	return 0;
 }
 
-
 ETHER_API sleep(lua_State * L)
 {
 	SDL_Delay(luaL_checknumber(L, 1));
 
 	return 0;
 }
-
 
 ETHER_API dynamicSleep(lua_State* L)
 {
@@ -29,14 +47,12 @@ ETHER_API dynamicSleep(lua_State* L)
 	return 0;
 }
 
-
 ETHER_API getInitTime(lua_State * L)
 {
 	lua_pushnumber(L, SDL_GetTicks());
 
 	return 1;
 }
-
 
 ETHER_API getAccurateCount(lua_State * L)
 {
@@ -45,23 +61,9 @@ ETHER_API getAccurateCount(lua_State * L)
 	return 1;
 }
 
-
 ETHER_API getCounterFrequency(lua_State * L)
 {
 	lua_pushnumber(L, SDL_GetPerformanceFrequency());
 
 	return 1;
-}
-
-
-ModuleTime::ModuleTime(lua_State* L, string name) : Module(L, name)
-{
-	_vCMethods = {
-		{ "Pause", pause },
-		{ "Sleep", sleep },
-		{ "DynamicSleep", dynamicSleep },
-		{ "GetInitTime", getInitTime },
-		{ "GetAccurateCount", getAccurateCount },
-		{ "GetCounterFrequency", getCounterFrequency },
-	};
 }

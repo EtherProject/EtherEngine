@@ -5,22 +5,20 @@
 
 #include <lua.hpp>
 
-#include <string>
 #include <vector>
 using namespace std;
 
 class Module
 {
 public:
-	Module(lua_State* L, string name) : _pL(L), _strName(name) {};
+	virtual Module& Instance();
 	~Module() {};
-	void OpenModule(void);
-
-protected:
-	string _strName;
-	lua_State* _pL = nullptr;
 	vector<luaL_Reg> _vCMethods;
 	vector<Macro> _vMacros;
+
+protected:
+	Module() {};
+	
 };
 
 #endif // !_MODULE_H_

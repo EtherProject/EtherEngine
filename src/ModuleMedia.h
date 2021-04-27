@@ -8,22 +8,33 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
-#define MUSIC_TYPE_WAV 1308
-#define MUSIC_TYPE_MP3 1309
-#define MUSIC_TYPE_OGG 1310
-#define MUSIC_TYPE_CMD 1311
-#define MUSIC_TYPE_MOD 1312
-#define MUSIC_TYPE_MID 1313
-#define MUSIC_TYPE_UNKONWN 1314
+#define MUSIC_TYPE_WAV		1308
+#define MUSIC_TYPE_MP3		1309
+#define MUSIC_TYPE_OGG		1310
+#define MUSIC_TYPE_CMD		1311
+#define MUSIC_TYPE_MOD		1312
+#define MUSIC_TYPE_MID		1313
+#define MUSIC_TYPE_UNKONWN	1314
 
-#define METANAME_MUSIC "Graphic.Music"
-#define METANAME_SOUND "Graphic.Sound"
+#define METANAME_MUSIC		"Graphic.Music"
+#define METANAME_SOUND		"Graphic.Sound"
 
 #define GetMusicDataAtFirstPos() Mix_Music* music = (Mix_Music*)(*(void**)luaL_checkudata(L, 1, METANAME_MUSIC))
 #define GetSoundDataAtFirstPos() Mix_Chunk* sound = (Mix_Chunk*)(*(void**)luaL_checkudata(L, 1, METANAME_SOUND))
 
 #define CheckMusicDataAtFirstPos() luaL_argcheck(L, music, 1, "get music data failed")
 #define CheckSoundDataAtFirstPos() luaL_argcheck(L, sound, 1, "get sound data failed")
+
+class ModuleMedia : public Module
+{
+public:
+	static ModuleMedia& Instance();
+	~ModuleMedia() {};
+
+private:
+	ModuleMedia();
+
+};
 
 // 加载音乐文件
 // 1参数：音乐文件路径
@@ -94,15 +105,6 @@ ETHER_API unloadSound(lua_State * L);
 // 2参数：音效数据（userdata-SOUND）、音效播放的次数（number，-1为循环播放）
 // 0返回值
 ETHER_API playSound(lua_State * L);
-
-
-class ModuleMedia : public Module
-{
-public:
-	ModuleMedia(lua_State* L, string name);
-	~ModuleMedia() {};
-
-};
 
 #endif // !_MEDIA_H_
 

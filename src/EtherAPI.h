@@ -20,7 +20,7 @@
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 
-#include <iostream>
+#include <map>
 using namespace std;
 
 #ifndef _ETHER_DEBUG_
@@ -31,7 +31,6 @@ using namespace std;
 #endif
 #endif
 
-#define MODULENAME_ALL				"All"
 #define MODULENAME_ALGORITHM		"Algorithm"
 #define MODULENAME_GRAPHIC			"Graphic"
 #define MODULENAME_INTERACTIVITY	"Interactivity"
@@ -55,7 +54,9 @@ extern char** environ;
 
 int _LoadConfig();
 
-void _PushArgs(lua_State* l, int argc, char** argv, char** envp);
+void _PushArgs(lua_State* L, int argc, char** argv, char** envp);
+
+void _PushMetatables(lua_State* L);
 
 void _HandleQuit();
 

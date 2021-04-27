@@ -1,5 +1,21 @@
 #include "ModuleString.h"
 
+
+ModuleString& ModuleString::Instance()
+{
+	static ModuleString* _instance = new ModuleString();
+	return *_instance;
+}
+
+
+ModuleString::ModuleString()
+{
+	_vCMethods = {
+		{ "GBKToUTF8", gbkToUTF8 },
+		{ "UTF8ToGBK", utf8ToGBK },
+	};
+}
+
 template<class Facet>
 struct deletable_facet : Facet
 {
@@ -199,13 +215,4 @@ ETHER_API utf8ToGBK(lua_State* L)
 	}
 
 	return 1;
-}
-
-
-ModuleString::ModuleString(lua_State* L, string name) : Module(L, name)
-{
-	_vCMethods = {
-		{ "GBKToUTF8", gbkToUTF8 },
-		{ "UTF8ToGBK", utf8ToGBK },
-	};
 }

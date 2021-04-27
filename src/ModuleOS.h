@@ -27,6 +27,17 @@ using namespace std;
 #define PATHMODE_DIR 7
 #define PATHMODE_FILEANDDIR 8
 
+class ModuleOS : public Module
+{
+public:
+	static ModuleOS& Instance();
+	~ModuleOS() {};
+
+private:
+	ModuleOS();
+
+};
+
 // 获取程序运行的目录
 // 0参数
 // 1返回值：程序运行目录（string）
@@ -104,13 +115,5 @@ ETHER_API getFileNameFromPath(lua_State* L);
 * 1返回值：根目录路径（string）
 */
 ETHER_API getBasePathFromPath(lua_State* L);
-
-class ModuleOS : public Module
-{
-public:
-	ModuleOS(lua_State* L, string name);
-	~ModuleOS() {};
-
-};
 
 #endif // !_OS_H_

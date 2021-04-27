@@ -1,6 +1,44 @@
 #include "ModuleOS.h"
 
 
+ModuleOS& ModuleOS::Instance()
+{
+	static ModuleOS* _instance = new ModuleOS();
+	return *_instance;
+}
+
+
+ModuleOS::ModuleOS()
+{
+	_vCMethods = {
+		{ "GetBasePath", getBasePath },
+		{ "SetClipboardText", setClipboardText },
+		{ "GetClipboardText", getClipboardText },
+		{ "GetPlatformType", getPlatformType },
+		{ "GetSystemTotalRAM", getSystemTotalRAM },
+		{ "ListDirectory", listDirectory },
+		{ "IfPathExist", ifPathExist },
+		{ "GetPathInfo", getPathInfo },
+		{ "JoinPath", joinPath },
+		{ "GetFileNameFromPath", getFileNameFromPath },
+		{ "GetBasePathFromPath", getBasePathFromPath },
+	};
+
+	_vMacros = {
+		{ "FILEATTRIB_ARCH", FILEATTRIB_ARCH },
+		{ "FILEATTRIB_HIDDEN", FILEATTRIB_HIDDEN },
+		{ "FILEATTRIB_NORMAL", FILEATTRIB_NORMAL },
+		{ "FILEATTRIB_RDONLY", FILEATTRIB_RDONLY },
+		{ "FILEATTRIB_SUBDIR", FILEATTRIB_SUBDIR },
+		{ "FILEATTRIB_SYSTEM", FILEATTRIB_SYSTEM },
+
+		{ "PATHMODE_FILE", PATHMODE_FILE },
+		{ "PATHMODE_DIR", PATHMODE_DIR },
+		{ "PATHMODE_FILEANDDIR", PATHMODE_FILEANDDIR },
+	};
+}
+
+
 ETHER_API getBasePath(lua_State * L)
 {
 	lua_pushstring(L, SDL_GetBasePath());
@@ -288,35 +326,4 @@ ETHER_API getBasePathFromPath(lua_State* L)
 	}
 
 	return 1;
-}
-
-
-ModuleOS::ModuleOS(lua_State* L, string name) : Module(L, name)
-{
-	_vCMethods = {
-		{ "GetBasePath", getBasePath },
-		{ "SetClipboardText", setClipboardText },
-		{ "GetClipboardText", getClipboardText },
-		{ "GetPlatformType", getPlatformType },
-		{ "GetSystemTotalRAM", getSystemTotalRAM },
-		{ "ListDirectory", listDirectory },
-		{ "IfPathExist", ifPathExist },
-		{ "GetPathInfo", getPathInfo },
-		{ "JoinPath", joinPath },
-		{ "GetFileNameFromPath", getFileNameFromPath },
-		{ "GetBasePathFromPath", getBasePathFromPath },
-	};
-
-	_vMacros = {
-		{ "FILEATTRIB_ARCH", FILEATTRIB_ARCH },
-		{ "FILEATTRIB_HIDDEN", FILEATTRIB_HIDDEN },
-		{ "FILEATTRIB_NORMAL", FILEATTRIB_NORMAL },
-		{ "FILEATTRIB_RDONLY", FILEATTRIB_RDONLY },
-		{ "FILEATTRIB_SUBDIR", FILEATTRIB_SUBDIR },
-		{ "FILEATTRIB_SYSTEM", FILEATTRIB_SYSTEM },
-
-		{ "PATHMODE_FILE", PATHMODE_FILE },
-		{ "PATHMODE_DIR", PATHMODE_DIR },
-		{ "PATHMODE_FILEANDDIR", PATHMODE_FILEANDDIR },
-	};
 }

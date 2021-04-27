@@ -7,6 +7,17 @@
 #include <lua.hpp>
 #include <SDL.h>
 
+class ModuleTime : public Module
+{
+public:
+	static ModuleTime& Instance();
+	~ModuleTime() {};
+
+private:
+	ModuleTime();
+
+};
+
 // 暂停程序
 // 0参数
 // 0返回值
@@ -36,14 +47,5 @@ ETHER_API getAccurateCount(lua_State * L);
 // 0参数
 // 1返回值：计数器频率（number，单位：赫兹）
 ETHER_API getCounterFrequency(lua_State * L);
-
-
-class ModuleTime : public Module
-{
-public:
-	ModuleTime(lua_State* L, string name);
-	~ModuleTime() {};
-
-};
 
 #endif // !_TIME_H_

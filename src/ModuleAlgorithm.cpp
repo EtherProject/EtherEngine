@@ -1,5 +1,40 @@
 #include "ModuleAlgorithm.h"
 
+
+ModuleAlgorithm& ModuleAlgorithm::Instance()
+{
+	static ModuleAlgorithm* _instance = new ModuleAlgorithm();
+	return *_instance;
+}
+
+
+ModuleAlgorithm::ModuleAlgorithm()
+{
+	_vCMethods = {
+		{ "Clamp", clamp },
+		{ "IfPointInRect", ifPointInRect },
+		{ "IfPointInRectStrict", ifPointInRectStrict },
+		{ "IfPointInCircle", ifPointInCircle },
+		{ "IfPointInCircleStrict", ifPointInCircleStrict },
+		{ "IfRectsOverlap", ifRectsOverlap },
+		{ "IfRectsOverlapStrict", ifRectsOverlapStrict },
+		{ "IfCirclesOverlap", ifCirclesOverlap },
+		{ "IfCirclesOverlapStrict", ifCirclesOverlapStrict },
+		{ "GetPointsDistance", getPointsDistance },
+		{ "GetLinesDistance", getLinesDistance },
+		{ "GetPointLineDistance", getPointLineDistance },
+		{ "RGBAToHSLA", rgbaToHSLA },
+		{ "HSLAToRGBA", hslaToRGBA },
+		{ "IfElementInTable", ifElementInTable },
+	};
+
+	_vMacros = {
+		{ "ELEMENTTYPE_NUM", ELEMENTTYPE_NUM },
+		{ "ELEMENTTYPE_STR", ELEMENTTYPE_STR },
+	};
+}
+
+
 double HLS2RGBvalue(double n1, double n2, double hue)
 {
 	if (hue > 360)
@@ -422,31 +457,4 @@ ETHER_API ifElementInTable(lua_State* L)
 	}
 
 	return 1;
-}
-
-
-ModuleAlgorithm::ModuleAlgorithm(lua_State* L, string name) : Module(L, name)
-{
-	_vCMethods = {
-		{ "Clamp", clamp },
-		{ "IfPointInRect", ifPointInRect },
-		{ "IfPointInRectStrict", ifPointInRectStrict },
-		{ "IfPointInCircle", ifPointInCircle },
-		{ "IfPointInCircleStrict", ifPointInCircleStrict },
-		{ "IfRectsOverlap", ifRectsOverlap },
-		{ "IfRectsOverlapStrict", ifRectsOverlapStrict },
-		{ "IfCirclesOverlap", ifCirclesOverlap },
-		{ "IfCirclesOverlapStrict", ifCirclesOverlapStrict },
-		{ "GetPointsDistance", getPointsDistance },
-		{ "GetLinesDistance", getLinesDistance },
-		{ "GetPointLineDistance", getPointLineDistance },
-		{ "RGBAToHSLA", rgbaToHSLA },
-		{ "HSLAToRGBA", hslaToRGBA },
-		{ "IfElementInTable", ifElementInTable },
-	};
-
-	_vMacros = {
-		{ "ELEMENTTYPE_NUM", ELEMENTTYPE_NUM },
-		{ "ELEMENTTYPE_STR", ELEMENTTYPE_STR },
-	};
 }

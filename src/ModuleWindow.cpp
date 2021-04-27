@@ -1,5 +1,58 @@
 #include "ModuleWindow.h"
 
+
+ModuleWindow& ModuleWindow::Instance()
+{
+	static ModuleWindow* _instance = new ModuleWindow();
+	return *_instance;
+}
+
+
+ModuleWindow::ModuleWindow()
+{
+	_vCMethods = {
+		{ "ShowMessageBox", showMessageBox},
+		{ "CreateWindow", createWindow },
+		{ "CloseWindow", closeWindow },
+		{ "SetWindowTitle", setWindowTitle },
+		{ "GetWindowTitle", getWindowTitle },
+		{ "SetWindowMode", setWindowMode },
+		{ "SetWindowResizable", setWindowResizable },
+		{ "SetWindowOpacity", setWindowOpacity },
+		{ "SetWindowSize", setWindowSize },
+		{ "GetWindowSize", getWindowSize },
+		{ "SetWindowMaxSize", setWindowMaxSize },
+		{ "GetWindowMaxSize", getWindowMaxSize },
+		{ "SetWindowMinSize", setWindowMinSize },
+		{ "GetWindowMinSize", getWindowMinSize },
+		{ "SetWindowPosition", setWindowPosition },
+		{ "GetWindowPosition", getWindowPosition },
+		{ "SetWindowIcon", setWindowIcon },
+		{ "ClearWindow", clearWindow },
+		{ "UpdateWindow", updateWindow },
+	};
+
+	_vMacros = {
+		{ "WINDOW_POSITION_DEFAULT", WINDOW_POSITION_DEFAULT },
+
+		{ "MSGBOX_ERROR", MSGBOX_ERROR },
+		{ "MSGBOX_WARNING", MSGBOX_WARNING },
+		{ "MSGBOX_INFO", MSGBOX_INFO },
+
+		{ "WINDOW_FULLSCREEN", WINDOW_FULLSCREEN },
+		{ "WINDOW_FULLSCREEN_DESKTOP", WINDOW_FULLSCREEN_DESKTOP },
+		{ "WINDOW_BORDERLESS", WINDOW_BORDERLESS },
+		{ "WINDOW_RESIZABLE", WINDOW_RESIZABLE },
+		{ "WINDOW_MAXIMIZED", WINDOW_MAXIMIZED },
+		{ "WINDOW_MINIMIZED", WINDOW_MINIMIZED },
+
+		{ "WINDOW_MODE_WINDOWED", WINDOW_MODE_WINDOWED },
+		{ "WINDOW_MODE_FULLSCREEN", WINDOW_MODE_FULLSCREEN },
+		{ "WINDOW_MODE_FULLSCREEN_DESKTOP", WINDOW_MODE_FULLSCREEN_DESKTOP },
+	};
+}
+
+
 ETHER_API showMessageBox(lua_State* L)
 {
 	SDL_MessageBoxFlags flag;
@@ -312,49 +365,4 @@ ETHER_API updateWindow(lua_State* L)
 	SDL_RenderPresent(renderer);
 
 	return 0;
-}
-
-
-ModuleWindow::ModuleWindow(lua_State* L, string name) : Module(L, name)
-{
-	_vCMethods = {
-		{ "ShowMessageBox", showMessageBox},
-		{ "CreateWindow", createWindow },
-		{ "CloseWindow", closeWindow },
-		{ "SetWindowTitle", setWindowTitle },
-		{ "GetWindowTitle", getWindowTitle },
-		{ "SetWindowMode", setWindowMode },
-		{ "SetWindowResizable", setWindowResizable },
-		{ "SetWindowOpacity", setWindowOpacity },
-		{ "SetWindowSize", setWindowSize },
-		{ "GetWindowSize", getWindowSize },
-		{ "SetWindowMaxSize", setWindowMaxSize },
-		{ "GetWindowMaxSize", getWindowMaxSize },
-		{ "SetWindowMinSize", setWindowMinSize },
-		{ "GetWindowMinSize", getWindowMinSize },
-		{ "SetWindowPosition", setWindowPosition },
-		{ "GetWindowPosition", getWindowPosition },
-		{ "SetWindowIcon", setWindowIcon },
-		{ "ClearWindow", clearWindow },
-		{ "UpdateWindow", updateWindow },
-	};
-
-	_vMacros = {
-		{ "WINDOW_POSITION_DEFAULT", WINDOW_POSITION_DEFAULT },
-
-		{ "MSGBOX_ERROR", MSGBOX_ERROR },
-		{ "MSGBOX_WARNING", MSGBOX_WARNING },
-		{ "MSGBOX_INFO", MSGBOX_INFO },
-
-		{ "WINDOW_FULLSCREEN", WINDOW_FULLSCREEN },
-		{ "WINDOW_FULLSCREEN_DESKTOP", WINDOW_FULLSCREEN_DESKTOP },
-		{ "WINDOW_BORDERLESS", WINDOW_BORDERLESS },
-		{ "WINDOW_RESIZABLE", WINDOW_RESIZABLE },
-		{ "WINDOW_MAXIMIZED", WINDOW_MAXIMIZED },
-		{ "WINDOW_MINIMIZED", WINDOW_MINIMIZED },
-
-		{ "WINDOW_MODE_WINDOWED", WINDOW_MODE_WINDOWED },
-		{ "WINDOW_MODE_FULLSCREEN", WINDOW_MODE_FULLSCREEN },
-		{ "WINDOW_MODE_FULLSCREEN_DESKTOP", WINDOW_MODE_FULLSCREEN_DESKTOP },
-	};
 }

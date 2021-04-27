@@ -1,5 +1,65 @@
 #include "ModuleNetwork.h"
 
+
+ModuleNetwork& ModuleNetwork::Instance()
+{
+	static ModuleNetwork* _instance = new ModuleNetwork();
+	return *_instance;
+}
+
+
+ModuleNetwork::ModuleNetwork()
+{
+	_vCMethods = {
+		{ "GetLinkDomain", getLinkDomain },
+		{ "GetLinkRoute", getLinkRoute },
+		{ "RequestGet", requestGet },
+		{ "RequestPost", requestPost },
+	};
+
+	_vMacros = {
+		{ "MIMETYPE_CSS", MIMETYPE_CSS },
+		{ "MIMETYPE_CSV", MIMETYPE_CSV },
+		{ "MIMETYPE_TEXT", MIMETYPE_TEXT },
+		{ "MIMETYPE_VTT", MIMETYPE_VTT },
+		{ "MIMETYPE_HTML", MIMETYPE_HTML },
+		{ "MIMETYPE_APNG", MIMETYPE_APNG },
+		{ "MIMETYPE_SVG", MIMETYPE_SVG },
+		{ "MIMETYPE_WEBP", MIMETYPE_WEBP },
+		{ "MIMETYPE_ICO", MIMETYPE_ICO },
+		{ "MIMETYPE_TIFF", MIMETYPE_TIFF },
+		{ "MIMETYPE_JPG", MIMETYPE_JPG },
+		{ "MIMETYPE_AVIF", MIMETYPE_AVIF },
+		{ "MIMETYPE_BMP", MIMETYPE_BMP },
+		{ "MIMETYPE_GIF", MIMETYPE_GIF },
+		{ "MIMETYPE_PNG", MIMETYPE_PNG },
+		{ "MIMETYPE_MP4", MIMETYPE_MP4 },
+		{ "MIMETYPE_MPEG", MIMETYPE_MPEG },
+		{ "MIMETYPE_WEBM", MIMETYPE_WEBM },
+		{ "MIMETYPE_MPGA", MIMETYPE_MPGA },
+		{ "MIMETYPE_WEBA", MIMETYPE_WEBA },
+		{ "MIMETYPE_WAV", MIMETYPE_WAV },
+		{ "MIMETYPE_OTF", MIMETYPE_OTF },
+		{ "MIMETYPE_TTF", MIMETYPE_TTF },
+		{ "MIMETYPE_WOFF", MIMETYPE_WOFF },
+		{ "MIMETYPE_WOFF2", MIMETYPE_WOFF2 },
+		{ "MIMETYPE_7Z", MIMETYPE_7Z },
+		{ "MIMETYPE_ATOM", MIMETYPE_ATOM },
+		{ "MIMETYPE_PDF", MIMETYPE_PDF },
+		{ "MIMETYPE_JS", MIMETYPE_JS },
+		{ "MIMETYPE_JSON", MIMETYPE_JSON },
+		{ "MIMETYPE_RSS", MIMETYPE_RSS },
+		{ "MIMETYPE_XHTML", MIMETYPE_XHTML },
+		{ "MIMETYPE_XSLT", MIMETYPE_XSLT },
+		{ "MIMETYPE_XML", MIMETYPE_XML },
+		{ "MIMETYPE_GZ", MIMETYPE_GZ },
+		{ "MIMETYPE_ZIP", MIMETYPE_ZIP },
+		{ "MIMETYPE_WASM", MIMETYPE_WASM },
+		{ "MIMETYPE_MP3", MIMETYPE_MP3 },
+	};
+}
+
+
 string GetLinkDomain(string link)
 {
 	if (link.substr(0, 5) == "http:" || link.substr(0, 6) == "https:")
@@ -256,56 +316,4 @@ ETHER_API requestPost(lua_State* L)
 	delete(client);
 
 	return 1;
-}
-
-
-ModuleNetwork::ModuleNetwork(lua_State* L, string name) : Module(L, name)
-{
-	_vCMethods = {
-		{ "GetLinkDomain", getLinkDomain },
-		{ "GetLinkRoute", getLinkRoute },
-		{ "RequestGet", requestGet },
-		{ "RequestPost", requestPost },
-	};
-
-	_vMacros = {
-		{ "MIMETYPE_CSS", MIMETYPE_CSS },
-		{ "MIMETYPE_CSV", MIMETYPE_CSV },
-		{ "MIMETYPE_TEXT", MIMETYPE_TEXT },
-		{ "MIMETYPE_VTT", MIMETYPE_VTT },
-		{ "MIMETYPE_HTML", MIMETYPE_HTML },
-		{ "MIMETYPE_APNG", MIMETYPE_APNG },
-		{ "MIMETYPE_SVG", MIMETYPE_SVG },
-		{ "MIMETYPE_WEBP", MIMETYPE_WEBP },
-		{ "MIMETYPE_ICO", MIMETYPE_ICO },
-		{ "MIMETYPE_TIFF", MIMETYPE_TIFF },
-		{ "MIMETYPE_JPG", MIMETYPE_JPG },
-		{ "MIMETYPE_AVIF", MIMETYPE_AVIF },
-		{ "MIMETYPE_BMP", MIMETYPE_BMP },
-		{ "MIMETYPE_GIF", MIMETYPE_GIF },
-		{ "MIMETYPE_PNG", MIMETYPE_PNG },
-		{ "MIMETYPE_MP4", MIMETYPE_MP4 },
-		{ "MIMETYPE_MPEG", MIMETYPE_MPEG },
-		{ "MIMETYPE_WEBM", MIMETYPE_WEBM },
-		{ "MIMETYPE_MPGA", MIMETYPE_MPGA },
-		{ "MIMETYPE_WEBA", MIMETYPE_WEBA },
-		{ "MIMETYPE_WAV", MIMETYPE_WAV },
-		{ "MIMETYPE_OTF", MIMETYPE_OTF },
-		{ "MIMETYPE_TTF", MIMETYPE_TTF },
-		{ "MIMETYPE_WOFF", MIMETYPE_WOFF },
-		{ "MIMETYPE_WOFF2", MIMETYPE_WOFF2 },
-		{ "MIMETYPE_7Z", MIMETYPE_7Z },
-		{ "MIMETYPE_ATOM", MIMETYPE_ATOM },
-		{ "MIMETYPE_PDF", MIMETYPE_PDF },
-		{ "MIMETYPE_JS", MIMETYPE_JS },
-		{ "MIMETYPE_JSON", MIMETYPE_JSON },
-		{ "MIMETYPE_RSS", MIMETYPE_RSS },
-		{ "MIMETYPE_XHTML", MIMETYPE_XHTML },
-		{ "MIMETYPE_XSLT", MIMETYPE_XSLT },
-		{ "MIMETYPE_XML", MIMETYPE_XML },
-		{ "MIMETYPE_GZ", MIMETYPE_GZ },
-		{ "MIMETYPE_ZIP", MIMETYPE_ZIP },
-		{ "MIMETYPE_WASM", MIMETYPE_WASM },
-		{ "MIMETYPE_MP3", MIMETYPE_MP3 },
-	};
 }

@@ -25,6 +25,17 @@
 #define WINDOW_MODE_FULLSCREEN 1014
 #define WINDOW_MODE_FULLSCREEN_DESKTOP 1015
 
+class ModuleWindow : public Module
+{
+public:
+	static ModuleWindow& Instance();
+	~ModuleWindow() {};
+
+private:
+	ModuleWindow();
+
+};
+
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;
 
@@ -122,14 +133,5 @@ ETHER_API clearWindow(lua_State * L);
 // 0参数
 // 0返回值
 ETHER_API updateWindow(lua_State* L);
-
-
-class ModuleWindow : public Module
-{
-public:
-	ModuleWindow(lua_State* L, string name);
-	~ModuleWindow() {};
-
-};
 
 #endif // !_WINDOW_H_

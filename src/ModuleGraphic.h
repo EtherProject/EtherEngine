@@ -21,6 +21,16 @@
 #define FLIP_VERTICAL 1011
 #define FLIP_NONE 1012
 
+class ModuleGraphic : public Module
+{
+public:
+	static ModuleGraphic& Instance();
+	~ModuleGraphic() {};
+
+private:
+	ModuleGraphic();
+};
+
 extern SDL_Renderer* renderer;
 
 // 设置鼠标是否显示
@@ -252,13 +262,5 @@ ETHER_API createTextImageBlended(lua_State * L);
 // 3参数：字体数据（userdata-FONT），UTF-8编码格式的文本内容（string），用以描述文本颜色的RGBA表（table，取值范围均为0-255）
 // 1返回值：成功则返回图像数据（userdata-IMAGE），失败则返回nil
 ETHER_API createUTF8TextImageBlended(lua_State * L);
-
-class ModuleGraphic : public Module
-{
-public:
-	ModuleGraphic(lua_State* L, string name);
-	~ModuleGraphic() {};
-
-};
 
 #endif // !_GRAPHIC_H_

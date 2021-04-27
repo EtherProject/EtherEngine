@@ -12,6 +12,17 @@
 #include <sstream>
 using namespace std;
 
+class ModuleJSON : public Module
+{
+public:
+	static ModuleJSON& Instance();
+	~ModuleJSON() {};
+
+private:
+	ModuleJSON();
+
+};
+
 /// <summary>
 /// 判断指定索引的元素是否为数组
 /// </summary>
@@ -70,13 +81,5 @@ ETHER_API api_DumpJSON(lua_State* L);
 * 0返回值
 */
 ETHER_API api_DumpJSONToFile(lua_State* L);
-
-class ModuleJSON : public Module
-{
-public:
-	ModuleJSON(lua_State* L, string name);
-	~ModuleJSON() {};
-
-};
 
 #endif // !_JSON_H_

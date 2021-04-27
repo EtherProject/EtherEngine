@@ -1,5 +1,24 @@
 #include "ModuleJSON.h"
 
+
+ModuleJSON& ModuleJSON::Instance()
+{
+	static ModuleJSON* _instance = new ModuleJSON();
+	return *_instance;
+}
+
+
+ModuleJSON::ModuleJSON()
+{
+	_vCMethods = {
+		{ "LoadJSON", api_LoadJSON },
+		{ "LoadJSONFromFile", api_LoadJSONFromFile },
+		{ "DumpJSON", api_DumpJSON },
+		{ "DumpJSONToFile", api_DumpJSONToFile },
+	};
+}
+
+
 bool CheckArrary(lua_State* L, int iIndex)
 {
 	lua_pushnil(L);
@@ -223,14 +242,4 @@ ETHER_API api_DumpJSONToFile(lua_State* L)
 	fout.close(); fout.clear();
 	free(strJSON);
 	return 0;
-}
-
-ModuleJSON::ModuleJSON(lua_State* L, string name) : Module(L, name)
-{
-	_vCMethods = {
-		{ "LoadJSON", api_LoadJSON },
-		{ "LoadJSONFromFile", api_LoadJSONFromFile },
-		{ "DumpJSON", api_DumpJSON },
-		{ "DumpJSONToFile", api_DumpJSONToFile },
-	};
 }
