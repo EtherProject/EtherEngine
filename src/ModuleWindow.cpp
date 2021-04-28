@@ -12,6 +12,7 @@ ModuleWindow::ModuleWindow()
 {
 	_vCMethods = {
 		{ "ShowMessageBox", showMessageBox},
+		{ "ShowFolderSelector", showFolderSelector},
 		{ "CreateWindow", createWindow },
 		{ "CloseWindow", closeWindow },
 		{ "SetWindowTitle", setWindowTitle },
@@ -74,6 +75,64 @@ ETHER_API showMessageBox(lua_State* L)
 	SDL_ShowSimpleMessageBox(flag, luaL_checkstring(L, 1), luaL_checkstring(L, 2), window);
 
 	return 0;
+}
+
+
+ETHER_API showFolderSelector(lua_State* L)
+{
+#ifdef __WINDOWS__
+
+	WCHAR wszClassName[MAX_PATH] = { 0 };
+	try
+	{
+		MultiByteToWideChar(
+			CP_ACP,
+			0,
+			EncodingConversion::UTF8ToGBK(luaL_checkstring(L, 1)).c_str(),
+			strlen(EncodingConversion::UTF8ToGBK(luaL_checkstring(L, 1)).c_str()) + 1,
+			wszClassName,
+			sizeof(wszClassName) / sizeof(wszClassName[0])
+		);
+	}
+	catch (const std::exception&)
+	{
+		MultiByteToWideChar(
+			CP_ACP,
+			0,
+			luaL_checkstring(L, 1),
+			strlen(luaL_checkstring(L, 1)) + 1,
+			wszClassName,
+			sizeof(wszClassName) / sizeof(wszClassName[0])
+		);
+	}
+
+	TCHAR szBuffer[MAX_PATH] = { 0 };
+	BROWSEINFO bi = { 
+		GetForegroundWindow(), 
+		nullptr, 
+		szBuffer, 
+		wszClassName, 
+		BIF_EDITBOX | BIF_UAHINT
+	};
+	LPITEMIDLIST idl = SHBrowseForFolder(&bi);
+
+	if (idl)
+	{
+		SHGetPathFromIDList(idl, szBuffer);
+		int iLen = WideCharToMultiByte(CP_ACP, 0, szBuffer, -1, nullptr, 0, nullptr, nullptr);
+		char* chRtn = new char[iLen * sizeof(char)];
+		WideCharToMultiByte(CP_ACP, 0, szBuffer, -1, chRtn, iLen, nullptr, nullptr);
+		lua_pushstring(L, chRtn);
+		delete[] chRtn;
+	}
+	else
+		lua_pushnil(L);
+
+#else
+
+#endif
+
+	return 1;
 }
 
 

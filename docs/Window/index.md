@@ -8,6 +8,8 @@
 
 + [ShowMessageBox(title, content, type)](_ShowMessageBox_.md)：显示模态的提示信息窗口
 
++ [ShowFolderSelector(content)](_ShowFolderSelector_.md)：显示文件夹选择器
+
 + [CreateWindow(title, rect, attributes)](_CreateWindow_.md)：创建窗口，并将此窗口作为图形绘制等操作的上下文
 
 + [CloseWindow()](_CloseWindow_.md)：关闭窗口

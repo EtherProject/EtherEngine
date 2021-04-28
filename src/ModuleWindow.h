@@ -8,6 +8,14 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#ifdef __WINDOWS__
+#define  WIN32_LEAN_AND_MEAN
+#include <shlobj.h>
+#include <tchar.h>
+#else
+#include ""
+#endif
+
 #define WINDOW_POSITION_DEFAULT INT_MIN
 
 #define MSGBOX_ERROR 1001
@@ -43,6 +51,11 @@ extern SDL_Renderer* renderer;
 // 3参数：提示窗口标题（string），提示信息内容（string），窗口类型（Macro number）
 // 0返回值
 ETHER_API showMessageBox(lua_State * L);
+
+// 显示文件夹选择器
+// 1参数：提示信息内容
+// 1返回时：选择成功则返回文件夹路径（string），否则返回nil
+ETHER_API showFolderSelector(lua_State* L);
 
 // 创建窗口，并将此窗口作为图形绘制等操作的上下文
 // 5参数：窗口标题，用以描述显示区域的矩形，用以描述窗口属性的表（table）
