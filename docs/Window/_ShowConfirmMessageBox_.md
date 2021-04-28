@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# ShowMessageBox
+# ShowConfirmMessageBox
 
 > 显示模态的提示信息窗口
 
 ```lua
 
-ShowMessageBox(type, title, content)
+flag = ShowConfirmMessageBox(type, title, content [, ok_text, cancel_text])
 
 ```
 
@@ -20,10 +20,12 @@ ShowMessageBox(type, title, content)
 
 + title [string]：提示窗口标题
 + content [string]：提示信息内容
++ ok_text [string]：确认按钮文本，可选
++ cancel_text [string]：取消按钮文本，可选
 
 ## 返回值：
 
-无
++ flag [boolean]：确认则返回 true，否则选择 false
 
 ## 示例
 

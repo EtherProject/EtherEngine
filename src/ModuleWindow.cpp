@@ -12,6 +12,7 @@ ModuleWindow::ModuleWindow()
 {
 	_vCMethods = {
 		{ "ShowMessageBox", showMessageBox},
+		{ "ShowConfirmMessageBox", showConfirmMessageBox},
 		{ "ShowFolderSelector", showFolderSelector},
 		{ "CreateWindow", createWindow },
 		{ "CloseWindow", closeWindow },
@@ -69,12 +70,57 @@ ETHER_API showMessageBox(lua_State* L)
 		flag = SDL_MESSAGEBOX_INFORMATION;
 		break;
 	default:
-		luaL_error(L, "bad argument #3 to 'ShowMessageBox' (MACRO number expected, got %s)", luaL_typename(L, 3));
+		luaL_error(L, "bad argument #1 to 'ShowMessageBox' (MACRO number expected, got %s)", luaL_typename(L, 3));
 		break;
 	}
 	SDL_ShowSimpleMessageBox(flag, luaL_checkstring(L, 1), luaL_checkstring(L, 2), window);
 
 	return 0;
+}
+
+
+ETHER_API showConfirmMessageBox(lua_State* L)
+{
+	SDL_MessageBoxFlags flag;
+	switch ((int)luaL_checknumber(L, 1))
+	{
+	case MSGBOX_ERROR:
+		flag = SDL_MESSAGEBOX_ERROR;
+		break;
+	case MSGBOX_WARNING:
+		flag = SDL_MESSAGEBOX_WARNING;
+		break;
+	case MSGBOX_INFO:
+		flag = SDL_MESSAGEBOX_INFORMATION;
+		break;
+	default:
+		luaL_error(L, "bad argument #1 to 'ShowMessageBox' (MACRO number expected, got %s)", luaL_typename(L, 1));
+		break;
+	}
+
+	const SDL_MessageBoxButtonData buttons[2] = {
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, lua_tostring(L, 4) ? lua_tostring(L, 4) : "OK" },
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, lua_tostring(L, 5) ? lua_tostring(L, 5) : "Cancel" },
+	};
+	const SDL_MessageBoxColorScheme colorScheme = {
+		{
+			{ 255, 0, 0 },
+			{ 0, 255, 0 },
+			{ 255, 255, 0 },
+			{ 0, 0, 255 },
+			{ 255, 0, 255 }
+		}
+	};
+	const SDL_MessageBoxData messageboxdata = {
+		flag, window, luaL_checkstring(L, 2), luaL_checkstring(L, 3), 2, buttons, &colorScheme
+	};
+
+	int iButtonID = 0;
+	SDL_ShowMessageBox(&messageboxdata, &iButtonID);
+
+	lua_pushboolean(L, iButtonID == 1 ? true : false);
+
+	return 1;
 }
 
 
