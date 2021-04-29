@@ -18,8 +18,9 @@ ModuleWindow::ModuleWindow()
 		{ "CloseWindow", closeWindow },
 		{ "SetWindowTitle", setWindowTitle },
 		{ "GetWindowTitle", getWindowTitle },
+		{ "SetWindowAndScreenBrightness", setWindowAndScreenBrightness },
+		{ "GetWindowAndScreenBrightness", getWindowAndScreenBrightness },
 		{ "SetWindowMode", setWindowMode },
-		{ "SetWindowResizable", setWindowResizable },
 		{ "SetWindowOpacity", setWindowOpacity },
 		{ "SetWindowSize", setWindowSize },
 		{ "GetWindowSize", getWindowSize },
@@ -51,6 +52,10 @@ ModuleWindow::ModuleWindow()
 		{ "WINDOW_MODE_WINDOWED", WINDOW_MODE_WINDOWED },
 		{ "WINDOW_MODE_FULLSCREEN", WINDOW_MODE_FULLSCREEN },
 		{ "WINDOW_MODE_FULLSCREEN_DESKTOP", WINDOW_MODE_FULLSCREEN_DESKTOP },
+		{ "WINDOW_MODE_BORDERLESS", WINDOW_MODE_BORDERLESS },
+		{ "WINDOW_MODE_BORDERED", WINDOW_MODE_BORDERED },
+		{ "WINDOW_MODE_RESIZABLE", WINDOW_MODE_RESIZABLE },
+		{ "WINDOW_MODE_SIZEFIXED", WINDOW_MODE_SIZEFIXED },
 	};
 }
 
@@ -184,8 +189,10 @@ ETHER_API showFolderSelector(lua_State* L)
 
 ETHER_API createWindow(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (window)
 		luaL_error(L, "bad operation to 'CreateWindow' (only one window can be created)");
+#endif
 	else
 	{
 		SDL_Rect rect;
@@ -246,8 +253,10 @@ ETHER_API createWindow(lua_State* L)
 
 ETHER_API closeWindow(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "close operation must be done after the window creation operation");
+#endif
 
 	SDL_DestroyWindow(window);
 	window = NULL;
@@ -258,8 +267,10 @@ ETHER_API closeWindow(lua_State* L)
 
 ETHER_API setWindowTitle(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "title operation must be done after the window creation operation");
+#endif
 
 	SDL_SetWindowTitle(window, luaL_checkstring(L, 1));
 
@@ -269,8 +280,10 @@ ETHER_API setWindowTitle(lua_State* L)
 
 ETHER_API getWindowTitle(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "title operation must be done after the window creation operation");
+#endif
 
 	lua_pushstring(L, SDL_GetWindowTitle(window));
 
@@ -278,10 +291,38 @@ ETHER_API getWindowTitle(lua_State* L)
 }
 
 
+ETHER_API setWindowAndScreenBrightness(lua_State* L)
+{
+#ifdef _ETHER_DEBUG_
+	if (!window)
+		luaL_error(L, "brightness operation must be done after the window creation operation");
+#endif
+
+	SDL_SetWindowBrightness(window, luaL_checknumber(L, 1));
+
+	return 0;
+}
+
+
+ETHER_API getWindowAndScreenBrightness(lua_State* L)
+{
+#ifdef _ETHER_DEBUG_
+	if (!window)
+		luaL_error(L, "brightness operation must be done after the window creation operation");
+#endif
+
+	lua_pushnumber(L, SDL_GetWindowBrightness(window));
+
+	return 1;
+}
+
+
 ETHER_API setWindowMode(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "mode operation must be done after the window creation operation");
+#endif
 
 	switch ((int)luaL_checknumber(L, 1))
 	{
@@ -294,6 +335,18 @@ ETHER_API setWindowMode(lua_State* L)
 	case WINDOW_MODE_FULLSCREEN_DESKTOP:
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		break;
+	case WINDOW_MODE_BORDERLESS:
+		SDL_SetWindowBordered(window, SDL_FALSE);
+		break;
+	case WINDOW_MODE_BORDERED:
+		SDL_SetWindowFullscreen(window, SDL_TRUE);
+		break;
+	case WINDOW_MODE_RESIZABLE:
+		SDL_SetWindowResizable(window, SDL_TRUE);
+		break;
+	case WINDOW_MODE_SIZEFIXED:
+		SDL_SetWindowResizable(window, SDL_FALSE);
+		break;
 	default:
 		luaL_error(L, "bad argument #1 to 'SetWindowMode' (number-MACRO expected, got %s)", luaL_typename(L, -1));
 		break;
@@ -303,21 +356,12 @@ ETHER_API setWindowMode(lua_State* L)
 }
 
 
-ETHER_API setWindowResizable(lua_State* L)
-{
-	if (!window)
-		luaL_error(L, "resize operation must be done after the window creation operation");
-
-	SDL_SetWindowResizable(window, lua_toboolean(L, 1) ? SDL_TRUE : SDL_FALSE);
-
-	return 0;
-}
-
-
 ETHER_API setWindowOpacity(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "opacity operation must be done after the window creation operation");
+#endif
 
 	SDL_SetWindowOpacity(window, luaL_checknumber(L, 1));
 
@@ -327,8 +371,10 @@ ETHER_API setWindowOpacity(lua_State* L)
 
 ETHER_API setWindowSize(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "size operation must be done after the window creation operation");
+#endif
 
 	SDL_SetWindowSize(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
 
@@ -338,11 +384,12 @@ ETHER_API setWindowSize(lua_State* L)
 
 ETHER_API getWindowSize(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "size operation must be done after the window creation operation");
+#endif
 
-	int width = 0;
-	int height = 0;
+	int width = 0, height = 0;
 	SDL_GetWindowSize(window, &width, &height);
 	lua_pushnumber(L, width);
 	lua_pushnumber(L, height);
@@ -353,8 +400,10 @@ ETHER_API getWindowSize(lua_State* L)
 
 ETHER_API setWindowMaxSize(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "size operation must be done after the window creation operation");
+#endif
 
 	SDL_SetWindowMaximumSize(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
 
@@ -364,11 +413,12 @@ ETHER_API setWindowMaxSize(lua_State* L)
 
 ETHER_API getWindowMaxSize(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "size operation must be done after the window creation operation");
+#endif
 
-	int width = 0;
-	int height = 0;
+	int width = 0, height = 0;
 	SDL_GetWindowMaximumSize(window, &width, &height);
 	lua_pushnumber(L, width);
 	lua_pushnumber(L, height);
@@ -379,8 +429,10 @@ ETHER_API getWindowMaxSize(lua_State* L)
 
 ETHER_API setWindowMinSize(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "size operation must be done after the window creation operation");
+#endif
 
 	SDL_SetWindowMinimumSize(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
 
@@ -390,11 +442,12 @@ ETHER_API setWindowMinSize(lua_State* L)
 
 ETHER_API getWindowMinSize(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "size operation must be done after the window creation operation");
+#endif
 
-	int width = 0;
-	int height = 0;
+	int width = 0, height = 0;
 	SDL_GetWindowMinimumSize(window, &width, &height);
 	lua_pushnumber(L, width);
 	lua_pushnumber(L, height);
@@ -405,8 +458,10 @@ ETHER_API getWindowMinSize(lua_State* L)
 
 ETHER_API setWindowPosition(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "position operation must be done after the window creation operation");
+#endif
 
 	SDL_Point point;
 #ifdef _ETHER_DEBUG_
@@ -422,8 +477,10 @@ ETHER_API setWindowPosition(lua_State* L)
 
 ETHER_API getWindowPosition(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "position operation must be done after the window creation operation");
+#endif
 
 	SDL_Point point;
 	SDL_GetWindowPosition(window, &point.x, &point.y);
@@ -440,10 +497,13 @@ ETHER_API getWindowPosition(lua_State* L)
 
 ETHER_API setWindowIcon(lua_State* L)
 {
-	SDL_Surface* surface = GetImageDataAtFirstPos();
-	CheckImageDataAtFirstPos(surface);
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "icon operation must be done after the window creation operation");
+#endif
+
+	SDL_Surface* surface = GetImageDataAtFirstPos();
+	CheckImageDataAtFirstPos(surface);
 
 	SDL_SetWindowIcon(window, surface);
 
@@ -453,8 +513,10 @@ ETHER_API setWindowIcon(lua_State* L)
 
 ETHER_API clearWindow(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "clear operation must be done after the window creation operation");
+#endif
 
 	SDL_RenderClear(renderer);
 
@@ -464,8 +526,10 @@ ETHER_API clearWindow(lua_State* L)
 
 ETHER_API updateWindow(lua_State* L)
 {
+#ifdef _ETHER_DEBUG_
 	if (!window)
 		luaL_error(L, "update operation must be done after the window creation operation");
+#endif
 
 	SDL_RenderPresent(renderer);
 

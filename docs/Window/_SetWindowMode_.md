@@ -17,6 +17,10 @@ SetWindowMode(mode)
     + WINDOW_MODE_WINDOWED：窗口模式
     + WINDOW_MODE_FULLSCREEN：全屏（视频输出模式更改的真全屏）模式
     + WINDOW_MODE_FULLSCREEN_DESKTOP：全屏（将窗口拉伸至屏幕分辨率大小的伪全屏）模式
+    + WINDOW_MODE_BORDERLESS：窗口无边框
+    + WINDOW_MODE_BORDERED：窗口有边框
+    + WINDOW_MODE_RESIZABLE：窗口大小可变
+    + WINDOW_MODE_SIZEFIXED：窗口大小固定
 
 ## 返回值：
 

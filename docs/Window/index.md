@@ -20,9 +20,11 @@
 
 + [GetWindowTitle()](_GetWindowTitle_.md)：获取窗口标题
 
-+ [SetWindowMode(mode)](_SetWindowMode_.md)：设置窗口模式
++ [SetWindowAndScreenBrightness(value)](_SetWindowAndScreenBrightness_.md)：设置窗口及屏幕亮度（伽马值）
 
-+ [SetWindowResizable(flag)](_SetWindowResizable_.md)：设置窗口大小是否可变
++ [GetWindowAndScreenBrightness()](_GetWindowAndScreenBrightness_.md)：获取窗口及屏幕亮度（伽马值）
+
++ [SetWindowMode(mode)](_SetWindowMode_.md)：设置窗口模式
 
 + [SetWindowOpacity(value)](_SetWindowOpacity_.md)：设置窗口透明度
 

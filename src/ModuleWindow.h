@@ -18,20 +18,24 @@
 
 #define WINDOW_POSITION_DEFAULT INT_MIN
 
-#define MSGBOX_ERROR 1001
-#define MSGBOX_WARNING 1002
-#define MSGBOX_INFO 1003
+#define MSGBOX_ERROR					1001
+#define MSGBOX_WARNING					1002
+#define MSGBOX_INFO						1003
 
-#define WINDOW_FULLSCREEN 1004
-#define WINDOW_FULLSCREEN_DESKTOP 1005
-#define WINDOW_BORDERLESS 1006
-#define WINDOW_RESIZABLE 1007
-#define WINDOW_MAXIMIZED 1008
-#define WINDOW_MINIMIZED 1009
+#define WINDOW_FULLSCREEN				1004
+#define WINDOW_FULLSCREEN_DESKTOP		1005
+#define WINDOW_BORDERLESS				1006
+#define WINDOW_RESIZABLE				1007
+#define WINDOW_MAXIMIZED				1008
+#define WINDOW_MINIMIZED				1009
 
-#define WINDOW_MODE_WINDOWED 1013
-#define WINDOW_MODE_FULLSCREEN 1014
-#define WINDOW_MODE_FULLSCREEN_DESKTOP 1015
+#define WINDOW_MODE_WINDOWED			1013
+#define WINDOW_MODE_FULLSCREEN			1014
+#define WINDOW_MODE_FULLSCREEN_DESKTOP	1015
+#define WINDOW_MODE_BORDERLESS			1016
+#define WINDOW_MODE_BORDERED			1017
+#define WINDOW_MODE_RESIZABLE			1018
+#define WINDOW_MODE_SIZEFIXED			1019
 
 class ModuleWindow : public Module
 {
@@ -82,15 +86,20 @@ ETHER_API setWindowTitle(lua_State * L);
 // 1返回值：窗口标题（string）
 ETHER_API getWindowTitle(lua_State * L);
 
+// 设置窗口及屏幕的亮度（伽马值）
+// 1参数：亮度（number），取值范围0-1
+// 0返回值
+ETHER_API setWindowAndScreenBrightness(lua_State* L);
+
+// 获取窗口及屏幕的亮度（伽马值）
+// 0参数
+// 1返回值：亮度（number），取值范围0-1
+ETHER_API getWindowAndScreenBrightness(lua_State* L);
+
 // 设置窗口模式
 // 1参数：窗口模式（Macro number）
 // 0返回值
 ETHER_API setWindowMode(lua_State * L);
-
-// 设置窗口大小是否可变
-// 1参数：是否可变（boolean）
-// 0返回值
-ETHER_API setWindowResizable(lua_State * L);
 
 // 设置窗口透明度
 // 1参数：透明度大小（number，取值范围0-1）
