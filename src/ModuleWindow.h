@@ -86,16 +86,6 @@ ETHER_API setWindowTitle(lua_State * L);
 // 1返回值：窗口标题（string）
 ETHER_API getWindowTitle(lua_State * L);
 
-// 设置窗口及屏幕的亮度（伽马值）
-// 1参数：亮度（number），取值范围0-1
-// 0返回值
-ETHER_API setWindowAndScreenBrightness(lua_State* L);
-
-// 获取窗口及屏幕的亮度（伽马值）
-// 0参数
-// 1返回值：亮度（number），取值范围0-1
-ETHER_API getWindowAndScreenBrightness(lua_State* L);
-
 // 设置窗口模式
 // 1参数：窗口模式（Macro number）
 // 0返回值

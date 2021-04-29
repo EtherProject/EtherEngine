@@ -18,8 +18,6 @@ ModuleWindow::ModuleWindow()
 		{ "CloseWindow", closeWindow },
 		{ "SetWindowTitle", setWindowTitle },
 		{ "GetWindowTitle", getWindowTitle },
-		{ "SetWindowAndScreenBrightness", setWindowAndScreenBrightness },
-		{ "GetWindowAndScreenBrightness", getWindowAndScreenBrightness },
 		{ "SetWindowMode", setWindowMode },
 		{ "SetWindowOpacity", setWindowOpacity },
 		{ "SetWindowSize", setWindowSize },
@@ -286,33 +284,6 @@ ETHER_API getWindowTitle(lua_State* L)
 #endif
 
 	lua_pushstring(L, SDL_GetWindowTitle(window));
-	cout << SDL_GetPrefPath("Voidmatrix", "Cardinal") << endl;
-	return 1;
-}
-
-
-ETHER_API setWindowAndScreenBrightness(lua_State* L)
-{
-#ifdef _ETHER_DEBUG_
-	if (!window)
-		luaL_error(L, "brightness operation must be done after the window created");
-#endif	
-
-	SDL_SetWindowBrightness(window, luaL_checknumber(L, 1));
-
-	return 0;
-}
-
-
-ETHER_API getWindowAndScreenBrightness(lua_State* L)
-{
-#ifdef _ETHER_DEBUG_
-	if (!window)
-		luaL_error(L, "brightness operation must be done after the window created");
-#endif
-
-	lua_pushnumber(L, SDL_GetWindowBrightness(window));
-
 	return 1;
 }
 
