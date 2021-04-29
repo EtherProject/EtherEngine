@@ -52,7 +52,7 @@ extern SDL_Renderer* renderer;
 // 0返回值
 ETHER_API showMessageBox(lua_State * L);
 
-// 显示模态的确认窗口
+// 显示模态的确认信息窗口
 // 3或5参数：窗口类型（Macro number），提示窗口标题（string），提示信息内容（string），确认按钮文本（string，可选），取消按钮文本（string，可选）
 // 1返回值：确认则返回 true（boolean），否则返回 false（boolean）
 ETHER_API showConfirmMessageBox(lua_State* L);

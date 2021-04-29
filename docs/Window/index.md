@@ -8,7 +8,7 @@
 
 + [ShowMessageBox(type, title, content)](_ShowMessageBox_.md)：显示模态的提示信息窗口
 
-+ [ShowConfirmMessageBox(type, title, content [, ok_text, cancel_text])](_ShowConfirmMessageBox_.md)：显示模态的确认窗口
++ [ShowConfirmMessageBox(type, title, content [, ok_text, cancel_text])](_ShowConfirmMessageBox_.md)：显示模态的确认信息窗口
 
 + [ShowFolderSelector(content)](_ShowFolderSelector_.md)：显示文件夹选择器
 

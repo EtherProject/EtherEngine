@@ -2,7 +2,7 @@
 
 # ShowConfirmMessageBox
 
-> 显示模态的提示信息窗口
+> 显示模态的确认信息窗口
 
 ```lua
 

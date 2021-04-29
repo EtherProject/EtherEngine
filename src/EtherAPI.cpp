@@ -35,24 +35,30 @@ ETHER_API usingModule(lua_State* L)
 	Module* pModule;
 	auto iter = _mapMoudles.find(luaL_checkstring(L, 1));
 	if (iter != _mapMoudles.end())
+	{
 		pModule = iter->second;
+
+		lua_newtable(pL);
+
+		for (luaL_Reg method : pModule->_vCMethods)
+		{
+			lua_pushstring(pL, method.name);
+			lua_pushcfunction(pL, method.func);
+			lua_settable(pL, -3);
+		}
+
+		for (Macro macro : pModule->_vMacros)
+		{
+			lua_pushstring(pL, macro.name);
+			lua_pushinteger(pL, macro.value);
+			lua_settable(pL, -3);
+		}
+	}	
 	else
-		luaL_error(L, "module '%s' not found", luaL_checkstring(L, 1));
-	
-	lua_newtable(pL);
-
-	for (luaL_Reg method : pModule->_vCMethods)
 	{
-		lua_pushstring(pL, method.name);
-		lua_pushcfunction(pL, method.func);
-		lua_settable(pL, -3);
-	}
-
-	for (Macro macro : pModule->_vMacros)
-	{
-		lua_pushstring(pL, macro.name);
-		lua_pushinteger(pL, macro.value);
-		lua_settable(pL, -3);
+		lua_getglobal(pL, "require");
+		lua_pushstring(pL, lua_tostring(L, 1));
+		lua_call(pL, 1, 1);
 	}	
 
 	return 1;

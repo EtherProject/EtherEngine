@@ -4,7 +4,7 @@
 /* 定义 _ETHER_DEUBG_ 以开启Debug模式 */
 #define _ETHER_DEBUG_
 
-#define _VERSION_ "Release v3.3.0"
+#define _VERSION_ "Release v4.0.0"
 
 #define ETHER_API extern "C" int
 
