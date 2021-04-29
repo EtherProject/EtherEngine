@@ -74,6 +74,11 @@ ETHER_API getCPUCount(lua_State* L);
 // 1返回值：系统内存大小（number，单位为MB）
 ETHER_API getSystemTotalRAM(lua_State * L);
 
+// 获取指定组织的应用在当前系统用户下的数据文件夹路径，如果没有则创建
+// 2参数：组织名（string），应用名（string）
+// 1返回值：数据文件夹路径（string）
+ETHER_API getAppDataPath(lua_State* L);
+
 /*
 * 获取设备当前电源信息
 * 0参数

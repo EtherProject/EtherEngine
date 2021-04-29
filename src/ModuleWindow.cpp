@@ -255,11 +255,11 @@ ETHER_API closeWindow(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "close operation must be done after the window creation operation");
+		luaL_error(L, "close operation must be done after the window created");
 #endif
 
 	SDL_DestroyWindow(window);
-	window = NULL;
+	window = nullptr;
 
 	return 0;
 }
@@ -269,7 +269,7 @@ ETHER_API setWindowTitle(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "title operation must be done after the window creation operation");
+		luaL_error(L, "title operation must be done after the window created");
 #endif
 
 	SDL_SetWindowTitle(window, luaL_checkstring(L, 1));
@@ -282,11 +282,11 @@ ETHER_API getWindowTitle(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "title operation must be done after the window creation operation");
+		luaL_error(L, "title operation must be done after the window created");
 #endif
 
 	lua_pushstring(L, SDL_GetWindowTitle(window));
-
+	cout << SDL_GetPrefPath("Voidmatrix", "Cardinal") << endl;
 	return 1;
 }
 
@@ -295,8 +295,8 @@ ETHER_API setWindowAndScreenBrightness(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "brightness operation must be done after the window creation operation");
-#endif
+		luaL_error(L, "brightness operation must be done after the window created");
+#endif	
 
 	SDL_SetWindowBrightness(window, luaL_checknumber(L, 1));
 
@@ -308,7 +308,7 @@ ETHER_API getWindowAndScreenBrightness(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "brightness operation must be done after the window creation operation");
+		luaL_error(L, "brightness operation must be done after the window created");
 #endif
 
 	lua_pushnumber(L, SDL_GetWindowBrightness(window));
@@ -321,7 +321,7 @@ ETHER_API setWindowMode(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "mode operation must be done after the window creation operation");
+		luaL_error(L, "mode operation must be done after the window created");
 #endif
 
 	switch ((int)luaL_checknumber(L, 1))
@@ -360,7 +360,7 @@ ETHER_API setWindowOpacity(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "opacity operation must be done after the window creation operation");
+		luaL_error(L, "opacity operation must be done after the window created");
 #endif
 
 	SDL_SetWindowOpacity(window, luaL_checknumber(L, 1));
@@ -373,7 +373,7 @@ ETHER_API setWindowSize(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "size operation must be done after the window creation operation");
+		luaL_error(L, "size operation must be done after the window created");
 #endif
 
 	SDL_SetWindowSize(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
@@ -386,7 +386,7 @@ ETHER_API getWindowSize(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "size operation must be done after the window creation operation");
+		luaL_error(L, "size operation must be done after the window created");
 #endif
 
 	int width = 0, height = 0;
@@ -402,7 +402,7 @@ ETHER_API setWindowMaxSize(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "size operation must be done after the window creation operation");
+		luaL_error(L, "size operation must be done after the window created");
 #endif
 
 	SDL_SetWindowMaximumSize(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
@@ -415,7 +415,7 @@ ETHER_API getWindowMaxSize(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "size operation must be done after the window creation operation");
+		luaL_error(L, "size operation must be done after the window created");
 #endif
 
 	int width = 0, height = 0;
@@ -431,7 +431,7 @@ ETHER_API setWindowMinSize(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "size operation must be done after the window creation operation");
+		luaL_error(L, "size operation must be done after the window created");
 #endif
 
 	SDL_SetWindowMinimumSize(window, luaL_checknumber(L, 1), luaL_checknumber(L, 2));
@@ -444,7 +444,7 @@ ETHER_API getWindowMinSize(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "size operation must be done after the window creation operation");
+		luaL_error(L, "size operation must be done after the window created");
 #endif
 
 	int width = 0, height = 0;
@@ -460,7 +460,7 @@ ETHER_API setWindowPosition(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "position operation must be done after the window creation operation");
+		luaL_error(L, "position operation must be done after the window created");
 #endif
 
 	SDL_Point point;
@@ -479,7 +479,7 @@ ETHER_API getWindowPosition(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "position operation must be done after the window creation operation");
+		luaL_error(L, "position operation must be done after the window created");
 #endif
 
 	SDL_Point point;
@@ -499,7 +499,7 @@ ETHER_API setWindowIcon(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "icon operation must be done after the window creation operation");
+		luaL_error(L, "icon operation must be done after the window created");
 #endif
 
 	SDL_Surface* surface = GetImageDataAtFirstPos();
@@ -515,7 +515,7 @@ ETHER_API clearWindow(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "clear operation must be done after the window creation operation");
+		luaL_error(L, "clear operation must be done after the window created");
 #endif
 
 	SDL_RenderClear(renderer);
@@ -528,7 +528,7 @@ ETHER_API updateWindow(lua_State* L)
 {
 #ifdef _ETHER_DEBUG_
 	if (!window)
-		luaL_error(L, "update operation must be done after the window creation operation");
+		luaL_error(L, "update operation must be done after the window created");
 #endif
 
 	SDL_RenderPresent(renderer);

@@ -135,7 +135,7 @@ ETHER_API createTexture(lua_State * L)
 #ifdef _ETHER_DEBUG_
 	CheckImageDataAtFirstPos(surface);
 	if (!renderer)
-		luaL_error(L, "Texture creation must be done after the window creation operation");
+		luaL_error(L, "Texture creation must be done after the window created");
 #endif
 	SDL_Texture* pTexture = SDL_CreateTextureFromSurface(renderer, surface);
 #ifdef _ETHER_DEBUG_

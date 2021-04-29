@@ -17,6 +17,7 @@ ModuleOS::ModuleOS()
 		{ "GetPlatformType", getPlatformType },
 		{ "GetCPUCount", getCPUCount },
 		{ "GetSystemTotalRAM", getSystemTotalRAM },
+		{ "GetAppDataPath", getAppDataPath },
 		{ "GetPowerInfo", getPowerInfo },
 		{ "ListDirectory", listDirectory },
 		{ "CheckPathExist", checkPathExist },
@@ -83,6 +84,7 @@ ETHER_API getPlatformType(lua_State * L)
 ETHER_API getCPUCount(lua_State* L)
 {
 	lua_pushnumber(L, SDL_GetCPUCount());
+
 	return 1;
 }
 
@@ -90,6 +92,14 @@ ETHER_API getCPUCount(lua_State* L)
 ETHER_API getSystemTotalRAM(lua_State * L)
 {
 	lua_pushnumber(L, SDL_GetSystemRAM());
+
+	return 1;
+}
+
+
+ETHER_API getAppDataPath(lua_State* L)
+{
+	lua_pushstring(L, SDL_GetPrefPath(luaL_checkstring(L, 1), luaL_checkstring(L, 2)));
 
 	return 1;
 }

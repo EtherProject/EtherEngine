@@ -18,6 +18,8 @@
 
 + [GetSystemTotalRAM()](_GetSystemTotalRAM_.md)：获取系统总内存大小
 
++ [GetAppDataPath()](_GetAppDataPath_.md)：获取指定组织的应用在当前系统用户下的数据文件夹路径，如果没有则创建
+
 + [GetPowerInfo()](_GetPowerInfo_.md)：获取系统总内存大小
 
 + [ListDirectory(path)](_ListDirectory_.md)：获取目录下文件列表
