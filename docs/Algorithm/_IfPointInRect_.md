@@ -6,7 +6,7 @@
 
 ```lua
 
-flag = IfPointInRect(point, rect)
+flag = IfPointInRect(point, rect [, border])
 
 ```
 
@@ -14,6 +14,7 @@ flag = IfPointInRect(point, rect)
 
 + point [table]：点坐标
 + rect [table]：矩形区域
++ border [boolean]：是否包含边界，可选，默认为 true
 
 ## 返回值：
 

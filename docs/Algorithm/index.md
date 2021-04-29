@@ -8,21 +8,13 @@
 
 + [Clamp(checknum [, lower, upper])](_Clamp_.md)：将数值限制在指定区间
 
-+ [IfPointInRect(point, rect)](_IfPointInRect_.md)：判断点是否位于指定矩形区域内（包含矩形边界）
++ [IfPointInRect(point, rect [, border])](_IfPointInRect_.md)：判断点是否位于指定矩形区域内（包含矩形边界）
 
-+ [IfPointInRectStrict(point, rect)](_IfPointInRectStrict_.md)：判断点是否严格位于指定矩形区域内（不包含指定矩形边界）
++ [IfPointInCircle(point, center, radius [, border])](_IfPointInCircle_.md)：判断点是否位于指定圆形区域内（包含圆形边界）
 
-+ [IfPointInCircle(point, center, radius)](_IfPointInCircle_.md)：判断点是否位于指定圆形区域内（包含圆形边界）
++ [IfRectsOverlap(rect1, rect2 [, border])](_IfRectsOverlap_.md)：判断两矩形区域是否相交（包含矩形边界）
 
-+ [IfPointInCircleStrict(point, center, radius)](_IfPointInCircleStrict_.md)：判断点是否严格位于指定圆形区域内（不包含圆形边界）
-
-+ [IfRectsOverlap(rect1, rect2)](_IfRectsOverlap_.md)：判断两矩形区域是否相交（包含矩形边界）
-
-+ [IfRectsOverlapStrict(rect1, rect2)](_IfRectsOverlapStrict_.md)：判断两矩形区域是否严格相交（不包含矩形边界）
-
-+ [IfCirclesOverlap(center1, radius1, center2, radius2)](_IfCirclesOverlap_.md)：判断两圆是否相交（包含圆形边界）
-
-+ [IfCirclesOverlapStrict(center1, radius1, center2, radius2)](_IfCirclesOverlapStrict_.md)：判断两圆是否严格相交（不包含圆形边界）
++ [IfCirclesOverlap(center1, radius1, center2, radius2 [, border])](_IfCirclesOverlap_.md)：判断两圆是否相交（包含圆形边界）
 
 + [GetPointsDistance(point1, point2)](_GetPointsDistance_.md)：获取两点间直线距离
 

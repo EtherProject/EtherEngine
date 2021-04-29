@@ -15,9 +15,11 @@ ModuleOS::ModuleOS()
 		{ "SetClipboardText", setClipboardText },
 		{ "GetClipboardText", getClipboardText },
 		{ "GetPlatformType", getPlatformType },
+		{ "GetCPUCount", getCPUCount },
 		{ "GetSystemTotalRAM", getSystemTotalRAM },
+		{ "GetPowerInfo", getPowerInfo },
 		{ "ListDirectory", listDirectory },
-		{ "IfPathExist", ifPathExist },
+		{ "CheckPathExist", checkPathExist },
 		{ "GetPathInfo", getPathInfo },
 		{ "JoinPath", joinPath },
 		{ "GetFileNameFromPath", getFileNameFromPath },
@@ -35,6 +37,12 @@ ModuleOS::ModuleOS()
 		{ "PATHMODE_FILE", PATHMODE_FILE },
 		{ "PATHMODE_DIR", PATHMODE_DIR },
 		{ "PATHMODE_FILEANDDIR", PATHMODE_FILEANDDIR },
+
+		{ "POWERSTATE_UNKOWN", POWERSTATE_UNKOWN },
+		{ "POWERSTATE_ONBATTERY", POWERSTATE_ONBATTERY },
+		{ "POWERSTATE_NOBATTERY", POWERSTATE_NOBATTERY },
+		{ "POWERSTATE_CHARGING", POWERSTATE_CHARGING },
+		{ "POWERSTATE_CHARGEDN", POWERSTATE_CHARGEDN },
 	};
 }
 
@@ -72,9 +80,56 @@ ETHER_API getPlatformType(lua_State * L)
 }
 
 
+ETHER_API getCPUCount(lua_State* L)
+{
+	lua_pushnumber(L, SDL_GetCPUCount());
+	return 1;
+}
+
+
 ETHER_API getSystemTotalRAM(lua_State * L)
 {
 	lua_pushnumber(L, SDL_GetSystemRAM());
+
+	return 1;
+}
+
+
+ETHER_API getPowerInfo(lua_State* L)
+{
+	int secs, pct;
+	lua_newtable(L);
+
+	lua_pushstring(L, "state");
+	switch (SDL_GetPowerInfo(&secs, &pct))
+	{
+	case SDL_POWERSTATE_UNKNOWN:
+		lua_pushinteger(L, POWERSTATE_UNKOWN);
+		break;
+	case SDL_POWERSTATE_ON_BATTERY:
+		lua_pushinteger(L, POWERSTATE_ONBATTERY);
+		break;
+	case SDL_POWERSTATE_NO_BATTERY:
+		lua_pushinteger(L, POWERSTATE_NOBATTERY);
+		break;
+	case SDL_POWERSTATE_CHARGING:
+		lua_pushinteger(L, POWERSTATE_CHARGING);
+		break;
+	case SDL_POWERSTATE_CHARGED:
+		lua_pushinteger(L, POWERSTATE_CHARGEDN);
+		break;
+	default:
+		break;
+	}
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "remain_time");
+	lua_pushinteger(L, secs);
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "remain_percentage");
+	lua_pushinteger(L, pct);
+	lua_settable(L, -3);
 
 	return 1;
 }
@@ -122,7 +177,7 @@ ETHER_API listDirectory(lua_State* L)
 }
 
 
-ETHER_API ifPathExist(lua_State* L)
+ETHER_API checkPathExist(lua_State* L)
 {
 	int mode = PATHMODE_FILEANDDIR;
 	if (lua_isnumber(L, 2))
@@ -139,7 +194,7 @@ ETHER_API ifPathExist(lua_State* L)
 			mode = PATHMODE_FILEANDDIR;
 			break;
 		default:
-			luaL_error(L, "bad argument #2 to 'IfPathExist' (MACRO number expected, got %s)", luaL_typename(L, 2));
+			luaL_error(L, "bad argument #2 to 'CheckPathExist' (MACRO number expected, got %s)", luaL_typename(L, 2));
 			break;
 		}
 	}

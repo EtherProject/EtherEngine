@@ -6,7 +6,7 @@
 
 ```lua
 
-flag = IfPointInCircle(point, center, radius)
+flag = IfPointInCircle(point, center, radius [, border])
 
 ```
 
@@ -15,6 +15,7 @@ flag = IfPointInCircle(point, center, radius)
 + point [table]：点坐标
 + center [table]：圆心坐标
 + radius [number]：圆半径
++ border [boolean]：是否包含边界，可选，默认为 true
 
 ## 返回值：
 

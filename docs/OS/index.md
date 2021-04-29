@@ -14,11 +14,15 @@
 
 + [GetPlatformType()](_GetPlatformType_.md)：获取平台类型
 
++ [GetCPUCount()](_GetCPUCount_.md)：获取 CPU 逻辑核心数
+
 + [GetSystemTotalRAM()](_GetSystemTotalRAM_.md)：获取系统总内存大小
+
++ [GetPowerInfo()](_GetPowerInfo_.md)：获取系统总内存大小
 
 + [ListDirectory(path)](_ListDirectory_.md)：获取目录下文件列表
 
-+ [IfPathExist(path [, mode])](_IfPathExist_.md)：判断指定路径是否存在
++ [CheckPathExist(path [, mode])](_CheckPathExist_.md)：判断指定路径是否存在
 
 + [GetPathInfo(path)](_GetPathInfo_.md)：获取指定路径的信息
 

@@ -16,7 +16,7 @@ info = GetPathInfo(path)
 
 ## 返回值：
 
-+ info [table]：成功则返回路径信息，表内成员如下，失败则返回nil
++ info [table]：成功则返回路径信息，表内成员如下，失败则返回nil：
 
     + name [string]：文件名
     + size [number]：文件大小，单位为字节

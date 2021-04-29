@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# IfPathExist
+# CheckPathExist
 
 > 判断指定路径是否存在
 
 ```lua
 
-flag = IfPathExist(path [, mode])
+flag = CheckPathExist(path [, mode])
 
 ```
 

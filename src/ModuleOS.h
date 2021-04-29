@@ -16,16 +16,22 @@ using namespace std;
 #include ""
 #endif
 
-#define FILEATTRIB_ARCH 0
-#define FILEATTRIB_HIDDEN 1
-#define FILEATTRIB_NORMAL 2
-#define FILEATTRIB_RDONLY 3
-#define FILEATTRIB_SUBDIR 4
-#define FILEATTRIB_SYSTEM 5
+#define FILEATTRIB_ARCH			0
+#define FILEATTRIB_HIDDEN		1
+#define FILEATTRIB_NORMAL		2
+#define FILEATTRIB_RDONLY		3
+#define FILEATTRIB_SUBDIR		4
+#define FILEATTRIB_SYSTEM		5
 
-#define PATHMODE_FILE 6
-#define PATHMODE_DIR 7
-#define PATHMODE_FILEANDDIR 8
+#define PATHMODE_FILE			6
+#define PATHMODE_DIR			7
+#define PATHMODE_FILEANDDIR		8
+
+#define POWERSTATE_UNKOWN		9
+#define POWERSTATE_ONBATTERY	10
+#define POWERSTATE_NOBATTERY	11
+#define POWERSTATE_CHARGING		12
+#define POWERSTATE_CHARGEDN		13
 
 class ModuleOS : public Module
 {
@@ -58,10 +64,27 @@ ETHER_API getClipboardText(lua_State * L);
 // 1返回值：平台类型（string）
 ETHER_API getPlatformType(lua_State * L);
 
+// 获取 CPU 逻辑核心数
+// 0参数
+// 1返回值：CPU 逻辑核心数（number）
+ETHER_API getCPUCount(lua_State* L);
+
 // 获取系统总内存大小
 // 0参数
 // 1返回值：系统内存大小（number，单位为MB）
 ETHER_API getSystemTotalRAM(lua_State * L);
+
+/*
+* 获取设备当前电源信息
+* 0参数
+* 1返回值：设备当前电源信息（table，表结构如下）：
+	{
+		state: 供电状态（Macro number）,
+		remain_time：成功则为剩余使用时长（number），单位为秒，失败或当前不是电池供电则为 -1（number）
+		remain_percentage：成功则返回剩余电量百分比（number），取值范围为 0 - 100，失败则为 -1（number）
+	}
+*/
+ETHER_API getPowerInfo(lua_State* L);
 
 /*
 * 获取指定目录下文件列表
@@ -75,7 +98,7 @@ ETHER_API listDirectory(lua_State* L);
 * 1或2参数：目录或文件所在的路径（string），【可选】判断模式（Macro number）
 * 1返回值：是否存在（boolean）
 */
-ETHER_API ifPathExist(lua_State* L);
+ETHER_API checkPathExist(lua_State* L);
 
 /*
 * 获取指定路径的信息
@@ -89,7 +112,7 @@ ETHER_API ifPathExist(lua_State* L);
 			access：最后一次访问时间（number），
 			write：最后一次修改时间（number），
 		}，
-		attributes：文件属性，
+		attributes：文件属性（table），
 	}
 * ，失败则返回nil
 */

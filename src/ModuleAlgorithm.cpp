@@ -12,25 +12,15 @@ ModuleAlgorithm::ModuleAlgorithm()
 {
 	_vCMethods = {
 		{ "Clamp", clamp },
-		{ "IfPointInRect", ifPointInRect },
-		{ "IfPointInRectStrict", ifPointInRectStrict },
-		{ "IfPointInCircle", ifPointInCircle },
-		{ "IfPointInCircleStrict", ifPointInCircleStrict },
-		{ "IfRectsOverlap", ifRectsOverlap },
-		{ "IfRectsOverlapStrict", ifRectsOverlapStrict },
-		{ "IfCirclesOverlap", ifCirclesOverlap },
-		{ "IfCirclesOverlapStrict", ifCirclesOverlapStrict },
+		{ "CheckPointInRect", checkPointInRect },
+		{ "CheckPointInCircle", checkPointInCircle },
+		{ "CheckRectsOverlap", checkRectsOverlap },
+		{ "CheckCirclesOverlap", checkCirclesOverlap },
 		{ "GetPointsDistance", getPointsDistance },
 		{ "GetLinesDistance", getLinesDistance },
 		{ "GetPointLineDistance", getPointLineDistance },
 		{ "RGBAToHSLA", rgbaToHSLA },
 		{ "HSLAToRGBA", hslaToRGBA },
-		{ "IfElementInTable", ifElementInTable },
-	};
-
-	_vMacros = {
-		{ "ELEMENTTYPE_NUM", ELEMENTTYPE_NUM },
-		{ "ELEMENTTYPE_STR", ELEMENTTYPE_STR },
 	};
 }
 
@@ -75,7 +65,7 @@ ETHER_API clamp(lua_State * L)
 }
 
 
-ETHER_API ifPointInRect(lua_State* L)
+ETHER_API checkPointInRect(lua_State* L)
 {
 	SDL_Point point;
 	SDL_Rect rect;
@@ -86,30 +76,18 @@ ETHER_API ifPointInRect(lua_State* L)
 	GetPointParam(L, 1, point);
 	GetRectParam(L, 2, rect);
 #endif
-	lua_pushboolean(L, point.x >= rect.x && point.x <= rect.x + rect.w && point.y >= rect.y && point.y <= rect.y + rect.h);
+	lua_pushboolean(
+		L,
+		lua_toboolean(L, 3) ?
+		point.x >= rect.x && point.x <= rect.x + rect.w && point.y >= rect.y && point.y <= rect.y + rect.h
+		: point.x > rect.x && point.x < rect.x + rect.w && point.y > rect.y && point.y < rect.y + rect.h
+	);
 
 	return 1;
 }
 
 
-ETHER_API ifPointInRectStrict(lua_State* L)
-{
-	SDL_Point point;
-	SDL_Rect rect;
-#ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, !GetPointParam(L, 1, point), 1, "table point expected");
-	luaL_argcheck(L, !GetRectParam(L, 2, rect), 2, "table rect expected");
-#else
-	GetPointParam(L, 1, point);
-	GetRectParam(L, 2, rect);
-#endif
-	lua_pushboolean(L, point.x > rect.x && point.x < rect.x + rect.w && point.y > rect.y && point.y < rect.y + rect.h);
-
-	return 1;
-}
-
-
-ETHER_API ifPointInCircle(lua_State* L)
+ETHER_API checkPointInCircle(lua_State* L)
 {
 	SDL_Point point, center;
 #ifdef _ETHER_DEBUG_
@@ -119,29 +97,18 @@ ETHER_API ifPointInCircle(lua_State* L)
 	GetPointParam(L, 1, point);
 	GetPointParam(L, 2, center);
 #endif
-	lua_pushboolean(L, sqrt(pow(point.x - center.x, 2) + pow(point.y - center.y, 2)) <= luaL_checknumber(L, 3));
+	lua_pushboolean(
+		L, 
+		lua_toboolean(L, 4) ? 
+		sqrt(pow(point.x - center.x, 2) + pow(point.y - center.y, 2)) <= luaL_checknumber(L, 3)
+		: sqrt(pow(point.x - center.x, 2) + pow(point.y - center.y, 2)) < luaL_checknumber(L, 3)
+	);
 
 	return 1;
 }
 
 
-ETHER_API ifPointInCircleStrict(lua_State* L)
-{
-	SDL_Point point, center;
-#ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, !GetPointParam(L, 1, point), 1, "table point expected");
-	luaL_argcheck(L, !GetPointParam(L, 2, center), 2, "table point expected");
-#else
-	GetPointParam(L, 1, point);
-	GetPointParam(L, 2, center);
-#endif
-	lua_pushboolean(L, sqrt(pow(point.x - center.x, 2) + pow(point.y - center.y, 2)) < luaL_checknumber(L, 3));
-
-	return 1;
-}
-
-
-ETHER_API ifRectsOverlap(lua_State* L)
+ETHER_API checkRectsOverlap(lua_State* L)
 {
 	SDL_Rect rect_1, rect_2;
 #ifdef _ETHER_DEBUG_
@@ -151,54 +118,33 @@ ETHER_API ifRectsOverlap(lua_State* L)
 	GetRectParam(L, 1, rect_1);
 	GetRectParam(L, 2, rect_2);
 #endif
-	lua_pushboolean(L, fmax(rect_1.x + rect_1.w, rect_2.x + rect_2.w) - fmin(rect_1.x, rect_2.x) <= rect_1.w + rect_2.w && fmax(rect_1.y + rect_1.h, rect_2.y + rect_2.h) - fmin(rect_1.y, rect_2.y) <= rect_1.h + rect_2.h);
+	lua_pushboolean(
+		L, 
+		lua_toboolean(L, 3) ?
+		fmax(rect_1.x + rect_1.w, rect_2.x + rect_2.w) - fmin(rect_1.x, rect_2.x) <= rect_1.w + rect_2.w && fmax(rect_1.y + rect_1.h, rect_2.y + rect_2.h) - fmin(rect_1.y, rect_2.y) <= rect_1.h + rect_2.h
+		: fmax(rect_1.x + rect_1.w, rect_2.x + rect_2.w) - fmin(rect_1.x, rect_2.x) < rect_1.w + rect_2.w && fmax(rect_1.y + rect_1.h, rect_2.y + rect_2.h) - fmin(rect_1.y, rect_2.y) < rect_1.h + rect_2.h
+	);
 
 	return 1;
 }
 
 
-ETHER_API ifRectsOverlapStrict(lua_State* L)
-{
-	SDL_Rect rect_1, rect_2;
-#ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, !GetRectParam(L, 1, rect_1), 1, "table rect expected");
-	luaL_argcheck(L, !GetRectParam(L, 2, rect_2), 2, "table rect expected");
-#else
-	GetRectParam(L, 1, rect_1);
-	GetRectParam(L, 2, rect_2);
-#endif
-	lua_pushboolean(L, fmax(rect_1.x + rect_1.w, rect_2.x + rect_2.w) - fmin(rect_1.x, rect_2.x) < rect_1.w + rect_2.w && fmax(rect_1.y + rect_1.h, rect_2.y + rect_2.h) - fmin(rect_1.y, rect_2.y) < rect_1.h + rect_2.h);
-
-	return 1;
-}
-
-
-ETHER_API ifCirclesOverlap(lua_State* L)
+ETHER_API checkCirclesOverlap(lua_State* L)
 {
 	SDL_Point center_1, center_2;
 #ifdef _ETHER_DEBUG_
 	luaL_argcheck(L, !GetPointParam(L, 1, center_1), 1, "table point expected");
-	luaL_argcheck(L, !GetPointParam(L, 2, center_2), 2, "table point expected");
+	luaL_argcheck(L, !GetPointParam(L, 3, center_2), 3, "table point expected");
 #else
 	GetPointParam(L, 1, center_1);
 	GetPointParam(L, 2, center_2);
 #endif
-	lua_pushboolean(L, sqrt(pow(center_1.x - center_2.x, 2) + pow(center_1.y - center_2.y, 2)) <= luaL_checknumber(L, 2) + luaL_checknumber(L, 4));
-
-	return 1;
-}
-
-ETHER_API ifCirclesOverlapStrict(lua_State* L)
-{
-	SDL_Point center_1, center_2;
-#ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, !GetPointParam(L, 1, center_1), 1, "table point expected");
-	luaL_argcheck(L, !GetPointParam(L, 2, center_2), 2, "table point expected");
-#else
-	GetPointParam(L, 1, center_1);
-	GetPointParam(L, 2, center_2);
-#endif
-	lua_pushboolean(L, sqrt(pow(center_1.x - center_2.x, 2) + pow(center_1.y - center_2.y, 2)) < luaL_checknumber(L, 2) + luaL_checknumber(L, 4));
+	lua_pushboolean(
+		L,
+		lua_toboolean(L, 5) ?
+		sqrt(pow(center_1.x - center_2.x, 2) + pow(center_1.y - center_2.y, 2)) <= luaL_checknumber(L, 2) + luaL_checknumber(L, 4)
+		: sqrt(pow(center_1.x - center_2.x, 2) + pow(center_1.y - center_2.y, 2)) < luaL_checknumber(L, 2) + luaL_checknumber(L, 4)
+	);
 
 	return 1;
 }
@@ -395,66 +341,6 @@ ETHER_API hslaToRGBA(lua_State* L)
 	lua_pushstring(L, "a");
 	lua_pushnumber(L, color.a * 255);
 	lua_settable(L, -3);
-
-	return 1;
-}
-
-
-ETHER_API ifElementInTable(lua_State* L)
-{
-	int type;
-	switch ((int)luaL_checknumber(L, 3))
-	{
-	case ELEMENTTYPE_NUM:
-		type = ELEMENTTYPE_NUM;
-		break;
-	case ELEMENTTYPE_STR:
-		type = ELEMENTTYPE_STR;
-		break;
-	default:
-		luaL_error(L, "bad argument #3 to 'IfElementInTable' (MACRO number expected, got %s)", luaL_typename(L, 3));
-		break;
-	}
-
-	if (!lua_istable(L, 2))
-	{
-		luaL_error(L, "bad argument #2 to 'IfElementInTable' (table expected, got %s)", luaL_typename(L, 2));
-	}
-	else
-	{
-		if (type == ELEMENTTYPE_NUM)
-		{
-			bool isExist = false;
-			double num = luaL_checknumber(L, 1);
-			lua_pushnil(L);
-			while (!isExist && lua_next(L, 2))
-			{
-				lua_pushvalue(L, -2);
-				if (!lua_isnumber(L, -2))
-					luaL_error(L, "bad argument #2 to 'IfElementInTable' (table elements must be number, got %s)", luaL_typename(L, -2));
-				else if (num == lua_tonumber(L, -2))
-					isExist = true;
-				lua_pop(L, 2);
-			}
-			lua_pushboolean(L, isExist);
-		}
-		else
-		{
-			bool isExist = false;
-			string str = luaL_checkstring(L, 1);
-			lua_pushnil(L);
-			while (!isExist && lua_next(L, 2))
-			{
-				lua_pushvalue(L, -2);
-				if (!lua_isstring(L, -2))
-					luaL_error(L, "bad argument #2 to 'IfElementInTable' (table elements must be string, got %s)", luaL_typename(L, -2));
-				else if (str == lua_tostring(L, -2))
-					isExist = true;
-				lua_pop(L, 2);
-			}
-			lua_pushboolean(L, isExist);
-		}
-	}
 
 	return 1;
 }

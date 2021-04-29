@@ -6,7 +6,7 @@
 
 ```lua
 
-flag = IfRectsOverlap(rect1, rect2)
+flag = IfRectsOverlap(rect1, rect2 [, border])
 
 ```
 
@@ -14,6 +14,7 @@ flag = IfRectsOverlap(rect1, rect2)
 
 + rect1 [table]：矩形1区域
 + rect2 [table]：矩形2区域
++ border [boolean]：是否包含边界，可选，默认为 true
 
 ## 返回值：
 

@@ -6,7 +6,7 @@
 
 ```lua
 
-flag = IfCirclesOverlap(center1, radius1, center2, radius2)
+flag = IfCirclesOverlap(center1, radius1, center2, radius2 [, border])
 
 ```
 
@@ -16,6 +16,7 @@ flag = IfCirclesOverlap(center1, radius1, center2, radius2)
 + radius1 [number]：圆1半径
 + center2 [table]：圆2圆心坐标
 + radius2 [number]：圆2半径
++ border [boolean]：是否包含边界，可选，默认为 true
 
 ## 返回值：
 
