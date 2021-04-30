@@ -18,7 +18,9 @@
 
 + [GetSystemTotalRAM()](_GetSystemTotalRAM_.md)：获取系统总内存大小
 
-+ [GetAppDataPath()](_GetAppDataPath_.md)：获取指定组织的应用在当前系统用户下的数据文件夹路径，如果没有则创建
++ [GetAppStorageDirectory()](_GetAppStorageDirectory_.md)：获取应用在当前系统用户下的存储目录，如果不存在则创建
+
++ [GetSpecialPath(attributes)](_GetSpecialPath_.md)：获取系统特殊路径
 
 + [GetPowerInfo()](_GetPowerInfo_.md)：获取系统总内存大小
 
@@ -30,6 +32,4 @@
 
 + [JoinPath(directory, file)](_JoinPath_.md)：合并目录和文件名为完整路径
 
-+ [GetFileNameFromPath(path)](_GetFileNameFromPath_.md)：从路径中获取文件名
-
-+ [GetBasePathFromPath(path)](_GetBasePathFromPath_.md)：从路径中获取根目录路径
++ [SplitPath(path)](_SplitPath_.md)：将路径分割为文件夹路径和文件名

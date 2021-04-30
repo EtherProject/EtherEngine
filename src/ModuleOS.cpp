@@ -17,14 +17,14 @@ ModuleOS::ModuleOS()
 		{ "GetPlatformType", getPlatformType },
 		{ "GetCPUCount", getCPUCount },
 		{ "GetSystemTotalRAM", getSystemTotalRAM },
-		{ "GetAppDataPath", getAppDataPath },
+		{ "GetAppStorageDirectory", getAppStorageDirectory },
+		{ "GetSpecialPath", getSpecialPath },
 		{ "GetPowerInfo", getPowerInfo },
 		{ "ListDirectory", listDirectory },
 		{ "CheckPathExist", checkPathExist },
 		{ "GetPathInfo", getPathInfo },
 		{ "JoinPath", joinPath },
-		{ "GetFileNameFromPath", getFileNameFromPath },
-		{ "GetBasePathFromPath", getBasePathFromPath },
+		{ "SplitPath", splitPath },
 	};
 
 	_vMacros = {
@@ -44,6 +44,60 @@ ModuleOS::ModuleOS()
 		{ "POWERSTATE_NOBATTERY", POWERSTATE_NOBATTERY },
 		{ "POWERSTATE_CHARGING", POWERSTATE_CHARGING },
 		{ "POWERSTATE_CHARGEDN", POWERSTATE_CHARGEDN },
+
+		{ "PATHATTRIB_DESKTOP", PATHATTRIB_DESKTOP },
+		{ "PATHATTRIB_INTERNET", PATHATTRIB_INTERNET },
+		{ "PATHATTRIB_PROGRAMS", PATHATTRIB_PROGRAMS },
+		{ "PATHATTRIB_CONTROLS", PATHATTRIB_CONTROLS },
+		{ "PATHATTRIB_PRINTERS", PATHATTRIB_PRINTERS },
+		{ "PATHATTRIB_DOCUMENTS", PATHATTRIB_DOCUMENTS },
+		{ "PATHATTRIB_FAVORITES", PATHATTRIB_FAVORITES },
+		{ "PATHATTRIB_STARTUP", PATHATTRIB_STARTUP },
+		{ "PATHATTRIB_RECENT", PATHATTRIB_RECENT },
+		{ "PATHATTRIB_SENDTO", PATHATTRIB_SENDTO },
+		{ "PATHATTRIB_RECYCLEBIN", PATHATTRIB_RECYCLEBIN },
+		{ "PATHATTRIB_STARTMENU", PATHATTRIB_STARTMENU },
+		{ "PATHATTRIB_MUSIC", PATHATTRIB_MUSIC },
+		{ "PATHATTRIB_VIDEO", PATHATTRIB_VIDEO },
+		{ "PATHATTRIB_DRIVES", PATHATTRIB_DRIVES },
+		{ "PATHATTRIB_NETWORK", PATHATTRIB_NETWORK },
+		{ "PATHATTRIB_NETHOOD", PATHATTRIB_NETHOOD },
+		{ "PATHATTRIB_FONTS", PATHATTRIB_FONTS },
+		{ "PATHATTRIB_TEMPLATES", PATHATTRIB_TEMPLATES },
+		{ "PATHATTRIB_COMMON_STARTMENU", PATHATTRIB_COMMON_STARTMENU },
+		{ "PATHATTRIB_COMMON_PROGRAMS", PATHATTRIB_COMMON_PROGRAMS },
+		{ "PATHATTRIB_COMMON_STARTUP", PATHATTRIB_COMMON_STARTUP },
+		{ "PATHATTRIB_COMMON_DESKTOP", PATHATTRIB_COMMON_DESKTOP },
+		{ "PATHATTRIB_APPDATA", PATHATTRIB_APPDATA },
+		{ "PATHATTRIB_PRINTHOOD", PATHATTRIB_PRINTHOOD },
+		{ "PATHATTRIB_LOCAL_APPDATA", PATHATTRIB_LOCAL_APPDATA },
+		{ "PATHATTRIB_COMMON_FAVORITES", PATHATTRIB_COMMON_FAVORITES },
+		{ "PATHATTRIB_INTERNET_CACHE", PATHATTRIB_INTERNET_CACHE },
+		{ "PATHATTRIB_COOKIES", PATHATTRIB_COOKIES },
+		{ "PATHATTRIB_HISTORY", PATHATTRIB_HISTORY },
+		{ "PATHATTRIB_COMMON_APPDATA", PATHATTRIB_COMMON_APPDATA },
+		{ "PATHATTRIB_WINDOWS", PATHATTRIB_WINDOWS },
+		{ "PATHATTRIB_SYSTEM", PATHATTRIB_SYSTEM },
+		{ "PATHATTRIB_PROGRAM_FILES", PATHATTRIB_PROGRAM_FILES },
+		{ "PATHATTRIB_PICTURES", PATHATTRIB_PICTURES },
+		{ "PATHATTRIB_PROFILE", PATHATTRIB_PROFILE },
+		{ "PATHATTRIB_SYSTEMX86", PATHATTRIB_SYSTEMX86 },
+		{ "PATHATTRIB_PROGRAM_FILESX86", PATHATTRIB_PROGRAM_FILESX86 },
+		{ "PATHATTRIB_PROGRAM_FILES_COMMON", PATHATTRIB_PROGRAM_FILES_COMMON },
+		{ "PATHATTRIB_PROGRAM_FILES_COMMONX86", PATHATTRIB_PROGRAM_FILES_COMMONX86 },
+		{ "PATHATTRIB_COMMON_TEMPLATES", PATHATTRIB_COMMON_TEMPLATES },
+		{ "PATHATTRIB_COMMON_DOCUMENTS", PATHATTRIB_COMMON_DOCUMENTS },
+		{ "PATHATTRIB_COMMON_ADMINTOOLS", PATHATTRIB_COMMON_ADMINTOOLS },
+		{ "PATHATTRIB_ADMINTOOLS", PATHATTRIB_ADMINTOOLS },
+		{ "PATHATTRIB_CONNECTIONS", PATHATTRIB_CONNECTIONS },
+		{ "PATHATTRIB_COMMON_MUSIC", PATHATTRIB_COMMON_MUSIC },
+		{ "PATHATTRIB_COMMON_PICTURES", PATHATTRIB_COMMON_PICTURES },
+		{ "PATHATTRIB_COMMON_VIDEO", PATHATTRIB_COMMON_VIDEO },
+		{ "PATHATTRIB_RESOURCES", PATHATTRIB_RESOURCES },
+		{ "PATHATTRIB_RESOURCES_LOCALIZED", PATHATTRIB_RESOURCES_LOCALIZED },
+		{ "PATHATTRIB_COMMON_OEM_LINKS", PATHATTRIB_COMMON_OEM_LINKS },
+		{ "PATHATTRIB_CDBURN_AREA", PATHATTRIB_CDBURN_AREA },
+		{ "PATHATTRIB_COMPUTERSNEARME", PATHATTRIB_COMPUTERSNEARME },
 	};
 }
 
@@ -97,9 +151,194 @@ ETHER_API getSystemTotalRAM(lua_State * L)
 }
 
 
-ETHER_API getAppDataPath(lua_State* L)
+ETHER_API getAppStorageDirectory(lua_State* L)
 {
 	lua_pushstring(L, SDL_GetPrefPath(luaL_checkstring(L, 1), luaL_checkstring(L, 2)));
+
+	return 1;
+}
+
+
+ETHER_API getSpecialPath(lua_State* L)
+{
+#ifdef __WINDOWS__
+
+	TCHAR szPath[MAX_PATH];
+	switch ((int)luaL_checknumber(L, 1))
+	{
+	case PATHATTRIB_DESKTOP:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_DESKTOP, FALSE);
+		break;
+	case PATHATTRIB_INTERNET:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_INTERNET, FALSE);
+		break;
+	case PATHATTRIB_PROGRAMS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_PROGRAMS, FALSE);
+		break;
+	case PATHATTRIB_CONTROLS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_CONTROLS, FALSE);
+		break;
+	case PATHATTRIB_PRINTERS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_PRINTERS, FALSE);
+		break;
+	case PATHATTRIB_DOCUMENTS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_PERSONAL, FALSE);
+		break;
+	case PATHATTRIB_FAVORITES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_FAVORITES, FALSE);
+		break;
+	case PATHATTRIB_STARTUP:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_STARTUP, FALSE);
+		break;
+	case PATHATTRIB_RECENT:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_RECENT, FALSE);
+		break;
+	case PATHATTRIB_SENDTO:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_SENDTO, FALSE);
+		break;
+	case PATHATTRIB_RECYCLEBIN:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_BITBUCKET, FALSE);
+		break;
+	case PATHATTRIB_STARTMENU:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_STARTMENU, FALSE);
+		break;
+	case PATHATTRIB_MUSIC:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_MYMUSIC, FALSE);
+		break;
+	case PATHATTRIB_VIDEO:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_MYVIDEO, FALSE);
+		break;
+	case PATHATTRIB_DRIVES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_DRIVES, FALSE);
+		break;
+	case PATHATTRIB_NETWORK:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_NETWORK, FALSE);
+		break;
+	case PATHATTRIB_NETHOOD:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_NETHOOD, FALSE);
+		break;
+	case PATHATTRIB_FONTS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_FONTS, FALSE);
+		break;
+	case PATHATTRIB_TEMPLATES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_TEMPLATES, FALSE);
+		break;
+	case PATHATTRIB_COMMON_STARTMENU:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_STARTMENU, FALSE);
+		break;
+	case PATHATTRIB_COMMON_PROGRAMS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_PROGRAMS, FALSE);
+		break;
+	case PATHATTRIB_COMMON_STARTUP:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_STARTUP, FALSE);
+		break;
+	case PATHATTRIB_COMMON_DESKTOP:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_DESKTOPDIRECTORY, FALSE);
+		break;
+	case PATHATTRIB_APPDATA:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_APPDATA, FALSE);
+		break;
+	case PATHATTRIB_PRINTHOOD:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_PRINTHOOD, FALSE);
+		break;
+	case PATHATTRIB_LOCAL_APPDATA:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_LOCAL_APPDATA, FALSE);
+		break;
+	case PATHATTRIB_COMMON_FAVORITES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_FAVORITES, FALSE);
+		break;
+	case PATHATTRIB_INTERNET_CACHE:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_INTERNET_CACHE, FALSE);
+		break;
+	case PATHATTRIB_COOKIES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COOKIES, FALSE);
+		break;
+	case PATHATTRIB_HISTORY:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_HISTORY, FALSE);
+		break;
+	case PATHATTRIB_COMMON_APPDATA:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_APPDATA, FALSE);
+		break;
+	case PATHATTRIB_WINDOWS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_WINDOWS, FALSE);
+		break;
+	case PATHATTRIB_SYSTEM:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_SYSTEM, FALSE);
+		break;
+	case PATHATTRIB_PROGRAM_FILES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_PROGRAM_FILES, FALSE);
+		break;
+	case PATHATTRIB_PICTURES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_MYPICTURES, FALSE);
+		break;
+	case PATHATTRIB_PROFILE:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_PROFILE, FALSE);
+		break;
+	case PATHATTRIB_SYSTEMX86:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_SYSTEMX86, FALSE);
+		break;
+	case PATHATTRIB_PROGRAM_FILESX86:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_PROGRAM_FILESX86, FALSE);
+		break;
+	case PATHATTRIB_PROGRAM_FILES_COMMON:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_PROGRAM_FILES_COMMON, FALSE);
+		break;
+	case PATHATTRIB_PROGRAM_FILES_COMMONX86:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_PROGRAM_FILES_COMMONX86, FALSE);
+		break;
+	case PATHATTRIB_COMMON_TEMPLATES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_TEMPLATES, FALSE);
+		break;
+	case PATHATTRIB_COMMON_DOCUMENTS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_DOCUMENTS, FALSE);
+		break;
+	case PATHATTRIB_COMMON_ADMINTOOLS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_ADMINTOOLS, FALSE);
+		break;
+	case PATHATTRIB_ADMINTOOLS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_ADMINTOOLS, FALSE);
+		break;
+	case PATHATTRIB_CONNECTIONS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_CONNECTIONS, FALSE);
+		break;
+	case PATHATTRIB_COMMON_MUSIC:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_MUSIC, FALSE);
+		break;
+	case PATHATTRIB_COMMON_PICTURES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_PICTURES, FALSE);
+		break;
+	case PATHATTRIB_COMMON_VIDEO:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_VIDEO, FALSE);
+		break;
+	case PATHATTRIB_RESOURCES:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_RESOURCES, FALSE);
+		break;
+	case PATHATTRIB_RESOURCES_LOCALIZED:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_RESOURCES_LOCALIZED, FALSE);
+		break;
+	case PATHATTRIB_COMMON_OEM_LINKS:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMMON_OEM_LINKS, FALSE);
+		break;
+	case PATHATTRIB_CDBURN_AREA:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_CDBURN_AREA, FALSE);
+		break;
+	case PATHATTRIB_COMPUTERSNEARME:
+		SHGetSpecialFolderPath(nullptr, szPath, CSIDL_COMPUTERSNEARME, FALSE);
+		break;
+	default:
+		luaL_error(L, "bad argument #1 to 'GetSpecialPath' (MACRO number expected, got %s)", luaL_typename(L, 1));
+		break;
+	}
+
+	int iLen = WideCharToMultiByte(CP_ACP, 0, szPath, -1, nullptr, 0, nullptr, nullptr);
+	char* chRtn = new char[iLen * sizeof(char)];
+	WideCharToMultiByte(CP_ACP, 0, szPath, -1, chRtn, iLen, nullptr, nullptr);
+	lua_pushstring(L, chRtn);
+	delete[] chRtn;
+
+#else
+
+#endif
 
 	return 1;
 }
@@ -348,7 +587,7 @@ ETHER_API joinPath(lua_State* L)
 }
 
 
-ETHER_API getFileNameFromPath(lua_State* L)
+ETHER_API splitPath(lua_State* L)
 {
 	string path = luaL_checkstring(L, 1);
 	string::size_type index_slash = path.find_last_of('/');
@@ -356,39 +595,20 @@ ETHER_API getFileNameFromPath(lua_State* L)
 
 	if (index_slash == string::npos && index_backslash == string::npos)
 	{
-		lua_pushstring(L, path.c_str());
-	}
-	else if (index_slash != string::npos && index_backslash != string::npos)
-	{
-		lua_pushstring(L, path.substr((index_slash < index_backslash ? index_backslash : index_slash) + 1).c_str());
-	}
-	else
-	{
-		lua_pushstring(L, index_slash == string::npos ? path.substr(index_backslash + 1).c_str() : path.substr(index_slash + 1).c_str());
-	}
-	
-	return 1;
-}
-
-
-ETHER_API getBasePathFromPath(lua_State* L)
-{
-	string path = luaL_checkstring(L, 1);
-	string::size_type index_slash = path.find_last_of('/');
-	string::size_type index_backslash = path.find_last_of('\\');
-
-	if (index_slash == string::npos && index_backslash == string::npos)
-	{
-		lua_pushstring(L, path.c_str());
+		bool isFolder = false;
+		lua_pushstring(L, (isFolder = path.find('.') == string::npos) ? path.c_str() : "");
+		lua_pushstring(L, isFolder ? "" : path.c_str());
 	}
 	else if (index_slash != string::npos && index_backslash != string::npos)
 	{
 		lua_pushstring(L, path.substr(0, (index_slash < index_backslash ? index_backslash : index_slash) + 1).c_str());
+		lua_pushstring(L, path.substr((index_slash < index_backslash ? index_backslash : index_slash) + 1).c_str());
 	}
 	else
 	{
 		lua_pushstring(L, index_slash == string::npos ? path.substr(0, index_backslash + 1).c_str() : path.substr(0, index_slash + 1).c_str());
+		lua_pushstring(L, index_slash == string::npos ? path.substr(index_backslash + 1).c_str() : path.substr(index_slash + 1).c_str());
 	}
 
-	return 1;
+	return 2;
 }

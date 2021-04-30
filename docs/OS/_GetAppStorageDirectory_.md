@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# GetAppDataPath
+# GetAppStorageDirectory
 
-> 获取指定组织的应用在当前系统用户下的数据文件夹路径，如果没有则创建
+> 获取应用在当前系统用户下的存储目录，如果不存在则创建
 
 ```lua
 
-path = GetAppDataPath(org, app)
+path = GetAppStorageDirectory(org, app)
 
 ```
 

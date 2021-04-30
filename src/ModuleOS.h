@@ -11,27 +11,84 @@
 using namespace std;
 
 #ifdef __WINDOWS__
+#define  WIN32_LEAN_AND_MEAN
+#include <shlobj.h>
+#include <tchar.h>
 #include <io.h>
 #else
 #include ""
 #endif
 
-#define FILEATTRIB_ARCH			0
-#define FILEATTRIB_HIDDEN		1
-#define FILEATTRIB_NORMAL		2
-#define FILEATTRIB_RDONLY		3
-#define FILEATTRIB_SUBDIR		4
-#define FILEATTRIB_SYSTEM		5
+#define FILEATTRIB_ARCH						0
+#define FILEATTRIB_HIDDEN					1
+#define FILEATTRIB_NORMAL					2
+#define FILEATTRIB_RDONLY					3
+#define FILEATTRIB_SUBDIR					4
+#define FILEATTRIB_SYSTEM					5
 
-#define PATHMODE_FILE			6
-#define PATHMODE_DIR			7
-#define PATHMODE_FILEANDDIR		8
+#define PATHMODE_FILE						6
+#define PATHMODE_DIR						7
+#define PATHMODE_FILEANDDIR					8
 
-#define POWERSTATE_UNKOWN		9
-#define POWERSTATE_ONBATTERY	10
-#define POWERSTATE_NOBATTERY	11
-#define POWERSTATE_CHARGING		12
-#define POWERSTATE_CHARGEDN		13
+#define POWERSTATE_UNKOWN					9
+#define POWERSTATE_ONBATTERY				10
+#define POWERSTATE_NOBATTERY				11
+#define POWERSTATE_CHARGING					12
+#define POWERSTATE_CHARGEDN					13
+
+#define PATHATTRIB_DESKTOP					14          
+#define PATHATTRIB_INTERNET					15          
+#define PATHATTRIB_PROGRAMS					16          
+#define PATHATTRIB_CONTROLS					17          
+#define PATHATTRIB_PRINTERS					18          
+#define PATHATTRIB_DOCUMENTS				19           
+#define PATHATTRIB_FAVORITES				20          
+#define PATHATTRIB_STARTUP					21          
+#define PATHATTRIB_RECENT					22          
+#define PATHATTRIB_SENDTO					23          
+#define PATHATTRIB_RECYCLEBIN				24           
+#define PATHATTRIB_STARTMENU				25                    
+#define PATHATTRIB_MUSIC					26        
+#define PATHATTRIB_VIDEO					27              
+#define PATHATTRIB_DRIVES					28          
+#define PATHATTRIB_NETWORK					29          
+#define PATHATTRIB_NETHOOD					30          
+#define PATHATTRIB_FONTS					31          
+#define PATHATTRIB_TEMPLATES				32          
+#define PATHATTRIB_COMMON_STARTMENU			33       
+#define PATHATTRIB_COMMON_PROGRAMS			34  
+#define PATHATTRIB_COMMON_STARTUP			35  
+#define PATHATTRIB_COMMON_DESKTOP			36
+#define PATHATTRIB_APPDATA					37  
+#define PATHATTRIB_PRINTHOOD				38  
+#define PATHATTRIB_LOCAL_APPDATA			39
+#define PATHATTRIB_COMMON_FAVORITES			40
+#define PATHATTRIB_INTERNET_CACHE			41
+#define PATHATTRIB_COOKIES					42
+#define PATHATTRIB_HISTORY					43
+#define PATHATTRIB_COMMON_APPDATA			44
+#define PATHATTRIB_WINDOWS					45
+#define PATHATTRIB_SYSTEM					46
+#define PATHATTRIB_PROGRAM_FILES			47
+#define PATHATTRIB_PICTURES					48
+#define PATHATTRIB_PROFILE					49 
+#define PATHATTRIB_SYSTEMX86				50
+#define PATHATTRIB_PROGRAM_FILESX86			51
+#define PATHATTRIB_PROGRAM_FILES_COMMON		52
+#define PATHATTRIB_PROGRAM_FILES_COMMONX86	53
+#define PATHATTRIB_COMMON_TEMPLATES			54
+#define PATHATTRIB_COMMON_DOCUMENTS			55
+#define PATHATTRIB_COMMON_ADMINTOOLS		56
+#define PATHATTRIB_ADMINTOOLS				57
+#define PATHATTRIB_CONNECTIONS				58
+#define PATHATTRIB_COMMON_MUSIC				59
+#define PATHATTRIB_COMMON_PICTURES			60
+#define PATHATTRIB_COMMON_VIDEO				61
+#define PATHATTRIB_RESOURCES				62
+#define PATHATTRIB_RESOURCES_LOCALIZED		63
+#define PATHATTRIB_COMMON_OEM_LINKS			64
+#define PATHATTRIB_CDBURN_AREA				65
+#define PATHATTRIB_COMPUTERSNEARME			66
 
 class ModuleOS : public Module
 {
@@ -74,10 +131,15 @@ ETHER_API getCPUCount(lua_State* L);
 // 1返回值：系统内存大小（number，单位为MB）
 ETHER_API getSystemTotalRAM(lua_State * L);
 
-// 获取指定组织的应用在当前系统用户下的数据文件夹路径，如果没有则创建
+// 获取应用在当前系统用户下的存储目录，如果不存在则创建
 // 2参数：组织名（string），应用名（string）
 // 1返回值：数据文件夹路径（string）
-ETHER_API getAppDataPath(lua_State* L);
+ETHER_API getAppStorageDirectory(lua_State* L);
+
+// 获取系统特殊路径
+// 1参数：路径标识（Macro number）
+// 1参数：完整路径（string）
+ETHER_API getSpecialPath(lua_State* L);
 
 /*
 * 获取设备当前电源信息
@@ -131,17 +193,10 @@ ETHER_API getPathInfo(lua_State* L);
 ETHER_API joinPath(lua_State* L);
 
 /*
-* 从路径中获取文件名
+* 将路径分割为文件夹路径和文件名
 * 1参数：路径（string）
-* 1返回值：文件名（string）
+* 2返回值：文件夹路径（string），文件名（string）
 */
-ETHER_API getFileNameFromPath(lua_State* L);
-
-/*
-* 从路径中获取根目录路径
-* 1参数：路径（string）
-* 1返回值：根目录路径（string）
-*/
-ETHER_API getBasePathFromPath(lua_State* L);
+ETHER_API splitPath(lua_State* L);
 
 #endif // !_OS_H_

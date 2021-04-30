@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# GetFileNameFromPath
+# SplitPath
 
-> 从路径中获取文件名
+> 将路径分割为文件夹路径和文件名
 
 ```lua
 
-filename = GetFileNameFromPath(path)
+basepath, filename = SplitPath(path)
 
 ```
 
@@ -16,6 +16,7 @@ filename = GetFileNameFromPath(path)
 
 ## 返回值：
 
++ basepath [string]：文件夹路径
 + filename [string]：文件名
 
 ## 示例

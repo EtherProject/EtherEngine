@@ -61,7 +61,7 @@ ModuleWindow::ModuleWindow()
 ETHER_API showMessageBox(lua_State* L)
 {
 	SDL_MessageBoxFlags flag;
-	switch ((int)luaL_checknumber(L, 3))
+	switch ((int)luaL_checknumber(L, 1))
 	{
 	case MSGBOX_ERROR:
 		flag = SDL_MESSAGEBOX_ERROR;
@@ -73,10 +73,10 @@ ETHER_API showMessageBox(lua_State* L)
 		flag = SDL_MESSAGEBOX_INFORMATION;
 		break;
 	default:
-		luaL_error(L, "bad argument #1 to 'ShowMessageBox' (MACRO number expected, got %s)", luaL_typename(L, 3));
+		luaL_error(L, "bad argument #1 to 'ShowMessageBox' (MACRO number expected, got %s)", luaL_typename(L, 1));
 		break;
 	}
-	SDL_ShowSimpleMessageBox(flag, luaL_checkstring(L, 1), luaL_checkstring(L, 2), window);
+	SDL_ShowSimpleMessageBox(flag, luaL_checkstring(L, 2), luaL_checkstring(L, 3), window);
 
 	return 0;
 }
