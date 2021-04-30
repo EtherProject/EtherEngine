@@ -29,10 +29,10 @@ You can find the release version or source code of these dependencies for the pl
 + **cJSON - 1.7.14：**[https://github.com/VoidmatrixHeathcliff/cJSON](https://github.com/VoidmatrixHeathcliff/cJSON) 
 
 然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherAPI 启动器，它将自动加载同一目录下的 `Main.lua`（文件名大小写不敏感）文件作为入口文件。  
-另外，您可以在 `Macros.h` 文件中决定是否禁用 `_ETHER_DEBUG_` 宏来开启 Release 模式；在 Release 模式下，EtherAPI 将跳过部分严格的类型检查，来确保更加高效的运行，同时，在 Windows 平台下，此模式将意味着程序所使用的子系统为 `windows` 而非 `console` ，程序将不会显示控制台，通过 `print()` 等操作输出的调试信息可能会被隐藏。
+另外，您可以在 `Macros.h` 文件中决定是否禁用 `_ETHER_DEBUG_` 宏来开启 Release 模式；在 Release 模式下，EtherAPI 将跳过部分严格的类型检查，来确保更加高效的运行，同时，在 Windows 平台下，此模式将意味着程序所使用的子系统为 `window` 而非 `console` ，程序将不会显示控制台，通过 `print()` 等操作输出的调试信息可能会被隐藏。
 
 Then add all source files in the `src` folder to your project and compile them to get the Ethernet API loader suitable for your current development platform, which will automatically load the `Main.lua` (file name case insensitive) file in the same directory as entry file.
-In addition, you can decide whether to disable `_ETHER_DEBUG_` Macro in the `macro.h` file to open release mode; in release mode, etherapi will skip some strict type check to ensure more efficient operation. Meanwhile, under Windows platform, this mode will mean that the subsystem used by the program is `windows` instead of `console`. The program will not show the console. Debugging information output through operation such as `print()` may be hidden.
+In addition, you can decide whether to disable `_ETHER_DEBUG_` Macro in the `macro.h` file to open release mode; in release mode, etherapi will skip some strict type check to ensure more efficient operation. Meanwhile, under Windows platform, this mode will mean that the subsystem used by the program is `window` instead of `console`. The program will not show the console. Debugging information output through operation such as `print()` may be hidden.
 
 ## 文档 · Documentation：
 
