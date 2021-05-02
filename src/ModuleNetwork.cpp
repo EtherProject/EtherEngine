@@ -11,257 +11,197 @@ ModuleNetwork& ModuleNetwork::Instance()
 ModuleNetwork::ModuleNetwork()
 {
 	_vCMethods = {
-		{ "GetLinkDomain", getLinkDomain },
-		{ "GetLinkRoute", getLinkRoute },
-		{ "RequestGet", requestGet },
-		{ "RequestPost", requestPost },
+		{ "CreateClient", createClient },
+		{ "CloseClient", closeClient },
+		{ "SplitLink", splitLink },
 	};
 
 	_vMacros = {
-		{ "MIMETYPE_CSS", MIMETYPE_CSS },
-		{ "MIMETYPE_CSV", MIMETYPE_CSV },
-		{ "MIMETYPE_TEXT", MIMETYPE_TEXT },
-		{ "MIMETYPE_VTT", MIMETYPE_VTT },
-		{ "MIMETYPE_HTML", MIMETYPE_HTML },
-		{ "MIMETYPE_APNG", MIMETYPE_APNG },
-		{ "MIMETYPE_SVG", MIMETYPE_SVG },
-		{ "MIMETYPE_WEBP", MIMETYPE_WEBP },
-		{ "MIMETYPE_ICO", MIMETYPE_ICO },
-		{ "MIMETYPE_TIFF", MIMETYPE_TIFF },
-		{ "MIMETYPE_JPG", MIMETYPE_JPG },
-		{ "MIMETYPE_AVIF", MIMETYPE_AVIF },
-		{ "MIMETYPE_BMP", MIMETYPE_BMP },
-		{ "MIMETYPE_GIF", MIMETYPE_GIF },
-		{ "MIMETYPE_PNG", MIMETYPE_PNG },
-		{ "MIMETYPE_MP4", MIMETYPE_MP4 },
-		{ "MIMETYPE_MPEG", MIMETYPE_MPEG },
-		{ "MIMETYPE_WEBM", MIMETYPE_WEBM },
-		{ "MIMETYPE_MPGA", MIMETYPE_MPGA },
-		{ "MIMETYPE_WEBA", MIMETYPE_WEBA },
-		{ "MIMETYPE_WAV", MIMETYPE_WAV },
-		{ "MIMETYPE_OTF", MIMETYPE_OTF },
-		{ "MIMETYPE_TTF", MIMETYPE_TTF },
-		{ "MIMETYPE_WOFF", MIMETYPE_WOFF },
-		{ "MIMETYPE_WOFF2", MIMETYPE_WOFF2 },
-		{ "MIMETYPE_7Z", MIMETYPE_7Z },
-		{ "MIMETYPE_ATOM", MIMETYPE_ATOM },
-		{ "MIMETYPE_PDF", MIMETYPE_PDF },
-		{ "MIMETYPE_JS", MIMETYPE_JS },
-		{ "MIMETYPE_JSON", MIMETYPE_JSON },
-		{ "MIMETYPE_RSS", MIMETYPE_RSS },
-		{ "MIMETYPE_XHTML", MIMETYPE_XHTML },
-		{ "MIMETYPE_XSLT", MIMETYPE_XSLT },
-		{ "MIMETYPE_XML", MIMETYPE_XML },
-		{ "MIMETYPE_GZ", MIMETYPE_GZ },
-		{ "MIMETYPE_ZIP", MIMETYPE_ZIP },
-		{ "MIMETYPE_WASM", MIMETYPE_WASM },
-		{ "MIMETYPE_MP3", MIMETYPE_MP3 },
+		{ "ERRCODE_SUCCESS", ERRCODE_SUCCESS },
+		{ "ERRCODE_UNKNOWN", ERRCODE_UNKNOWN },
+		{ "ERRCODE_CONNECTION", ERRCODE_CONNECTION },
+		{ "ERRCODE_BINDIPADDRESS", ERRCODE_BINDIPADDRESS },
+		{ "ERRCODE_READ", ERRCODE_READ },
+		{ "ERRCODE_WRITE", ERRCODE_WRITE },
+		{ "ERRCODE_EXCEEDREDRICTCOUNT", ERRCODE_EXCEEDREDRICTCOUNT },
+		{ "ERRCODE_CANCELED", ERRCODE_CANCELED },
+		{ "ERRCODE_SSLCONNECTION", ERRCODE_SSLCONNECTION },
+		{ "ERRCODE_SSLLOADINGCERTS", ERRCODE_SSLLOADINGCERTS },
+		{ "ERRCODE_SSLSERVERVERIFY", ERRCODE_SSLSERVERVERIFY },
+		{ "ERRCODE_UNSUPPORTEDMBC", ERRCODE_UNSUPPORTEDMBC },
+		{ "ERRCODE_COMPRESSION", ERRCODE_COMPRESSION },
+	};
+
+	_vMetaData = {
+		{
+			METANAME_CLIENT,
+			{
+				{"Get", client_Get},
+				{"Post", client_Post},
+				{"SetDefaultHeaders", client_SetDefaultHeaders},
+			}
+		},
 	};
 }
 
 
-string GetLinkDomain(string link)
+int ConvertErrorCodeToMacro(const Error& error)
 {
-	if (link.substr(0, 5) == "http:" || link.substr(0, 6) == "https:")
+	switch (error)
 	{
-		size_t index_begin = link.find_first_of("/") + 2;
-		size_t index_end = link.find_first_of("/", index_begin + 1);
-		return link.substr(index_begin, index_end - index_begin);
-	}
-	else
-	{
-		size_t index_end = link.find_first_of("/");
-		if (index_end == string::npos)
-			return link;
-		return link.substr(0, index_end);
+	case httplib::Success:
+		return ERRCODE_SUCCESS;
+		break;
+	case httplib::Unknown:
+		return ERRCODE_UNKNOWN;
+		break;
+	case httplib::Connection:
+		return ERRCODE_CONNECTION;
+		break;
+	case httplib::BindIPAddress:
+		return ERRCODE_BINDIPADDRESS;
+		break;
+	case httplib::Read:
+		return ERRCODE_READ;
+		break;
+	case httplib::Write:
+		return ERRCODE_WRITE;
+		break;
+	case httplib::ExceedRedirectCount:
+		return ERRCODE_EXCEEDREDRICTCOUNT;
+		break;
+	case httplib::Canceled:
+		return ERRCODE_CANCELED;
+		break;
+	case httplib::SSLConnection:
+		return ERRCODE_SSLCONNECTION;
+		break;
+	case httplib::SSLLoadingCerts:
+		return ERRCODE_SSLLOADINGCERTS;
+		break;
+	case httplib::SSLServerVerification:
+		return ERRCODE_SSLSERVERVERIFY;
+		break;
+	case httplib::UnsupportedMultipartBoundaryChars:
+		return ERRCODE_UNSUPPORTEDMBC;
+		break;
+	case httplib::Compression:
+		return ERRCODE_COMPRESSION;
+		break;
+	default:
+		break;
 	}
 }
 
 
-string GetLinkRoute(string link)
+void PushResponseToStack(lua_State* L, const Result& res)
 {
-	string domain = GetLinkDomain(link);
-	size_t index_domain_end = link.find(domain) + domain.size();
-	if (index_domain_end == link.size())
-		return "/";
-	else
-		return link.substr(index_domain_end);
-}
+	lua_newtable(L);
 
-void PushResponseTable(lua_State* L, Result result)
-{
-	if (!result)
+	lua_pushstring(L, "error");
+	lua_pushinteger(L, ConvertErrorCodeToMacro(res.error()));
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "status");
+	if (res)
+		lua_pushinteger(L, res->status);
+	else
 		lua_pushnil(L);
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "body");
+	if (res)
+		lua_pushlstring(L, res->body.c_str(), res->body.size());
 	else
+		lua_pushnil(L);
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "headers");
+	if (res)
 	{
 		lua_newtable(L);
-		lua_pushstring(L, "status");
-		lua_pushnumber(L, result->status);
-		lua_settable(L, -3);
-
-		lua_pushstring(L, "body");
-		lua_pushstring(L, result->body.c_str());
-		lua_settable(L, -3);
-
-		lua_pushstring(L, "headers");
-		lua_newtable(L);
-		for (auto kv : result->headers)
+		for (auto kv : res->headers)
 		{
 			lua_pushstring(L, kv.first.c_str());
 			lua_pushstring(L, kv.second.c_str());
 			lua_settable(L, -3);
 		}
-		lua_settable(L, -3);
 	}
+	else
+		lua_pushnil(L);
+	lua_settable(L, -3);
 }
 
 
-string ConvertMacroToMIMEType(int macro)
+ETHER_API client_Get(lua_State* L)
 {
-	switch (macro)
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+	Headers headers;
+	if (lua_istable(L, 3))
 	{
-	case MIMETYPE_CSS:
-		return "text/css";
-		break;
-	case MIMETYPE_CSV:
-		return "text/csv";
-		break;
-	case MIMETYPE_TEXT:
-		return "text/plain";
-		break;
-	case MIMETYPE_VTT:
-		return "text/vtt";
-		break;
-	case MIMETYPE_HTML:
-		return "text/html";
-		break;
-	case MIMETYPE_APNG:
-		return "image/apng";
-		break;
-	case MIMETYPE_SVG:
-		return "image/svg+xml";
-		break;
-	case MIMETYPE_WEBP:
-		return "image/webp";
-	case MIMETYPE_ICO:
-		return "image/x-icon";
-		break;
-	case MIMETYPE_TIFF:
-		return "image/tiff";
-		break;
-	case MIMETYPE_JPG:
-		return "image/jpeg";
-		break;
-	case MIMETYPE_AVIF:
-		return "image/avif";
-		break;
-	case MIMETYPE_BMP:
-		return "image/bmp";
-		break;
-	case MIMETYPE_GIF:
-		return "image/gif";
-		break;
-	case MIMETYPE_PNG:
-		return "image/png";
-	case MIMETYPE_MP4:
-		return "video/mp4";
-		break;
-	case MIMETYPE_MPEG:
-		return "video/mpeg";
-		break;
-	case MIMETYPE_WEBM:
-		return "video/webm";
-		break;
-	case MIMETYPE_MPGA:
-		return "audio/mpeg";
-		break;
-	case MIMETYPE_WEBA:
-		return "audio/webm";
-		break;
-	case MIMETYPE_MP3:
-		return "audio/mp3";
-		break;
-	case MIMETYPE_WAV:
-		return "audio/wave";
-		break;
-	case MIMETYPE_OTF:
-		return "font/otf";
-		break;
-	case MIMETYPE_TTF:
-		return "font/ttf";
-		break;
-	case MIMETYPE_WOFF:
-		return "font/woff";
-		break;
-	case MIMETYPE_WOFF2:
-		return "font/woff2";
-		break;
-	case MIMETYPE_7Z:
-		return "application/x-7z-compressed";
-		break;
-	case MIMETYPE_ATOM:
-		return "application/atom+xml";
-		break;
-	case MIMETYPE_PDF:
-		return "application/pdf";
-		break;
-	case MIMETYPE_JS:
-		return "application/javascript";
-		break;
-	case MIMETYPE_JSON:
-		return "application/json";
-		break;
-	case MIMETYPE_RSS:
-		return "application/rss+xml";
-		break;
-	case MIMETYPE_TAR:
-		return "application/x-tar";
-		break;
-	case MIMETYPE_XHTML:
-		return "application/xhtml+xml";
-		break;
-	case MIMETYPE_XSLT:
-		return "application/xslt+xml";
-		break;
-	case MIMETYPE_XML:
-		return "application/xml";
-		break;
-	case MIMETYPE_GZ:
-		return "application/gzip";
-		break;
-	case MIMETYPE_ZIP:
-		return "application/zip";
-	case MIMETYPE_WASM:
-		return "application/wasm";
-		break;
-	default:
-		return "";
-		break;
+		int index_header = lua_gettop(L);
+		lua_pushnil(L);
+		while (lua_next(L, index_header))
+		{
+#ifdef _ETHER_DEBUG_
+			luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 3, 
+				"the key and value of the headers table must be string");
+#endif
+			headers.insert(make_pair(lua_tostring(L, -2), lua_tostring(L, -1)));
+			lua_pop(L, 1);
+		}
 	}
-}
 
-
-ETHER_API getLinkDomain(lua_State* L)
-{
-	lua_pushstring(L, GetLinkDomain(luaL_checkstring(L, 1)).c_str());
+	PushResponseToStack(L, client->Get(luaL_checkstring(L, 2), headers));
 
 	return 1;
 }
 
 
-ETHER_API getLinkRoute(lua_State* L)
+ETHER_API client_Post(lua_State* L)
 {
-	lua_pushstring(L, GetLinkRoute(luaL_checkstring(L, 1)).c_str());
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+	if (lua_istable(L, 3))
+	{
+		Params params;
+		int index_param = lua_gettop(L);
+		lua_pushnil(L);
+		while (lua_next(L, index_param))
+		{
+#ifdef _ETHER_DEBUG_
+			luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 3, 
+				"the key and value of the params table must be string");
+#endif
+			params.emplace(lua_tostring(L, -2), lua_tostring(L, -1));
+			lua_pop(L, 1);
+		}
+		PushResponseToStack(L, client->Post(luaL_checkstring(L, 2), params));
+	}
+	else if (lua_isstring(L, 3))
+		PushResponseToStack(L, client->Post(
+			luaL_checkstring(L, 2),
+			lua_tostring(L, 3),
+			lua_isstring(L, 4) ? lua_tostring(L, 4) : "application/x-www-form-urlencoded")
+		);
+	else
+		luaL_argcheck(L, false, 4, "the argument to post must be string or table");
 
 	return 1;
 }
 
 
-ETHER_API requestGet(lua_State* L)
+ETHER_API client_SetDefaultHeaders(lua_State* L)
 {
-	string domain = GetLinkDomain(luaL_checkstring(L, 1));
-	string route = GetLinkRoute(luaL_checkstring(L, 1));
-	
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
 	Headers headers;
 	if (lua_istable(L, 2))
 	{
@@ -269,51 +209,74 @@ ETHER_API requestGet(lua_State* L)
 		lua_pushnil(L);
 		while (lua_next(L, index_header))
 		{
-			headers.insert(make_pair(luaL_checkstring(L, -2), luaL_checkstring(L, -1)));
+#ifdef _ETHER_DEBUG_
+			luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 2, 
+				"the key and value of the headers table must be string");
+#endif
+			headers.insert(make_pair(lua_tostring(L, -2), lua_tostring(L, -1)));
 			lua_pop(L, 1);
 		}
 	}
 
-	Client* client;
-	if (domain.find(':') != string::npos)
-		client = new Client(domain.substr(0, domain.find(':')), atoi(domain.substr(domain.find(':') + 1).c_str()));
-	else
-		client = new Client(domain.c_str());
-	PushResponseTable(L, client->Get(route.c_str(), headers));
-	delete(client);
+	client->set_default_headers(headers);
+
+	return 0;
+}
+
+
+ETHER_API createClient(lua_State* L)
+{
+	string host = luaL_checkstring(L, 1);
+	if (host.back() == '\\' || host.back() == '/')
+		host.pop_back();
+	Client* client = new Client(host.c_str());
+	Client** uppClient = (Client**)lua_newuserdata(L, sizeof(Client*));
+	*uppClient = client;
+	luaL_getmetatable(L, METANAME_CLIENT);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
 
 
-ETHER_API requestPost(lua_State* L)
+ETHER_API closeClient(lua_State* L)
 {
-	string domain = GetLinkDomain(luaL_checkstring(L, 1));
-	string route = GetLinkRoute(luaL_checkstring(L, 1));
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+	delete client;
+	client = nullptr;
 
-	Headers headers;
-	if (lua_istable(L, 4))
-	{
-		int index_header = lua_gettop(L);
-		lua_pushnil(L);
-		while (lua_next(L, index_header))
-		{
-			headers.insert(make_pair(luaL_checkstring(L, -2), luaL_checkstring(L, -1)));
-			lua_pop(L, 1);
-		}
-	}
-
-	Client* client;
-	if (domain.find(':') != string::npos)
-		client = new Client(domain.substr(0, domain.find(':')), atoi(domain.substr(domain.find(':') + 1).c_str()));
-	else
-		client = new Client(domain.c_str());
-
-	string mimeType = ConvertMacroToMIMEType(luaL_checknumber(L, 3));
-	if (mimeType.empty())
-		luaL_error(L, "bad argument #3 to 'RequestPost' (MACRO number expected, got %s)", luaL_typename(L, 3));
-	PushResponseTable(L, client->Post(route.c_str(), headers, luaL_checkstring(L, 2), mimeType.c_str()));
-	delete(client);
+	lua_pushnil(L);
 
 	return 1;
+}
+
+
+ETHER_API splitLink(lua_State* L)
+{
+	string link = luaL_checkstring(L, 1), domain, route, param;
+
+	if (!link.empty())
+	{
+		link.erase(0, link.find_first_not_of(" "));
+		link.erase(link.find_last_not_of(" ") + 1);
+	}
+
+	domain = link.substr(0, 5) == "http:" || link.substr(0, 6) == "https:" ?
+		link.substr(0, link.find_first_of("/", link.find_first_of("/") + 3))
+		: link.find_first_of("/") == string::npos ? link : link.substr(0, link.find_first_of("/"));
+
+	size_t index_quemark = link.find_first_of("?");
+
+	index_quemark == string::npos ?
+		(param = "", route = domain.size() == link.size() ? "/" : link.substr(domain.size()))
+		: (param = link.substr(index_quemark + 1), route = link.substr(domain.size(), index_quemark - domain.size()));
+
+	lua_pushstring(L, domain.c_str());
+	lua_pushstring(L, route.c_str());
+	lua_pushstring(L, param.c_str());
+
+	return 3;
 }

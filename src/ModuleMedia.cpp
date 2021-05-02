@@ -39,6 +39,11 @@ ModuleMedia::ModuleMedia()
 		{ "MUSIC_TYPE_MID", MUSIC_TYPE_MID },
 		{ "MUSIC_TYPE_UNKONWN", MUSIC_TYPE_UNKONWN },
 	};
+
+	_vMetaData = {
+		{ METANAME_MUSIC },
+		{ METANAME_SOUND },
+	};
 }
 
 
@@ -59,22 +64,24 @@ ETHER_API loadMusic(lua_State * L)
 
 ETHER_API unloadMusic(lua_State * L)
 {
-	GetMusicDataAtFirstPos();
+	Mix_Music* music = GetMusicDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
-	CheckMusicDataAtFirstPos();
+	CheckMusicDataAtFirstPos(music);
 #endif
 	Mix_FreeMusic(music);
 	music = nullptr;
 
-	return 0;
+	lua_pushnil(L);
+
+	return 1;
 }
 
 
 ETHER_API playMusic(lua_State * L)
 {
-	GetMusicDataAtFirstPos();
+	Mix_Music* music = GetMusicDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
-	CheckMusicDataAtFirstPos();
+	CheckMusicDataAtFirstPos(music);
 #endif
 	Mix_PlayMusic(music, luaL_checknumber(L, 2));
 
@@ -84,9 +91,9 @@ ETHER_API playMusic(lua_State * L)
 
 ETHER_API fadeInMusic(lua_State * L)
 {
-	GetMusicDataAtFirstPos();
+	Mix_Music* music = GetMusicDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
-	CheckMusicDataAtFirstPos();
+	CheckMusicDataAtFirstPos(music);
 #endif
 	Mix_FadeInMusic(music, luaL_checknumber(L, 2), luaL_checknumber(L, 3));
 
@@ -144,9 +151,9 @@ ETHER_API rewindMusic(lua_State * L)
 
 ETHER_API getMusicType(lua_State * L)
 {
-	GetMusicDataAtFirstPos();
+	Mix_Music* music = GetMusicDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
-	CheckMusicDataAtFirstPos();
+	CheckMusicDataAtFirstPos(music);
 #endif
 	switch (Mix_GetMusicType(music))
 	{
@@ -194,21 +201,25 @@ ETHER_API loadSound(lua_State * L)
 
 ETHER_API unloadSound(lua_State * L)
 {
-	GetSoundDataAtFirstPos();
+	Mix_Chunk* sound = GetSoundDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
-	CheckSoundDataAtFirstPos();
+	CheckSoundDataAtFirstPos(sound);
 #endif
 	Mix_FreeChunk(sound);
 	sound = nullptr;
 
-	return 0;
+	lua_pushnil(L);
+
+	return 1;
 }
 
 
 ETHER_API playSound(lua_State * L)
 {
-	GetSoundDataAtFirstPos();
-	CheckSoundDataAtFirstPos();
+	Mix_Chunk* sound = GetSoundDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckSoundDataAtFirstPos(sound);
+#endif
 	Mix_PlayChannel(-1, sound, luaL_checknumber(L, 2));
 
 	return 0;

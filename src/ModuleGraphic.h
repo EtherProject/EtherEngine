@@ -50,7 +50,7 @@ ETHER_API setImageColorKey(lua_State * L);
 
 // 释放已加载的图像
 // 1参数：图像数据（userdata-IMAGE）
-// 0返回值
+// 1返回值：nil
 ETHER_API unloadImage(lua_State * L);
 
 // 从图像数据创建属于窗口的可渲染纹理
@@ -60,7 +60,7 @@ ETHER_API createTexture(lua_State * L);
 
 // 销毁纹理数据
 // 1参数：纹理数据（userdata-TEXTURE）
-// 0返回值
+// 1返回值：nil
 ETHER_API destroyTexture(lua_State * L);
 
 // 设置纹理透明度
@@ -111,7 +111,7 @@ ETHER_API point(lua_State * L);
 // 在指定位置绘制直线
 // 2参数：起点坐标（table），终点坐标（table）
 // 0返回值
-ETHER_API singleline(lua_State * L);
+ETHER_API line(lua_State * L);
 
 // 在指定位置绘制粗直线
 // 3参数：起点坐标（table），终点坐标（table），线条宽度（number）
@@ -190,7 +190,7 @@ ETHER_API unloadFont(lua_State * L);
 
 // 获取已加载字体的样式
 // 1参数：字体数据（userdata-FONT）
-// 1返回值：用以描述字体样式的表（table）
+// 1返回值：nil
 ETHER_API getFontStyle(lua_State * L);
 
 // 设置已加载字体的样式

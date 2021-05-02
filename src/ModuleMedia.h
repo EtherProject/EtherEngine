@@ -19,11 +19,11 @@
 #define METANAME_MUSIC		"Graphic.Music"
 #define METANAME_SOUND		"Graphic.Sound"
 
-#define GetMusicDataAtFirstPos() Mix_Music* music = (Mix_Music*)(*(void**)luaL_checkudata(L, 1, METANAME_MUSIC))
-#define GetSoundDataAtFirstPos() Mix_Chunk* sound = (Mix_Chunk*)(*(void**)luaL_checkudata(L, 1, METANAME_SOUND))
+#define GetMusicDataAtFirstPos() (Mix_Music*)(*(void**)luaL_checkudata(L, 1, METANAME_MUSIC))
+#define GetSoundDataAtFirstPos() (Mix_Chunk*)(*(void**)luaL_checkudata(L, 1, METANAME_SOUND))
 
-#define CheckMusicDataAtFirstPos() luaL_argcheck(L, music, 1, "get music data failed")
-#define CheckSoundDataAtFirstPos() luaL_argcheck(L, sound, 1, "get sound data failed")
+#define CheckMusicDataAtFirstPos(music) luaL_argcheck(L, music, 1, "get music data failed")
+#define CheckSoundDataAtFirstPos(sound) luaL_argcheck(L, sound, 1, "get sound data failed")
 
 class ModuleMedia : public Module
 {
@@ -43,7 +43,7 @@ ETHER_API loadMusic(lua_State * L);
 
 // 释放已加载的音乐
 // 1参数：音乐数据（userdata-MUSIC）
-// 0返回值
+// 1返回值：nil
 ETHER_API unloadMusic(lua_State * L);
 
 // 播放已加载的音乐
@@ -98,7 +98,7 @@ ETHER_API loadSound(lua_State * L);
 
 // 释放已加载的音效
 // 1参数：音效数据（userdata-SOUND）
-// 0返回值
+// 1返回值：nil
 ETHER_API unloadSound(lua_State * L);
 
 // 播放已加载的音效

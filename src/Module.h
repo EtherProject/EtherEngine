@@ -5,19 +5,29 @@
 
 #include <lua.hpp>
 
+#include <string>
 #include <vector>
 using namespace std;
+
+struct MetaData
+{
+	string name;
+	vector<luaL_Reg> cFuns;
+};
 
 class Module
 {
 public:
 	virtual Module& Instance();
 	~Module() {};
-	vector<luaL_Reg> _vCMethods;
-	vector<Macro> _vMacros;
+	void PushMetaDataToGlobal(lua_State* L);
+	void PushMoudleDataToStack(lua_State* L);
 
 protected:
 	Module() {};
+	vector<luaL_Reg> _vCMethods;
+	vector<Macro> _vMacros;
+	vector<MetaData> _vMetaData;
 	
 };
 

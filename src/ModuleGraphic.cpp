@@ -29,7 +29,7 @@ ModuleGraphic::ModuleGraphic()
 		{ "SetDrawColor", setDrawColor },
 		{ "GetDrawColor", getDrawColor },
 		{ "Point", point },
-		{ "Line", singleline },
+		{ "Line", line },
 		{ "ThickLine", thickLine },
 		{ "Rectangle", rectangle },
 		{ "FillRectangle", fillRectangle },
@@ -72,6 +72,12 @@ ModuleGraphic::ModuleGraphic()
 		{ "FONT_STYLE_UNDERLINE", FONT_STYLE_UNDERLINE },
 		{ "FONT_STYLE_STRIKETHROUGH", FONT_STYLE_STRIKETHROUGH },
 		{ "FONT_STYLE_NORMAL", FONT_STYLE_NORMAL },
+	};
+
+	_vMetaData = {
+		{ METANAME_IMAGE },
+		{ METANAME_TEXTURE },
+		{ METANAME_FONT },
 	};
 }
 
@@ -125,7 +131,9 @@ ETHER_API unloadImage(lua_State * L)
 	SDL_FreeSurface(surface);
 	surface = nullptr;
 
-	return 0;
+	lua_pushnil(L);
+
+	return 1;
 }
 
 
@@ -159,7 +167,9 @@ ETHER_API destroyTexture(lua_State * L)
 	SDL_DestroyTexture(texture);
 	texture = nullptr;
 
-	return 0;
+	lua_pushnil(L);
+
+	return 1;
 }
 
 
@@ -394,7 +404,7 @@ ETHER_API point(lua_State * L)
 }
 
 
-ETHER_API singleline(lua_State * L)
+ETHER_API line(lua_State * L)
 {
 	SDL_Point startPoint, endPoint;
 #ifdef _ETHER_DEBUG_
@@ -648,7 +658,9 @@ ETHER_API unloadFont(lua_State * L)
 	TTF_CloseFont(font);
 	font = nullptr;
 
-	return 0;
+	lua_pushnil(L);
+
+	return 1;
 }
 
 

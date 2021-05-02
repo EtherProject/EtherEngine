@@ -56,8 +56,6 @@ int _LoadConfig();
 
 void _PushArgs(lua_State* L, int argc, char** argv, char** envp);
 
-void _PushMetatables(lua_State* L);
-
 void _HandleQuit();
 
 ETHER_API usingModule(lua_State* L);

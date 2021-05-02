@@ -9,14 +9,6 @@ SDL_Renderer* renderer = nullptr;
 
 lua_State* pL = luaL_newstate();
 
-vector<string> _metatables = {
-	METANAME_IMAGE,
-	METANAME_TEXTURE,
-	METANAME_FONT,
-	METANAME_MUSIC,
-	METANAME_SOUND,
-};
-
 map<string, Module*> _mapMoudles = {
 	{MODULENAME_ALGORITHM, &ModuleAlgorithm::Instance()},
 	{MODULENAME_GRAPHIC, &ModuleGraphic::Instance()},
@@ -36,30 +28,15 @@ ETHER_API usingModule(lua_State* L)
 	auto iter = _mapMoudles.find(luaL_checkstring(L, 1));
 	if (iter != _mapMoudles.end())
 	{
-		pModule = iter->second;
-
-		lua_newtable(pL);
-
-		for (luaL_Reg method : pModule->_vCMethods)
-		{
-			lua_pushstring(pL, method.name);
-			lua_pushcfunction(pL, method.func);
-			lua_settable(pL, -3);
-		}
-
-		for (Macro macro : pModule->_vMacros)
-		{
-			lua_pushstring(pL, macro.name);
-			lua_pushinteger(pL, macro.value);
-			lua_settable(pL, -3);
-		}
+		iter->second->PushMetaDataToGlobal(L);
+		iter->second->PushMoudleDataToStack(L);
 	}	
 	else
 	{
 		lua_getglobal(pL, "require");
 		lua_pushstring(pL, lua_tostring(L, 1));
 		lua_call(pL, 1, 1);
-	}	
+	}
 
 	return 1;
 }
@@ -95,15 +72,28 @@ int main(int argc, char** argv)
 
 	_PushArgs(pL, argc, argv, environ);
 
-	_PushMetatables(pL);
-
 	lua_pushcfunction(pL, usingModule);
 	lua_setglobal(pL, "UsingModule");
 	lua_pushcfunction(pL, getVersion);
 	lua_setglobal(pL, "GetVersion");
 
-	if (luaL_dofile(pL, strNameEntry.c_str()))
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(pL, -1), nullptr);
+	try
+	{
+		if (luaL_dofile(pL, strNameEntry.c_str()))
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(pL, -1), nullptr);
+	}
+	catch (const std::exception& err)
+	{
+		SDL_SetClipboardText(err.what());
+		SDL_ShowSimpleMessageBox(
+			SDL_MESSAGEBOX_ERROR, 
+			"Engine Crashed", 
+			(string("A fatal error occurred, causing the engine to crash.\nThe error message has been copied to the clipboard.\nPlease contact the developer or submit an issue on GitHub.\n\nEmail:Voidmatrix@qq.com\nGitHub: https://github.com/VoidmatrixHeathcliff/EtherEngine\n\n[Error Message]\n") + err.what()).c_str(), 
+			nullptr
+		);
+	}
+	
+	
 
 	_HandleQuit();
 
@@ -244,13 +234,6 @@ void _PushArgs(lua_State* L, int argc, char** argv, char** envp)
 		lua_settable(L, -3);
 	}
 	lua_setglobal(L, "_envp");
-}
-
-
-void _PushMetatables(lua_State* L)
-{
-	for (string metatable : _metatables)
-		luaL_newmetatable(L, metatable.c_str());
 }
 
 
