@@ -6,7 +6,7 @@
 
 ```lua
 
-UnloadFont(font)
+font = UnloadFont(font)
 
 ```
 
@@ -16,7 +16,7 @@ UnloadFont(font)
 
 ## 返回值：
 
-无
++ font [nil]：被释放后的字体数据
 
 ## 示例
 

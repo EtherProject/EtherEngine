@@ -6,7 +6,7 @@
 
 ```lua
 
-UnloadImage(image)
+image = UnloadImage(image)
 
 ```
 
@@ -16,7 +16,7 @@ UnloadImage(image)
 
 ## 返回值：
 
-无
++ image [nil]：被释放后的图像数据
 
 ## 示例
 

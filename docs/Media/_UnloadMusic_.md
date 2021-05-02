@@ -6,7 +6,7 @@
 
 ```lua
 
-UnloadMusic(music)
+music = UnloadMusic(music)
 
 ```
 
@@ -16,7 +16,7 @@ UnloadMusic(music)
 
 ## 返回值：
 
-无
++ music [nil]：被释放后的音乐数据
 
 ## 示例
 

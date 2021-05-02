@@ -6,7 +6,7 @@
 
 ```lua
 
-DestroyTexture(texture)
+texture = DestroyTexture(texture)
 
 ```
 
@@ -16,7 +16,7 @@ DestroyTexture(texture)
 
 ## 返回值：
 
-无
++ texture [nil]：被销毁后的纹理数据
 
 ## 示例
 

@@ -6,7 +6,7 @@
 
 ```lua
 
-UnloadSound(sound)
+sound = UnloadSound(sound)
 
 ```
 
@@ -16,7 +16,7 @@ UnloadSound(sound)
 
 ## 返回值：
 
-无
++ sound [nil]：被释放后的音效数据
 
 ## 示例
 
