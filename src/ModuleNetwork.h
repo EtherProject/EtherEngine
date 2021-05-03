@@ -11,6 +11,9 @@
 #include <httplib.h>
 using namespace httplib;
 
+#include <iostream>
+using namespace std;
+
 #define ERRCODE_SUCCESS				1354
 #define ERRCODE_UNKNOWN				1355
 #define ERRCODE_CONNECTION			1356
@@ -31,6 +34,15 @@ using namespace httplib;
 
 #define CheckClientDataAtFirstPos(client) luaL_argcheck(L, client, 1, "get client data failed")
 
+struct RequestParam
+{
+	string route;
+	Headers headers;
+	string str_params;
+	Params tab_params;
+	string content_type;
+};
+
 class ModuleNetwork : public Module
 {
 public:
@@ -41,6 +53,8 @@ private:
 	ModuleNetwork();
 
 };
+
+const char* GetRequestParamAtSecondPos(lua_State* L, RequestParam& reqParam);
 
 /// <summary>
 /// ½« Error ×ª»»Îªºê
@@ -55,7 +69,21 @@ ETHER_API client_Get(lua_State* L);
 
 ETHER_API client_Post(lua_State* L);
 
+ETHER_API client_Put(lua_State* L);
+
+ETHER_API client_Patch(lua_State* L);
+
+ETHER_API client_Delete(lua_State* L);
+
+ETHER_API client_Options(lua_State* L);
+
 ETHER_API client_SetDefaultHeaders(lua_State* L);
+
+ETHER_API client_SetConnectTimeout(lua_State* L);
+
+ETHER_API client_SetReadTimeout(lua_State* L);
+
+ETHER_API client_SetWriteTimeout(lua_State* L);
 
 ETHER_API createClient(lua_State* L);
 

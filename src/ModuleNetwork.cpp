@@ -38,10 +38,79 @@ ModuleNetwork::ModuleNetwork()
 			{
 				{"Get", client_Get},
 				{"Post", client_Post},
+				{"Put", client_Put},
+				{"Patch", client_Patch},
+				{"Delete", client_Delete},
+				{"Options", client_Options},
 				{"SetDefaultHeaders", client_SetDefaultHeaders},
+				{"SetConnectTimeout", client_SetConnectTimeout},
+				{"SetReadTimeout", client_SetReadTimeout},
+				{"client_SetWriteTimeout", client_SetWriteTimeout},
 			}
 		},
 	};
+}
+
+
+const char* GetRequestParamAtSecondPos(lua_State* L, RequestParam& reqParam)
+{
+	if (!lua_istable(L, 2)) return "request parameter must be table";
+	else
+	{
+		lua_getfield(L, 2, "route");
+		if (!lua_isstring(L, -1)) return "string field 'route' expected";
+		reqParam.route = lua_tostring(L, -1);
+		if (reqParam.route.empty() || (reqParam.route[0] != '/' && reqParam.route[0] != '\\'))
+			reqParam.route = "/" + reqParam.route;
+		lua_getfield(L, 2, "headers");
+		if (!lua_isnil(L, -1))
+		{
+			if (!lua_istable(L, 2)) return "'headers' field must be table";
+			int index_header = lua_gettop(L);
+			lua_pushnil(L);
+			while (lua_next(L, index_header))
+			{
+#ifdef _ETHER_DEBUG_
+				luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 2,
+					"key and value of 'headers' table must be string");
+#endif
+				reqParam.headers.insert(make_pair(lua_tostring(L, -2), lua_tostring(L, -1)));
+				lua_pop(L, 1);
+			}
+		}
+		lua_getfield(L, 2, "params");
+		if (lua_isstring(L, -1))
+			reqParam.str_params = lua_tostring(L, -1);
+		else if (lua_istable(L, -1))
+		{
+			int index_param = lua_gettop(L);
+			lua_pushnil(L);
+			while (lua_next(L, index_param))
+			{
+#ifdef _ETHER_DEBUG_
+				luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 2,
+					"key and value of 'params' table must be string");
+#endif
+				reqParam.tab_params.emplace(lua_tostring(L, -2), lua_tostring(L, -1));
+				lua_pop(L, 1);
+			}
+		}
+		else
+			return "'params' field must be string or table";
+		lua_getfield(L, 2, "type");
+#ifdef _ETHER_DEBUG_
+		if (!lua_isnil(L, -1))
+			if (lua_isstring(L, -1))
+				reqParam.content_type = lua_tostring(L, -1);
+			else
+				return "'type' field must be string";
+#else
+		reqParam.content_type = lua_tostring(L, -1);
+#endif
+
+	}
+
+	return nullptr;
 }
 
 
@@ -139,23 +208,15 @@ ETHER_API client_Get(lua_State* L)
 #ifdef _ETHER_DEBUG_
 	CheckClientDataAtFirstPos(client);
 #endif
-	Headers headers;
-	if (lua_istable(L, 3))
-	{
-		int index_header = lua_gettop(L);
-		lua_pushnil(L);
-		while (lua_next(L, index_header))
-		{
-#ifdef _ETHER_DEBUG_
-			luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 3, 
-				"the key and value of the headers table must be string");
-#endif
-			headers.insert(make_pair(lua_tostring(L, -2), lua_tostring(L, -1)));
-			lua_pop(L, 1);
-		}
-	}
 
-	PushResponseToStack(L, client->Get(luaL_checkstring(L, 2), headers));
+	RequestParam reqParam;
+	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	luaL_argcheck(L, !err, 2, err);
+
+	PushResponseToStack(L, reqParam.headers.empty() 
+		? client->Get(reqParam.route.c_str()) 
+		: client->Get(reqParam.route.c_str(), reqParam.headers)
+	);
 
 	return 1;
 }
@@ -167,30 +228,111 @@ ETHER_API client_Post(lua_State* L)
 #ifdef _ETHER_DEBUG_
 	CheckClientDataAtFirstPos(client);
 #endif
-	if (lua_istable(L, 3))
-	{
-		Params params;
-		int index_param = lua_gettop(L);
-		lua_pushnil(L);
-		while (lua_next(L, index_param))
-		{
+
+	RequestParam reqParam;
+	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	luaL_argcheck(L, !err, 2, err);
+
+	PushResponseToStack(L, reqParam.str_params.empty() 
+		? (reqParam.headers.empty()
+			? client->Post(reqParam.route.c_str(), reqParam.tab_params)
+			: client->Post(reqParam.route.c_str(), reqParam.headers, reqParam.tab_params)
+			)
+		: (reqParam.headers.empty()
+			? client->Post(reqParam.route.c_str(), reqParam.str_params.c_str(), reqParam.content_type.c_str())
+			: client->Post(reqParam.route.c_str(), reqParam.headers, reqParam.str_params.c_str(), reqParam.content_type.empty() ? "application/x-www-form-urlencoded" : reqParam.content_type.c_str())
+			)
+	);
+
+	return 1;
+}
+
+
+ETHER_API client_Put(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
-			luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 3, 
-				"the key and value of the params table must be string");
+	CheckClientDataAtFirstPos(client);
 #endif
-			params.emplace(lua_tostring(L, -2), lua_tostring(L, -1));
-			lua_pop(L, 1);
-		}
-		PushResponseToStack(L, client->Post(luaL_checkstring(L, 2), params));
-	}
-	else if (lua_isstring(L, 3))
-		PushResponseToStack(L, client->Post(
-			luaL_checkstring(L, 2),
-			lua_tostring(L, 3),
-			lua_isstring(L, 4) ? lua_tostring(L, 4) : "application/x-www-form-urlencoded")
-		);
-	else
-		luaL_argcheck(L, false, 4, "the argument to post must be string or table");
+
+	RequestParam reqParam;
+	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	luaL_argcheck(L, !err, 2, err);
+
+	PushResponseToStack(L, reqParam.str_params.empty()
+		? (reqParam.headers.empty()
+			? client->Put(reqParam.route.c_str(), reqParam.tab_params)
+			: client->Put(reqParam.route.c_str(), reqParam.headers, reqParam.tab_params)
+			)
+		: (reqParam.headers.empty()
+			? client->Put(reqParam.route.c_str(), reqParam.str_params.c_str(), reqParam.content_type.c_str())
+			: client->Put(reqParam.route.c_str(), reqParam.headers, reqParam.str_params.c_str(), reqParam.content_type.empty() ? "application/x-www-form-urlencoded" : reqParam.content_type.c_str())
+			)
+	);
+
+	return 1;
+}
+
+
+ETHER_API client_Patch(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	RequestParam reqParam;
+	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	luaL_argcheck(L, !err, 2, err);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, !reqParam.str_params.empty(), 2, "'params' field must be string");
+#endif
+	PushResponseToStack(L, reqParam.headers.empty()
+		? client->Patch(reqParam.route.c_str(), reqParam.str_params.c_str(), reqParam.content_type.c_str())
+		: client->Patch(reqParam.route.c_str(), reqParam.headers, reqParam.str_params.c_str(), reqParam.content_type.empty() ? "application/x-www-form-urlencoded" : reqParam.content_type.c_str())
+	);
+
+	return 1;
+}
+
+
+ETHER_API client_Delete(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	RequestParam reqParam;
+	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	luaL_argcheck(L, !err, 2, err);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, !reqParam.str_params.empty(), 2, "'params' field must be string");
+#endif
+	PushResponseToStack(L, reqParam.headers.empty()
+		? client->Delete(reqParam.route.c_str(), reqParam.str_params.c_str(), reqParam.content_type.c_str())
+		: client->Delete(reqParam.route.c_str(), reqParam.headers, reqParam.str_params.c_str(), reqParam.content_type.empty() ? "application/x-www-form-urlencoded" : reqParam.content_type.c_str())
+	);
+
+	return 1;
+}
+
+
+ETHER_API client_Options(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	RequestParam reqParam;
+	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	luaL_argcheck(L, !err, 2, err);
+
+	PushResponseToStack(L, reqParam.headers.empty()
+		? client->Options(reqParam.route.c_str())
+		: client->Options(reqParam.route.c_str(), reqParam.headers)
+	);
 
 	return 1;
 }
@@ -211,7 +353,7 @@ ETHER_API client_SetDefaultHeaders(lua_State* L)
 		{
 #ifdef _ETHER_DEBUG_
 			luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 2, 
-				"the key and value of the headers table must be string");
+				"key and value of the headers table must be string");
 #endif
 			headers.insert(make_pair(lua_tostring(L, -2), lua_tostring(L, -1)));
 			lua_pop(L, 1);
@@ -219,6 +361,45 @@ ETHER_API client_SetDefaultHeaders(lua_State* L)
 	}
 
 	client->set_default_headers(headers);
+
+	return 0;
+}
+
+
+ETHER_API client_SetConnectTimeout(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	client->set_connection_timeout(0, luaL_checknumber(L, 1) * 1000);
+
+	return 0;
+}
+
+
+ETHER_API client_SetReadTimeout(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	client->set_read_timeout(luaL_checknumber(L, 1), 0);
+
+	return 0;
+}
+
+
+ETHER_API client_SetWriteTimeout(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	client->set_read_timeout(luaL_checknumber(L, 1), 0);
 
 	return 0;
 }
