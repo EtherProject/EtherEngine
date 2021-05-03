@@ -85,6 +85,16 @@ ETHER_API client_SetReadTimeout(lua_State* L);
 
 ETHER_API client_SetWriteTimeout(lua_State* L);
 
+ETHER_API client_SetKeepAlive(lua_State* L);
+
+ETHER_API client_SetFollowRedirect(lua_State* L);
+
+ETHER_API client_SetCompressRequest(lua_State* L);
+
+ETHER_API client_SetCompressResopnse(lua_State* L);
+
+ETHER_API client_SetCACertPath(lua_State* L);
+
 ETHER_API createClient(lua_State* L);
 
 ETHER_API closeClient(lua_State* L);

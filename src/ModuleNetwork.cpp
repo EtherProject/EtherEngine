@@ -45,7 +45,12 @@ ModuleNetwork::ModuleNetwork()
 				{"SetDefaultHeaders", client_SetDefaultHeaders},
 				{"SetConnectTimeout", client_SetConnectTimeout},
 				{"SetReadTimeout", client_SetReadTimeout},
-				{"client_SetWriteTimeout", client_SetWriteTimeout},
+				{"SetWriteTimeout", client_SetWriteTimeout},
+				{"SetKeepAlive", client_SetKeepAlive},
+				{"SetFollowRedirect", client_SetFollowRedirect},
+				{"SetCompressRequest", client_SetCompressRequest},
+				{"SetCompressResopnse", client_SetCompressResopnse},
+				{"SetCACertPath", client_SetCACertPath},
 			}
 		},
 	};
@@ -400,6 +405,71 @@ ETHER_API client_SetWriteTimeout(lua_State* L)
 #endif
 
 	client->set_read_timeout(luaL_checknumber(L, 1), 0);
+
+	return 0;
+}
+
+
+ETHER_API client_SetKeepAlive(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	client->set_keep_alive(lua_toboolean(L, 1));
+
+	return 0;
+}
+
+
+ETHER_API client_SetFollowRedirect(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	client->set_follow_location(lua_toboolean(L, 1));
+
+	return 0;
+}
+
+
+ETHER_API client_SetCompressRequest(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	client->set_compress(lua_toboolean(L, 1));
+
+	return 0;
+}
+
+
+ETHER_API client_SetCompressResopnse(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	client->set_decompress(lua_toboolean(L, 1));
+
+	return 0;
+}
+
+
+ETHER_API client_SetCACertPath(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	client->set_ca_cert_path(luaL_checkstring(L, 1));
 
 	return 0;
 }
