@@ -49,7 +49,7 @@ ModuleNetwork::ModuleNetwork()
 				{"SetKeepAlive", client_SetKeepAlive},
 				{"SetFollowRedirect", client_SetFollowRedirect},
 				{"SetCompressRequest", client_SetCompressRequest},
-				{"SetCompressResopnse", client_SetCompressResopnse},
+				{"SetCompressResponse", client_SetCompressResponse},
 				{"SetCACertPath", client_SetCACertPath},
 			}
 		},
@@ -100,8 +100,6 @@ const char* GetRequestParamAtSecondPos(lua_State* L, RequestParam& reqParam)
 				lua_pop(L, 1);
 			}
 		}
-		else
-			return "'params' field must be string or table";
 		lua_getfield(L, 2, "type");
 #ifdef _ETHER_DEBUG_
 		if (!lua_isnil(L, -1))
@@ -176,23 +174,17 @@ void PushResponseToStack(lua_State* L, const Result& res)
 	lua_pushinteger(L, ConvertErrorCodeToMacro(res.error()));
 	lua_settable(L, -3);
 
-	lua_pushstring(L, "status");
-	if (res)
-		lua_pushinteger(L, res->status);
-	else
-		lua_pushnil(L);
-	lua_settable(L, -3);
-
-	lua_pushstring(L, "body");
-	if (res)
-		lua_pushlstring(L, res->body.c_str(), res->body.size());
-	else
-		lua_pushnil(L);
-	lua_settable(L, -3);
-
-	lua_pushstring(L, "headers");
 	if (res)
 	{
+		lua_pushstring(L, "status");
+		lua_pushinteger(L, res->status);
+		lua_settable(L, -3);
+		
+		lua_pushstring(L, "body");
+		lua_pushlstring(L, res->body.c_str(), res->body.size());
+		lua_settable(L, -3);
+
+		lua_pushstring(L, "headers");
 		lua_newtable(L);
 		for (auto kv : res->headers)
 		{
@@ -200,10 +192,8 @@ void PushResponseToStack(lua_State* L, const Result& res)
 			lua_pushstring(L, kv.second.c_str());
 			lua_settable(L, -3);
 		}
-	}
-	else
-		lua_pushnil(L);
-	lua_settable(L, -3);
+		lua_settable(L, -3);
+	}	
 }
 
 
@@ -357,14 +347,14 @@ ETHER_API client_SetDefaultHeaders(lua_State* L)
 		while (lua_next(L, index_header))
 		{
 #ifdef _ETHER_DEBUG_
-			luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 2, 
+			luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 2,
 				"key and value of the headers table must be string");
 #endif
 			headers.insert(make_pair(lua_tostring(L, -2), lua_tostring(L, -1)));
 			lua_pop(L, 1);
 		}
 	}
-
+	
 	client->set_default_headers(headers);
 
 	return 0;
@@ -449,7 +439,7 @@ ETHER_API client_SetCompressRequest(lua_State* L)
 }
 
 
-ETHER_API client_SetCompressResopnse(lua_State* L)
+ETHER_API client_SetCompressResponse(lua_State* L)
 {
 	Client* client = GetClientDataAtFirstPos();
 #ifdef _ETHER_DEBUG_

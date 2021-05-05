@@ -12,6 +12,7 @@
 #include "ModuleNetwork.h"
 #include "ModuleString.h"
 #include "ModuleJSON.h"
+#include "ModuleCompress.h"
 
 #include <lua.hpp>
 #include <cJSON.h>
@@ -41,6 +42,7 @@ using namespace std;
 #define MODULENAME_WINDOW			"Window"
 #define MODULENAME_STRING			"String"
 #define MODULENAME_JSON				"JSON"
+#define MODULENAME_COMPRESS			"Compress"
 
 #define DEFAULTNAME_ENTRY			"Main.lua"
 

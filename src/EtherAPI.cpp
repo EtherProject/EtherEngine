@@ -20,6 +20,7 @@ map<string, Module*> _mapMoudles = {
 	{MODULENAME_STRING, &ModuleString::Instance()},
 	{MODULENAME_TIME, &ModuleTime::Instance()},
 	{MODULENAME_WINDOW, &ModuleWindow::Instance()},
+	{MODULENAME_COMPRESS, &ModuleCompress::Instance()},
 };
 
 ETHER_API usingModule(lua_State* L)
