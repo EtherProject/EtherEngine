@@ -73,10 +73,8 @@ int main(int argc, char** argv)
 
 	_PushArgs(pL, argc, argv, environ);
 
-	lua_pushcfunction(pL, usingModule);
-	lua_setglobal(pL, "UsingModule");
-	lua_pushcfunction(pL, getVersion);
-	lua_setglobal(pL, "GetVersion");
+	lua_register(pL, "UsingModule", usingModule);
+	lua_register(pL, "GetVersion", getVersion);
 
 	try
 	{
