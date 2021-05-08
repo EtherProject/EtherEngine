@@ -1,10 +1,21 @@
 #include "ModuleNetwork.h"
 
 
+size_t ModuleNetwork::_stServerIndex = 0;
+
+mutex mtxServer;
+
+
 ModuleNetwork& ModuleNetwork::Instance()
 {
 	static ModuleNetwork* _instance = new ModuleNetwork();
 	return *_instance;
+}
+
+
+string ModuleNetwork::GetServerID()
+{
+	return to_string(_stServerIndex++) + "_" + to_string(SDL_GetTicks());
 }
 
 
@@ -13,6 +24,7 @@ ModuleNetwork::ModuleNetwork()
 	_vCMethods = {
 		{ "CreateClient", createClient },
 		{ "CloseClient", closeClient },
+		{ "CreateServer", createServer },
 		{ "SplitLink", splitLink },
 	};
 
@@ -53,6 +65,51 @@ ModuleNetwork::ModuleNetwork()
 				{"SetCACertPath", client_SetCACertPath},
 			}
 		},
+		{
+			METANAME_SERVER,
+			{
+				{"Get", server_Get},
+				{"BindToAnyPort", server_BindToAnyPort},
+				{"ListenAfterBind", server_ListenAfterBind},
+				{"Listen", server_Listen},
+				{"Stop", server_Stop},
+			}
+		},
+		{
+			METANAME_SERVER_REQ,
+			{
+				{"GetMethod", request_GetMethod},
+				{"GetRoute", request_GetRoute},
+				{"GetHeaders", request_GetHeaders},
+				{"GetBody", request_GetBody},
+				{"GetRemoteAddress", request_GetRemoteAddress},
+				{"GetRemotePort", request_GetRemotePort},
+				{"GetVersion", request_GetVersion},
+				{"GetParams", request_GetParams},
+				{"HasHeader", request_CheckHeaderExist},
+				{"GetHeaderValue", request_GetHeaderValue},
+				{"GetHeaderValueCount", request_GetHeaderValueCount},
+				{"HasParam", request_CheckParamExist},
+				{"GetParamValue", request_GetParamValue},
+				{"GetParamValueCount", request_GetParamValueCount},
+			}
+		},
+		{
+			METANAME_SERVER_RES,
+			{
+				{"SetVersion", response_SetVersion},
+				{"SetStatus", response_SetStatus},
+				{"GetHeaders", response_GetHeaders},
+				{"SetBody", response_SetBody},
+				{"CheckHeaderExist", response_CheckHeaderExist},
+				{"GetHeaderValue", response_GetHeaderValue},
+				{"GetHeaderValueCount", response_GetHeaderValueCount},
+				{"SetHeaderValue", response_SetHeaderValue},
+				{"SetHeaders", response_SetHeaders},
+				{"SetRedirect", response_SetRedirect},
+				{"SetContent", response_SetContent},
+			}
+		}
 	};
 }
 
@@ -161,6 +218,7 @@ int ConvertErrorCodeToMacro(const Error& error)
 		return ERRCODE_COMPRESSION;
 		break;
 	default:
+		return httplib::Success;
 		break;
 	}
 }
@@ -490,6 +548,449 @@ ETHER_API closeClient(lua_State* L)
 	client = nullptr;
 
 	lua_pushnil(L);
+
+	return 1;
+}
+
+
+void CallHandler(const Request& req, Response& res, lua_State* L, const string& refKey)
+{
+	mtxServer.lock();
+
+	lua_getfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+
+	Request request = req;
+	Request** uppRequest = (Request**)lua_newuserdata(L, sizeof(Request*));
+	*uppRequest = &request;
+	luaL_getmetatable(L, METANAME_SERVER_REQ);
+	lua_setmetatable(L, -2);
+	Response** uppResponse = (Response**)lua_newuserdata(L, sizeof(Response*));
+	*uppResponse = &res;
+	luaL_getmetatable(L, METANAME_SERVER_RES);
+	lua_setmetatable(L, -2);
+
+	lua_call(L, 2, 0);
+
+	mtxServer.unlock();
+}
+
+
+ETHER_API request_GetMethod(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushstring(L, req->method.c_str());
+
+	return 1;
+}
+
+
+ETHER_API request_GetRoute(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushstring(L, req->path.c_str());
+
+	return 1;
+}
+
+
+ETHER_API request_GetHeaders(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_newtable(L);
+	for (auto kv : req->headers)
+	{
+		lua_pushstring(L, kv.first.c_str());
+		lua_pushstring(L, kv.second.c_str());
+		lua_settable(L, -3);
+	}
+
+	return 1;
+}
+
+
+ETHER_API request_GetBody(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushlstring(L, req->body.c_str(), req->body.size());
+
+	return 1;
+}
+
+
+ETHER_API request_GetRemoteAddress(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushstring(L, req->remote_addr.c_str());
+
+	return 1;
+}
+
+
+ETHER_API request_GetRemotePort(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushinteger(L, req->remote_port);
+
+	return 1;
+}
+
+
+ETHER_API request_GetVersion(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushstring(L, req->version.c_str());
+
+	return 1;
+}
+
+
+ETHER_API request_GetParams(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_newtable(L);
+	for (auto kv : req->params)
+	{
+		lua_pushstring(L, kv.first.c_str());
+		lua_pushstring(L, kv.second.c_str());
+		lua_settable(L, -3);
+	}
+
+	return 1;
+}
+
+
+ETHER_API request_CheckHeaderExist(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushboolean(L, req->has_header(luaL_checkstring(L, 2)));
+
+	return 1;
+}
+
+
+ETHER_API request_GetHeaderValue(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushstring(L, req->get_header_value(luaL_checkstring(L, 2)).c_str());
+
+	return 1;
+}
+
+
+ETHER_API request_GetHeaderValueCount(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushnumber(L, req->get_header_value_count(luaL_checkstring(L, 2)));
+
+	return 1;
+}
+
+
+ETHER_API request_CheckParamExist(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushboolean(L, req->has_param(luaL_checkstring(L, 2)));
+
+	return 1;
+}
+
+
+ETHER_API request_GetParamValue(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushstring(L, req->get_param_value(luaL_checkstring(L, 2)).c_str());
+
+	return 1;
+}
+
+
+ETHER_API request_GetParamValueCount(lua_State* L)
+{
+	Request* req = GetServerReqDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerReqDataAtFirstPos(req);
+#endif
+	lua_pushnumber(L, req->get_param_value_count(luaL_checkstring(L, 2)));
+
+	return 1;
+}
+
+
+ETHER_API response_SetVersion(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	res->version = luaL_checkstring(L, 2);
+
+	return 0;
+}
+
+
+ETHER_API response_SetStatus(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	res->status = luaL_checkinteger(L, 2);
+
+	return 0;
+}
+
+
+ETHER_API response_GetHeaders(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	lua_newtable(L);
+	for (auto kv : res->headers)
+	{
+		lua_pushstring(L, kv.first.c_str());
+		lua_pushstring(L, kv.second.c_str());
+		lua_settable(L, -3);
+	}
+
+	return 1;
+}
+
+
+ETHER_API response_SetBody(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	size_t len;
+	const char* body = luaL_checklstring(L, 2, &len);
+	res->body = string(body, len);
+
+	return 0;
+}
+
+
+ETHER_API response_CheckHeaderExist(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	lua_pushboolean(L, res->has_header(luaL_checkstring(L, 2)));
+
+	return 1;
+}
+
+
+ETHER_API response_GetHeaderValue(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	lua_pushstring(L, res->get_header_value(luaL_checkstring(L, 2)).c_str());
+
+	return 1;
+}
+
+
+ETHER_API response_GetHeaderValueCount(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	lua_pushnumber(L, res->get_header_value_count(luaL_checkstring(L, 2)));
+
+	return 1;
+}
+
+
+ETHER_API response_SetHeaderValue(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	res->set_header(luaL_checkstring(L, 2), luaL_checkstring(L, 3));
+
+	return 0;
+}
+
+
+ETHER_API response_SetHeaders(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	luaL_argcheck(L, lua_istable(L, 2), 2, "headers must be table");
+	Headers headers;
+	int index_header = lua_gettop(L);
+	lua_pushnil(L);
+	while (lua_next(L, index_header))
+	{
+#ifdef _ETHER_DEBUG_
+		luaL_argcheck(L, lua_isstring(L, -1) && luaL_checkstring(L, -2), 2,
+			"key and value of 'headers' table must be string");
+#endif
+		headers.insert(make_pair(lua_tostring(L, -2), lua_tostring(L, -1)));
+		lua_pop(L, 1);
+	}
+	res->headers = headers;
+
+	return 0;
+}
+
+
+ETHER_API response_SetRedirect(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	res->set_redirect(luaL_checkstring(L, 2));
+
+	return 0;
+}
+
+
+ETHER_API response_SetContent(lua_State* L)
+{
+	Response* res = GetServerResDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerResDataAtFirstPos(res);
+#endif
+	size_t len;
+	res->set_content(luaL_checklstring(L, 2, &len), len, lua_isstring(L, 3) ? lua_tostring(L, 3) : "text/plain");
+
+	return 0;
+}
+
+
+ETHER_API server_Get(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	string route = luaL_checkstring(L, 2);
+	if (route.empty() || route[0] != '/') route = "/" + route;
+	string refKey = server->id + "_get_" + route;
+	server->refKeys.push_back(refKey);
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, lua_isfunction(L, 3), 3, "callback handler must be function");
+#endif
+	lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+	server->pServer->Get(
+		route.c_str(),
+		[=](const Request& req, Response& res) {
+			CallHandler(req, res, L, refKey);
+		}
+	);
+
+	return 0;
+}
+
+
+ETHER_API server_BindToAnyPort(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	lua_pushinteger(L, server->pServer->bind_to_any_port(luaL_checkstring(L, 2)));
+
+	return 1;
+}
+
+
+ETHER_API server_ListenAfterBind(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	server->pServer->listen_after_bind();
+
+	return 0;
+}
+
+
+ETHER_API server_Listen(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	const char* host = luaL_checkstring(L, 2);
+	int port = luaL_checkinteger(L, 3);
+	server->pServer->listen(host, port);
+
+	return 0;
+}
+
+
+ETHER_API server_Stop(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	server->pServer->stop();
+
+	return 0;
+}
+
+
+ETHER_API createServer(lua_State* L)
+{
+	E_Server* server = new E_Server(new Server(), ModuleNetwork::GetServerID());
+	E_Server** uppServer = (E_Server**)lua_newuserdata(L, sizeof(E_Server*));
+	*uppServer = server;
+	luaL_getmetatable(L, METANAME_SERVER);
+	lua_setmetatable(L, -2);
 
 	return 1;
 }
