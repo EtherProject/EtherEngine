@@ -473,9 +473,7 @@ ETHER_API setWindowIcon(lua_State* L)
 		luaL_error(L, "icon operation must be done after the window created");
 #endif
 
-	SDL_Surface* surface = GetImageDataAtFirstPos();
-	CheckImageDataAtFirstPos(surface);
-
+	SDL_Surface* surface = (SDL_Surface*)(*(void**)luaL_checkudata(L, 1, METANAME_IMAGE));
 	SDL_SetWindowIcon(window, surface);
 
 	return 0;

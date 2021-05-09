@@ -16,12 +16,7 @@ ModuleGraphic::ModuleGraphic()
 	_vCMethods = {
 		{ "SetCursorShow", setCursorShow },
 		{ "LoadImage", loadImage },
-		{ "SetImageColorKey", setImageColorKey },
-		{ "UnloadImage", unloadImage },
 		{ "CreateTexture", createTexture },
-		{ "DestroyTexture", destroyTexture },
-		{ "SetTextureAlpha", setTextureAlpha },
-		{ "GetImageSize", getImageSize },
 		{ "CopyTexture", copyTexture },
 		{ "CopyRotateTexture", copyRotateTexture },
 		{ "CopyReshapeTexture", copyReshapeTexture },
@@ -44,14 +39,6 @@ ModuleGraphic::ModuleGraphic()
 		{ "Triangle", triangle },
 		{ "FillTriangle", fillTriangle },
 		{ "LoadFont", loadFont },
-		{ "UnloadFont", unloadFont },
-		{ "GetFontStyle", getFontStyle },
-		{ "SetFontStyle", setFontStyle },
-		{ "GetFontOutlineWidth", getFontOutlineWidth },
-		{ "SetFontOutlineWidth", setFontOutlineWidth },
-		{ "GetFontKerning", getFontKerning },
-		{ "SetFontKerning", setFontKerning },
-		{ "GetFontHeight", getFontHeight },
 		{ "GetTextSize", getTextSize },
 		{ "GetUTF8TextSize", getUTF8TextSize },
 		{ "CreateTextImageSolid", createTextImageSolid },
@@ -75,9 +62,34 @@ ModuleGraphic::ModuleGraphic()
 	};
 
 	_vMetaData = {
-		{ METANAME_IMAGE },
-		{ METANAME_TEXTURE },
-		{ METANAME_FONT },
+		{ 
+			METANAME_IMAGE,
+			{
+				{ "SetColorKey", image_SetColorKey },
+				{ "GetSize", image_GetSize },
+			},
+			__gc_Image
+		},
+		{ 
+			METANAME_TEXTURE,
+			{
+				{ "SetAlpha", texture_SetAlpha },
+			},
+			__gc_Texture
+		},
+		{ 
+			METANAME_FONT,
+			{
+				{ "GetStyle", font_GetStyle },
+				{ "SetStyle", font_SetStyle },
+				{ "GetOutlineWidth", font_GetOutlineWidth },
+				{ "SetOutlineWidth", font_SetOutlineWidth },
+				{ "GetKerning", font_GetKerning },
+				{ "SetKerning", font_SetKerning },
+				{ "GetHeight", font_GetHeight },
+			},
+			__gc_Font
+		},
 	};
 }
 
@@ -104,7 +116,7 @@ ETHER_API loadImage(lua_State * L)
 }
 
 
-ETHER_API setImageColorKey(lua_State * L)
+ETHER_API image_SetColorKey(lua_State * L)
 {
 	SDL_Surface* surface = GetImageDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -122,7 +134,7 @@ ETHER_API setImageColorKey(lua_State * L)
 }
 
 
-ETHER_API unloadImage(lua_State * L)
+ETHER_API __gc_Image(lua_State * L)
 {
 	SDL_Surface* surface = GetImageDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -131,9 +143,7 @@ ETHER_API unloadImage(lua_State * L)
 	SDL_FreeSurface(surface);
 	surface = nullptr;
 
-	lua_pushnil(L);
-
-	return 1;
+	return 0;
 }
 
 
@@ -158,7 +168,7 @@ ETHER_API createTexture(lua_State * L)
 }
 
 
-ETHER_API destroyTexture(lua_State * L)
+ETHER_API __gc_Texture(lua_State * L)
 {
 	SDL_Texture* texture = GetTextureDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -167,13 +177,11 @@ ETHER_API destroyTexture(lua_State * L)
 	SDL_DestroyTexture(texture);
 	texture = nullptr;
 
-	lua_pushnil(L);
-
-	return 1;
+	return 0;
 }
 
 
-ETHER_API setTextureAlpha(lua_State * L)
+ETHER_API texture_SetAlpha(lua_State * L)
 {
 	SDL_Texture* texture = GetTextureDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -187,7 +195,7 @@ ETHER_API setTextureAlpha(lua_State * L)
 }
 
 
-ETHER_API getImageSize(lua_State * L)
+ETHER_API image_GetSize(lua_State * L)
 {
 	SDL_Surface* surface = GetImageDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -649,7 +657,7 @@ ETHER_API loadFont(lua_State * L)
 }
 
 
-ETHER_API unloadFont(lua_State * L)
+ETHER_API __gc_Font(lua_State * L)
 {
 	TTF_Font* font = GetFontDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -658,13 +666,11 @@ ETHER_API unloadFont(lua_State * L)
 	TTF_CloseFont(font);
 	font = nullptr;
 
-	lua_pushnil(L);
-
-	return 1;
+	return 0;
 }
 
 
-ETHER_API getFontStyle(lua_State * L)
+ETHER_API font_GetStyle(lua_State * L)
 {
 	TTF_Font* font = GetFontDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -715,7 +721,7 @@ ETHER_API getFontStyle(lua_State * L)
 }
 
 
-ETHER_API setFontStyle(lua_State * L)
+ETHER_API font_SetStyle(lua_State * L)
 {
 	TTF_Font* font = GetFontDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -762,7 +768,7 @@ ETHER_API setFontStyle(lua_State * L)
 }
 
 
-ETHER_API getFontOutlineWidth(lua_State * L)
+ETHER_API font_GetOutlineWidth(lua_State * L)
 {
 	TTF_Font* font = GetFontDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -774,7 +780,7 @@ ETHER_API getFontOutlineWidth(lua_State * L)
 }
 
 
-ETHER_API setFontOutlineWidth(lua_State * L)
+ETHER_API font_SetOutlineWidth(lua_State * L)
 {
 	TTF_Font* font = GetFontDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -786,7 +792,7 @@ ETHER_API setFontOutlineWidth(lua_State * L)
 }
 
 
-ETHER_API getFontKerning(lua_State * L)
+ETHER_API font_GetKerning(lua_State * L)
 {
 	TTF_Font* font = GetFontDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -798,7 +804,7 @@ ETHER_API getFontKerning(lua_State * L)
 }
 
 
-ETHER_API setFontKerning(lua_State * L)
+ETHER_API font_SetKerning(lua_State * L)
 {
 	TTF_Font* font = GetFontDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -810,7 +816,7 @@ ETHER_API setFontKerning(lua_State * L)
 }
 
 
-ETHER_API getFontHeight(lua_State * L)
+ETHER_API font_GetHeight(lua_State * L)
 {
 	TTF_Font* font = GetFontDataAtFirstPos();
 #ifdef _ETHER_DEBUG_

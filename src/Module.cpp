@@ -16,14 +16,16 @@ void Module::PushMetaDataToGlobal(lua_State* L)
 
 		lua_pushstring(L, "__index");
 		lua_newtable(L);
-
 		for (luaL_Reg method : metadata.cFuns)
 		{
 			lua_pushstring(L, method.name);
 			lua_pushcfunction(L, method.func);
 			lua_settable(L, -3);
 		}
+		lua_settable(L, -3);
 
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, metadata.gcFun);
 		lua_settable(L, -3);
 	}
 }

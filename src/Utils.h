@@ -10,18 +10,6 @@
 #include <locale>
 #include <string>
 
-#define METANAME_IMAGE "Graphic.Image"
-#define METANAME_TEXTURE "Graphic.Texture"
-#define METANAME_FONT "Graphic.Font"
-
-#define GetImageDataAtFirstPos()			(SDL_Surface*)(*(void**)luaL_checkudata(L, 1, METANAME_IMAGE))
-#define GetTextureDataAtFirstPos()			(SDL_Texture*)(*(void**)luaL_checkudata(L, 1, METANAME_TEXTURE))
-#define GetFontDataAtFirstPos()				(TTF_Font*)(*(void**)luaL_checkudata(L, 1, METANAME_FONT))
-
-#define CheckImageDataAtFirstPos(surface)	luaL_argcheck(L, surface, 1, "get image data failed")
-#define CheckTextureDataAtFirstPos(texture) luaL_argcheck(L, texture, 1, "get texture data failed")
-#define CheckFontDataAtFirstPos(font)		luaL_argcheck(L, font, 1, "get font data failed")
-
 #define CheckPointParam(L, index, point)	luaL_argcheck(L, !GetPointParam(L, index, point), index, "table point expected") 
 #define CheckRectParam(L, index, rect)		luaL_argcheck(L, !GetRectParam(L, index, rect), index, "table rect expected") 
 #define CheckColorParam(L, index, color)	luaL_argcheck(L, !GetColorParam(L, index, color), index, "table color expected") 

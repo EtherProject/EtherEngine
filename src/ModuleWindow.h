@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Utils.h"
+#include "ModuleGraphic.h"
 
 #include <lua.hpp>
 #include <SDL.h>

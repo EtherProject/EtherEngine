@@ -13,6 +13,7 @@ struct MetaData
 {
 	string name;
 	vector<luaL_Reg> cFuns;
+	lua_CFunction gcFun = [](lua_State* L) -> int { return 0; };
 };
 
 class Module

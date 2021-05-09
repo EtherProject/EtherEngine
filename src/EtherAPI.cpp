@@ -23,6 +23,7 @@ map<string, Module*> _mapMoudles = {
 	{MODULENAME_COMPRESS, &ModuleCompress::Instance()},
 };
 
+
 ETHER_API usingModule(lua_State* L)
 {
 	Module* pModule;
@@ -42,6 +43,7 @@ ETHER_API usingModule(lua_State* L)
 	return 1;
 }
 
+
 ETHER_API getVersion(lua_State* L)
 {
 	lua_pushstring(L, _VERSION_);
@@ -49,63 +51,11 @@ ETHER_API getVersion(lua_State* L)
 	return 1;
 }
 
-int main(int argc, char** argv)
-{
-	luaL_openlibs(pL);
-
-	lua_gc(pL, LUA_GCINC, 100);
-
-#ifdef _ETHER_DEBUG_
-	switch (_LoadConfig())
-	{
-	case CONFIGERROR_LOADING:
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Load Configuration Failed", "Failed to load configuration file.\nProgram will run with the default configuration.\nDisable _ETHER_DEBUG_ to hide this warning.", nullptr);
-		break;
-	case CONFIGERROR_PARSING:
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Parse Configuration Failed", "Failed to parse configuration file.\nProgram will run with the default configuration.\nDisable _ETHER_DEBUG_ to hide this warning.", nullptr);
-		break;
-	default:
-		break;
-	}
-#else
-	_LoadConfig();
-#endif	
-
-	SDL_Init(SDL_INIT_EVERYTHING);
-
-	_PushArgs(pL, argc, argv, environ);
-
-	lua_register(pL, "UsingModule", usingModule);
-	lua_register(pL, "GetVersion", getVersion);
-
-	try
-	{
-		if (luaL_dofile(pL, strNameEntry.c_str()))
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(pL, -1), nullptr);
-	}
-	catch (const std::exception& err)
-	{
-		SDL_SetClipboardText(err.what());
-		SDL_ShowSimpleMessageBox(
-			SDL_MESSAGEBOX_ERROR, 
-			"Engine Crashed", 
-			(string("A fatal error occurred, causing the engine to crash.\nThe error message has been copied to the clipboard.\nPlease contact the developer or submit an issue on GitHub.\n\nEmail:Voidmatrix@qq.com\nGitHub: https://github.com/VoidmatrixHeathcliff/EtherEngine\n\n[Error Message]\n") + err.what()).c_str(), 
-			nullptr
-		);
-	}
-	
-	
-
-	_HandleQuit();
-
-	return 0;
-}
-
 
 int _LoadConfig()
 {
 	ifstream fin("config.json");
-	if (!fin.good()) 
+	if (!fin.good())
 		return CONFIGERROR_LOADING;
 
 	stringstream ssContent;
@@ -253,4 +203,55 @@ void _HandleQuit()
 		SDL_DestroyWindow(window);
 		window = nullptr;
 	}
+}
+
+
+int main(int argc, char** argv)
+{
+	luaL_openlibs(pL);
+
+	lua_gc(pL, LUA_GCINC, 100);
+
+#ifdef _ETHER_DEBUG_
+	switch (_LoadConfig())
+	{
+	case CONFIGERROR_LOADING:
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Load Configuration Failed", "Failed to load configuration file.\nProgram will run with the default configuration.\nDisable _ETHER_DEBUG_ to hide this warning.", nullptr);
+		break;
+	case CONFIGERROR_PARSING:
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Parse Configuration Failed", "Failed to parse configuration file.\nProgram will run with the default configuration.\nDisable _ETHER_DEBUG_ to hide this warning.", nullptr);
+		break;
+	default:
+		break;
+	}
+#else
+	_LoadConfig();
+#endif	
+
+	SDL_Init(SDL_INIT_EVERYTHING);
+
+	_PushArgs(pL, argc, argv, environ);
+
+	lua_register(pL, "UsingModule", usingModule);
+	lua_register(pL, "GetVersion", getVersion);
+
+	try
+	{
+		if (luaL_dofile(pL, strNameEntry.c_str()))
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Scripts Run Failed", lua_tostring(pL, -1), nullptr);
+	}
+	catch (const std::exception& err)
+	{
+		SDL_SetClipboardText(err.what());
+		SDL_ShowSimpleMessageBox(
+			SDL_MESSAGEBOX_ERROR, 
+			"Engine Crashed", 
+			(string("A fatal error occurred, causing the engine to crash.\nThe error message has been copied to the clipboard.\nPlease contact the developer or submit an issue on GitHub.\n\nEmail:Voidmatrix@qq.com\nGitHub: https://github.com/VoidmatrixHeathcliff/EtherEngine\n\n[Error Message]\n") + err.what()).c_str(), 
+			nullptr
+		);
+	}
+
+	_HandleQuit();
+
+	return 0;
 }

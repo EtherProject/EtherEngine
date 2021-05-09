@@ -11,15 +11,27 @@
 #include <SDL_ttf.h>
 #include <SDL2_gfxPrimitives.h>
 
-#define FONT_STYLE_BOLD 1303
-#define FONT_STYLE_ITALIC 1304
-#define FONT_STYLE_UNDERLINE 1305
-#define FONT_STYLE_STRIKETHROUGH 1306
-#define FONT_STYLE_NORMAL 1307
+#define FONT_STYLE_BOLD				1303
+#define FONT_STYLE_ITALIC			1304
+#define FONT_STYLE_UNDERLINE		1305
+#define FONT_STYLE_STRIKETHROUGH	1306
+#define FONT_STYLE_NORMAL			1307
 
-#define FLIP_HORIZONTAL 1010
-#define FLIP_VERTICAL 1011
-#define FLIP_NONE 1012
+#define FLIP_HORIZONTAL				1010
+#define FLIP_VERTICAL				1011
+#define FLIP_NONE					1012
+
+#define METANAME_IMAGE				"Graphic.Image"
+#define METANAME_TEXTURE			"Graphic.Texture"
+#define METANAME_FONT				"Graphic.Font"
+
+#define GetImageDataAtFirstPos()			(SDL_Surface*)(*(void**)luaL_checkudata(L, 1, METANAME_IMAGE))
+#define GetTextureDataAtFirstPos()			(SDL_Texture*)(*(void**)luaL_checkudata(L, 1, METANAME_TEXTURE))
+#define GetFontDataAtFirstPos()				(TTF_Font*)(*(void**)luaL_checkudata(L, 1, METANAME_FONT))
+
+#define CheckImageDataAtFirstPos(surface)	luaL_argcheck(L, surface, 1, "get image data failed")
+#define CheckTextureDataAtFirstPos(texture) luaL_argcheck(L, texture, 1, "get texture data failed")
+#define CheckFontDataAtFirstPos(font)		luaL_argcheck(L, font, 1, "get font data failed")
 
 class ModuleGraphic : public Module
 {
@@ -44,34 +56,34 @@ ETHER_API setCursorShow(lua_State * L);
 ETHER_API loadImage(lua_State * L);
 
 // 设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
-// 2参数：图像数据（userdata-IMAGE），是否启用（boolean），ColorKey（table）
+// 3参数：图像数据（userdata-IMAGE），是否启用（boolean），ColorKey（table）
 // 0返回值
-ETHER_API setImageColorKey(lua_State * L);
+ETHER_API image_SetColorKey(lua_State * L);
 
-// 释放已加载的图像
+// 图像数据GC函数
 // 1参数：图像数据（userdata-IMAGE）
-// 1返回值：nil
-ETHER_API unloadImage(lua_State * L);
+// 0返回值
+ETHER_API __gc_Image(lua_State * L);
 
 // 从图像数据创建属于窗口的可渲染纹理
 // 1参数：图像数据（userdata-IMAGE）
 // 1返回值：纹理数据（userdata-TEXTURE）
 ETHER_API createTexture(lua_State * L);
 
-// 销毁纹理数据
+// 纹理数据GC函数
 // 1参数：纹理数据（userdata-TEXTURE）
-// 1返回值：nil
-ETHER_API destroyTexture(lua_State * L);
+// 0返回值
+ETHER_API __gc_Texture(lua_State * L);
 
 // 设置纹理透明度
 // 2参数：纹理数据（userdata-TEXTURE），透明度数值（number，取值范围0-255）
 // 0返回值
-ETHER_API setTextureAlpha(lua_State * L);
+ETHER_API texture_SetAlpha(lua_State * L);
 
 // 获取已加载图像尺寸
 // 1参数：图像数据（userdata-IMAGE）
 // 2返回值：图像宽度（number），图像高度（number）
-ETHER_API getImageSize(lua_State * L);
+ETHER_API image_GetSize(lua_State * L);
 
 // 将纹理拷贝至渲染缓冲区内
 // 2参数：纹理数据（userdata-TEXTURE），用以描述显示区域的矩形（table）
@@ -183,45 +195,45 @@ ETHER_API fillTriangle(lua_State * L);
 // 1返回值：成功则返回字体数据（userdata-FONT），失败则返回nil
 ETHER_API loadFont(lua_State * L);
 
-// 释放已加载的字体
+// 字体数据GC函数
 // 1参数：字体数据（userdata-FONT）
 // 0返回值
-ETHER_API unloadFont(lua_State * L);
+ETHER_API __gc_Font(lua_State * L);
 
 // 获取已加载字体的样式
 // 1参数：字体数据（userdata-FONT）
 // 1返回值：nil
-ETHER_API getFontStyle(lua_State * L);
+ETHER_API font_GetStyle(lua_State * L);
 
 // 设置已加载字体的样式
 // 2参数：字体数据（userdata-FONT），用以描述字体样式的表（table）
 // 0返回值
-ETHER_API setFontStyle(lua_State * L);
+ETHER_API font_SetStyle(lua_State * L);
 
 // 获取已加载字体的轮廓线宽度
 // 1参数：字体数据（userdata-FONT）
 // 1返回值：轮廓线宽度（number）
-ETHER_API getFontOutlineWidth(lua_State * L);
+ETHER_API font_GetOutlineWidth(lua_State * L);
 
 // 设置已加载字体的轮廓线宽度
 // 2参数：字体数据（userdata-FONT），轮廓线宽度（number）
 // 0返回值
-ETHER_API setFontOutlineWidth(lua_State * L);
+ETHER_API font_SetOutlineWidth(lua_State * L);
 
 // 获取字体间距
 // 1参数：字体数据（userdata-FONT）
 // 1返回值：字体间距（number）
-ETHER_API getFontKerning(lua_State * L);
+ETHER_API font_GetKerning(lua_State * L);
 
 // 设置字体间距
 // 2参数：字体数据（userdata-FONT），字体间距（number）
 // 0返回值
-ETHER_API setFontKerning(lua_State * L);
+ETHER_API font_SetKerning(lua_State * L);
 
 // 获取字体高度
 // 1参数：字体数据（userdata-FONT）
 // 1返回值：字体高度（number）
-ETHER_API getFontHeight(lua_State * L);
+ETHER_API font_GetHeight(lua_State * L);
 
 // 获取文本尺寸
 // 2参数：字体数据（userdata-FONT），文本内容（string）

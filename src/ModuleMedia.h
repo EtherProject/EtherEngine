@@ -44,7 +44,7 @@ ETHER_API loadMusic(lua_State * L);
 // 释放已加载的音乐
 // 1参数：音乐数据（userdata-MUSIC）
 // 1返回值：nil
-ETHER_API unloadMusic(lua_State * L);
+ETHER_API __gc_Music(lua_State * L);
 
 // 播放已加载的音乐
 // 2参数：音乐数据（userdata-MUSIC）、音乐播放的次数（number，-1为循环播放）
@@ -54,12 +54,17 @@ ETHER_API playMusic(lua_State * L);
 // 使用淡入效果播放已加载的音乐
 // 3参数：音乐数据（userdata-MUSIC）、音乐播放的次数（number，-1为循环播放），淡入音效持续时间（number，单位为毫秒）
 // 0返回值
-ETHER_API fadeInMusic(lua_State * L);
+ETHER_API playMusicWithFadeIn(lua_State * L);
+
+// 停止正在播放的音乐
+// 0参数
+// 0返回值
+ETHER_API stopMusic(lua_State* L);
 
 // 使用淡出效果停止正在播放的音乐
 // 1参数：淡出音效持续时间（number，单位为毫秒）
 // 0返回值
-ETHER_API fadeOutMusic(lua_State * L);
+ETHER_API stopMusicWithFadeOut(lua_State * L);
 
 // 设置音乐播放的音量
 // 1参数：音量大小（number，取值范围为0-128）
@@ -89,7 +94,7 @@ ETHER_API rewindMusic(lua_State * L);
 // 获取指定音乐的类型
 // 1参数：音乐数据（userdata-MUSIC，nil表示正在播放的音乐）
 // 1返回值：音乐类型（MACRO number）
-ETHER_API getMusicType(lua_State * L);
+ETHER_API music_GetType(lua_State * L);
 
 // 加载音效文件
 // 1参数：音效文件路径
@@ -99,12 +104,12 @@ ETHER_API loadSound(lua_State * L);
 // 释放已加载的音效
 // 1参数：音效数据（userdata-SOUND）
 // 1返回值：nil
-ETHER_API unloadSound(lua_State * L);
+ETHER_API __gc_Sound(lua_State * L);
 
 // 播放已加载的音效
 // 2参数：音效数据（userdata-SOUND）、音效播放的次数（number，-1为循环播放）
 // 0返回值
-ETHER_API playSound(lua_State * L);
+ETHER_API sound_Play(lua_State * L);
 
 #endif // !_MEDIA_H_
 
