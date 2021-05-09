@@ -53,6 +53,8 @@ int main(int argc, char** argv)
 {
 	luaL_openlibs(pL);
 
+	lua_gc(pL, LUA_GCINC, 100);
+
 #ifdef _ETHER_DEBUG_
 	switch (_LoadConfig())
 	{

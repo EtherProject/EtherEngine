@@ -1,19 +1,20 @@
 ### [[ << 回到上层 ]](index.md)
 
-# Client:SetConnectTimeout
+# Client:SetProxy
 
-> 设置客户端的连接超时时间
+> 设置客户端的代理主机
 
 ```lua
 
-client:SetConnectTimeout(delay)
+client:SetProxy(host, port)
 
 ```
 
 ## 参数：
 
 + client [userdata-Client]：客户端数据
-+ delay [number]：超时时间（单位为毫秒）
++ host [string]：代理主机地址
++ port [number]：代理主机端口
 
 ## 返回值：
 

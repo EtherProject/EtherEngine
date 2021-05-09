@@ -25,6 +25,7 @@ ModuleNetwork::ModuleNetwork()
 		{ "CreateClient", createClient },
 		{ "CloseClient", closeClient },
 		{ "CreateServer", createServer },
+		{ "CloseServer", closeServer },
 		{ "SplitLink", splitLink },
 	};
 
@@ -63,12 +64,20 @@ ModuleNetwork::ModuleNetwork()
 				{"SetCompressRequest", client_SetCompressRequest},
 				{"SetCompressResponse", client_SetCompressResponse},
 				{"SetCACertPath", client_SetCACertPath},
+				{"SetProxy", client_SetProxy},
 			}
 		},
 		{
 			METANAME_SERVER,
 			{
 				{"Get", server_Get},
+				{"SetExceptionHandler", server_SetExceptionHandler},
+				{"SetMaxKeepAliveCount", server_SetMaxKeepAliveCount},
+				{"SetKeepAliveTimeout", server_SetKeepAliveTimeout},
+				{"SetReadTimeout", server_SetReadTimeout},
+				{"SetWriteTimeout", server_SetWriteTimeout},
+				{"SetIdleInterval", server_SetIdleInterval},
+				{"SetMaxRequestLength", server_SetMaxRequestLength},
 				{"BindToAnyPort", server_BindToAnyPort},
 				{"ListenAfterBind", server_ListenAfterBind},
 				{"Listen", server_Listen},
@@ -426,7 +435,7 @@ ETHER_API client_SetConnectTimeout(lua_State* L)
 	CheckClientDataAtFirstPos(client);
 #endif
 
-	client->set_connection_timeout(0, luaL_checknumber(L, 1) * 1000);
+	client->set_connection_timeout(0, luaL_checknumber(L, 2) * 1000);
 
 	return 0;
 }
@@ -439,7 +448,7 @@ ETHER_API client_SetReadTimeout(lua_State* L)
 	CheckClientDataAtFirstPos(client);
 #endif
 
-	client->set_read_timeout(luaL_checknumber(L, 1), 0);
+	client->set_read_timeout(luaL_checknumber(L, 2), 0);
 
 	return 0;
 }
@@ -452,7 +461,7 @@ ETHER_API client_SetWriteTimeout(lua_State* L)
 	CheckClientDataAtFirstPos(client);
 #endif
 
-	client->set_read_timeout(luaL_checknumber(L, 1), 0);
+	client->set_read_timeout(luaL_checknumber(L, 2), 0);
 
 	return 0;
 }
@@ -465,7 +474,7 @@ ETHER_API client_SetKeepAlive(lua_State* L)
 	CheckClientDataAtFirstPos(client);
 #endif
 
-	client->set_keep_alive(lua_toboolean(L, 1));
+	client->set_keep_alive(lua_toboolean(L, 2));
 
 	return 0;
 }
@@ -478,7 +487,7 @@ ETHER_API client_SetFollowRedirect(lua_State* L)
 	CheckClientDataAtFirstPos(client);
 #endif
 
-	client->set_follow_location(lua_toboolean(L, 1));
+	client->set_follow_location(lua_toboolean(L, 2));
 
 	return 0;
 }
@@ -491,7 +500,7 @@ ETHER_API client_SetCompressRequest(lua_State* L)
 	CheckClientDataAtFirstPos(client);
 #endif
 
-	client->set_compress(lua_toboolean(L, 1));
+	client->set_compress(lua_toboolean(L, 2));
 
 	return 0;
 }
@@ -504,7 +513,7 @@ ETHER_API client_SetCompressResponse(lua_State* L)
 	CheckClientDataAtFirstPos(client);
 #endif
 
-	client->set_decompress(lua_toboolean(L, 1));
+	client->set_decompress(lua_toboolean(L, 2));
 
 	return 0;
 }
@@ -517,7 +526,20 @@ ETHER_API client_SetCACertPath(lua_State* L)
 	CheckClientDataAtFirstPos(client);
 #endif
 
-	client->set_ca_cert_path(luaL_checkstring(L, 1));
+	client->set_ca_cert_path(luaL_checkstring(L, 2));
+
+	return 0;
+}
+
+
+ETHER_API client_SetProxy(lua_State* L)
+{
+	Client* client = GetClientDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAtFirstPos(client);
+#endif
+
+	client->set_proxy(luaL_checkstring(L, 2), lua_tointeger(L, 3));
 
 	return 0;
 }
@@ -553,7 +575,7 @@ ETHER_API closeClient(lua_State* L)
 }
 
 
-void CallHandler(const Request& req, Response& res, lua_State* L, const string& refKey)
+void CallHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const char* err)
 {
 	mtxServer.lock();
 
@@ -568,8 +590,13 @@ void CallHandler(const Request& req, Response& res, lua_State* L, const string& 
 	*uppResponse = &res;
 	luaL_getmetatable(L, METANAME_SERVER_RES);
 	lua_setmetatable(L, -2);
-
-	lua_call(L, 2, 0);
+	if (err)
+	{
+		lua_pushstring(L, err);
+		lua_call(L, 3, 0);
+	}
+	else
+		lua_call(L, 2, 0);
 
 	mtxServer.unlock();
 }
@@ -934,6 +961,97 @@ ETHER_API server_Get(lua_State* L)
 }
 
 
+ETHER_API server_SetExceptionHandler(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+	luaL_argcheck(L, lua_isfunction(L, 2), 2, "callback handler must be function");
+#endif
+	string refKey = server->id + "_error_handler";
+	lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+	server->pServer->set_exception_handler(
+		[=](const Request& req, Response& res, std::exception& e) {
+			CallHandler(req, res, L, refKey, e.what());
+		}
+	);
+
+	return 0;
+}
+
+
+ETHER_API server_SetMaxKeepAliveCount(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	server->pServer->set_keep_alive_max_count(luaL_checknumber(L, 2));
+
+	return 0;
+}
+
+
+ETHER_API server_SetKeepAliveTimeout(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	server->pServer->set_keep_alive_max_count(luaL_checknumber(L, 2));
+
+	return 0;
+}
+
+
+ETHER_API server_SetReadTimeout(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	server->pServer->set_read_timeout(luaL_checknumber(L, 2), 0);
+
+	return 0;
+}
+
+
+ETHER_API server_SetWriteTimeout(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	server->pServer->set_write_timeout(luaL_checknumber(L, 2), 0);
+
+	return 0;
+}
+
+
+ETHER_API server_SetIdleInterval(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	server->pServer->set_idle_interval(0, luaL_checknumber(L, 2) * 1000);
+
+	return 0;
+}
+
+
+ETHER_API server_SetMaxRequestLength(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	server->pServer->set_payload_max_length(luaL_checknumber(L, 2));
+
+	return 0;
+}
+
+
 ETHER_API server_BindToAnyPort(lua_State* L)
 {
 	E_Server* server = GetServerDataAtFirstPos();
@@ -991,6 +1109,27 @@ ETHER_API createServer(lua_State* L)
 	*uppServer = server;
 	luaL_getmetatable(L, METANAME_SERVER);
 	lua_setmetatable(L, -2);
+
+	return 1;
+}
+
+
+ETHER_API closeServer(lua_State* L)
+{
+	E_Server* server = GetServerDataAtFirstPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAtFirstPos(server);
+#endif
+	delete server->pServer;
+	server->pServer = nullptr;
+	for (string refKey : server->refKeys)
+	{
+		lua_pushnil(L);
+		lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+	}
+	delete server;
+	server = nullptr;
+	lua_pushnil(L);
 
 	return 1;
 }

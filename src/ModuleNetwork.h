@@ -41,7 +41,7 @@ using namespace std;
 #define GetServerResDataAtFirstPos()		(Response*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER_RES))
 
 #define CheckClientDataAtFirstPos(client)	luaL_argcheck(L, client, 1, "get client data failed")
-#define CheckServerDataAtFirstPos(server)	luaL_argcheck(L, server, 1, "get server data failed")
+#define CheckServerDataAtFirstPos(server)	luaL_argcheck(L, server && server->pServer, 1, "get server data failed")
 #define CheckServerReqDataAtFirstPos(req)	luaL_argcheck(L, req, 1, "get request data failed")
 #define CheckServerResDataAtFirstPos(res)	luaL_argcheck(L, res, 1, "get response data failed")
 
@@ -211,7 +211,7 @@ ETHER_API client_SetDefaultHeaders(lua_State* L);
 
 /*
 * 设置客户端的连接超时时间
-* 2参数：客户端数据（userdata-Client），超时时间（number，单位为秒）
+* 2参数：客户端数据（userdata-Client），超时时间（number，单位为毫秒）
 * 0返回值
 */
 ETHER_API client_SetConnectTimeout(lua_State* L);
@@ -266,6 +266,13 @@ ETHER_API client_SetCompressResponse(lua_State* L);
 ETHER_API client_SetCACertPath(lua_State* L);
 
 /*
+* 设置客户端的代理主机
+* 3参数：客户端数据（userdata-Client），代理主机地址（string），代理主机端口（number）
+* 0返回值
+*/
+ETHER_API client_SetProxy(lua_State* L);
+
+/*
 * 创建客户端
 * 1参数：主机地址（string）
 * 1返回值：客户端数据（userdata-Client）
@@ -279,10 +286,21 @@ ETHER_API createClient(lua_State* L);
 */
 ETHER_API closeClient(lua_State* L);
 
-void CallHandler(const Request& req, Response& res, lua_State* L, const string& refKey);
+/// <summary>
+/// 回调函数代理
+/// </summary>
+/// <param name="req">请求数据对象</param>
+/// <param name="res">响应数据对象</param>
+/// <param name="L">Lua 虚拟机指针</param>
+/// <param name="refKey">回调函数对象在注册表中的索引键</param>
+/// <param name="err">异常信息</param>
+void CallHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const char* err = nullptr);
 
-
-
+/*
+* 获取请求方法
+* 1参数：请求数据对象数据（userdata-Request）
+* 1返回值：请求方法（string）
+*/
 ETHER_API request_GetMethod(lua_State* L);
 
 ETHER_API request_GetRoute(lua_State* L);
@@ -341,6 +359,20 @@ ETHER_API response_SetContent(lua_State* L);
 
 ETHER_API server_Get(lua_State* L);
 
+ETHER_API server_SetExceptionHandler(lua_State* L);
+
+ETHER_API server_SetMaxKeepAliveCount(lua_State* L);
+
+ETHER_API server_SetKeepAliveTimeout(lua_State* L);
+
+ETHER_API server_SetReadTimeout(lua_State* L);
+
+ETHER_API server_SetWriteTimeout(lua_State* L);
+
+ETHER_API server_SetIdleInterval(lua_State* L);
+
+ETHER_API server_SetMaxRequestLength(lua_State* L);
+
 ETHER_API server_BindToAnyPort(lua_State* L);
 
 ETHER_API server_ListenAfterBind(lua_State* L);
@@ -351,6 +383,8 @@ ETHER_API server_Stop(lua_State* L);
 
 
 ETHER_API createServer(lua_State* L);
+
+ETHER_API closeServer(lua_State* L);
 
 /*
 * 将 HTTP/HTTPS 链接分割为：主机地址、路由和参数
