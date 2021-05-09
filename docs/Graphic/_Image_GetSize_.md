@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# GetImageSize
+# Image:GetSize
 
 > 获取已加载图像尺寸
 
 ```lua
 
-width, height = GetImageSize(image)
+width, height = image:GetSize()
 
 ```
 

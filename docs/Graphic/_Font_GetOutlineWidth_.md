@@ -1,23 +1,22 @@
 ### [[ << 回到上层 ]](index.md)
 
-# SetFontKerning
+# Font:GetOutlineWidth
 
-> 设置字体间距
+> 获取已加载字体的轮廓线宽度
 
 ```lua
 
-SetFontKerning(font, kerning)
+width = font:GetOutlineWidth()
 
 ```
 
 ## 参数：
 
 + font [userdata-FONT]：字体数据
-+ kerning [number]：字体间距
 
 ## 返回值：
 
-无
++ width [number]：轮廓线宽度
 
 ## 示例
 

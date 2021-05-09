@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# SetTextureAlpha
+# Texture:SetAlpha
 
 > 设置纹理透明度
 
 ```lua
 
-SetTextureAlpha(texture, alpha)
+texture:SetAlpha(alpha)
 
 ```
 

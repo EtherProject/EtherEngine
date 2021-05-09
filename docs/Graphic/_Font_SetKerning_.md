@@ -1,19 +1,19 @@
 ### [[ << 回到上层 ]](index.md)
 
-# SetFontOutlineWidth
+# Font:SetKerning
 
-> 设置已加载字体的轮廓线宽度
+> 设置字体间距
 
 ```lua
 
-SetFontOutlineWidth(font, width)
+font:SetKerning(kerning)
 
 ```
 
 ## 参数：
 
 + font [userdata-FONT]：字体数据
-+ width [number]：轮廓线宽度
++ kerning [number]：字体间距
 
 ## 返回值：
 

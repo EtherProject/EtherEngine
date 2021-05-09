@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# UnloadFont
+# Font:GetKerning
 
-> 释放已加载的字体
+> 获取字体间距
 
 ```lua
 
-font = UnloadFont(font)
+kerning = font:GetKerning()
 
 ```
 
@@ -16,7 +16,7 @@ font = UnloadFont(font)
 
 ## 返回值：
 
-+ font [nil]：被释放后的字体数据
++ kerning [number]：字体间距
 
 ## 示例
 

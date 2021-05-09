@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# GetFontKerning
+# Font:GetHeight
 
-> 获取字体间距
+> 获取字体高度
 
 ```lua
 
-kerning = GetFontKerning(font)
+height = font:GetHeight()
 
 ```
 
@@ -16,7 +16,7 @@ kerning = GetFontKerning(font)
 
 ## 返回值：
 
-+ kerning [number]：字体间距
++ height [number]：字体高度
 
 ## 示例
 

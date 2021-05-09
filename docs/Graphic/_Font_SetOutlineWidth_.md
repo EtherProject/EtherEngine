@@ -1,22 +1,23 @@
 ### [[ << 回到上层 ]](index.md)
 
-# GetFontOutlineWidth
+# Font:SetOutlineWidth
 
-> 获取已加载字体的轮廓线宽度
+> 设置已加载字体的轮廓线宽度
 
 ```lua
 
-width = GetFontOutlineWidth(font)
+font:SetOutlineWidth(width)
 
 ```
 
 ## 参数：
 
 + font [userdata-FONT]：字体数据
++ width [number]：轮廓线宽度
 
 ## 返回值：
 
-+ width [number]：轮廓线宽度
+无
 
 ## 示例
 

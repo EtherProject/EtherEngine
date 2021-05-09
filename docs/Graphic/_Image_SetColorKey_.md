@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# SetImageColorKey
+# Image:SetColorKey
 
 > 设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
 
 ```lua
 
-SetImageColorKey(image, flag, color)
+image:SetColorKey(flag, color)
 
 ```
 

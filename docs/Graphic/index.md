@@ -10,17 +10,13 @@
 
 + [LoadImage(path)](_LoadImage_.md)：加载图像文件
 
-+ [SetImageColorKey(image, flag, color)](_SetImageColorKey_.md)：设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
++ [Image:GetSize()](_Image_GetSize_.md)：获取已加载图像尺寸
 
-+ [UnloadImage(image)](_UnloadImage_.md)：释放已加载的图像
++ [Image:SetColorKey(flag, color)](_Image_SetColorKey_.md)：设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
 
 + [CreateTexture(image)](_CreateTexture_.md)：从图像数据创建属于窗口的可渲染纹理
 
-+ [DestroyTexture(texture)](_DestroyTexture_.md)：销毁纹理数据
-
-+ [SetTextureAlpha(texture, alpha)](_SetTextureAlpha_.md)：设置纹理透明度
-
-+ [GetImageSize(image)](_GetImageSize_.md)：获取已加载图像尺寸
++ [Texture:SetAlpha(alpha)](_Texture_SetAlpha_.md)：设置纹理透明度
 
 + [CopyTexture(texture, rect)](_CopyTexture_.md)：将纹理拷贝至渲染缓冲区内
 
@@ -66,21 +62,19 @@
 
 + [LoadFont(path, size)](_LoadFont_.md)：加载字体文件
 
-+ [UnloadFont(font)](_UnloadFont_.md)：释放已加载的字体
++ [Font:GetStyle()](_Font_GetStyle_.md)：获取已加载字体的样式
 
-+ [GetFontStyle(font)](_GetFontStyle_.md)：获取已加载字体的样式
++ [Font:SetStyle(style)](_Font_SetStyle_.md)：设置已加载字体的样式
 
-+ [SetFontStyle(font, style)](_SetFontStyle_.md)：设置已加载字体的样式
++ [Font:GetOutlineWidth()](_Font_GetOutlineWidth_.md)：获取已加载字体的轮廓线宽度
 
-+ [GetFontOutlineWidth(font)](_GetFontOutlineWidth_.md)：获取已加载字体的轮廓线宽度
++ [Font:SetOutlineWidth(width)](_Font_SetOutlineWidth_.md)：设置已加载字体的轮廓线宽度
 
-+ [SetFontOutlineWidth(font, width)](_SetFontOutlineWidth_.md)：设置已加载字体的轮廓线宽度
++ [Font:GetKerning()](_Font_GetKerning_.md)：获取字体间距
 
-+ [GetFontKerning(font)](_GetFontKerning_.md)：获取字体间距
++ [Font:SetKerning(kerning)](_Font_SetKerning_.md)：设置字体间距
 
-+ [SetFontKerning(font, kerning)](_SetFontKerning_.md)：设置字体间距
-
-+ [GetFontHeight(font)](_GetFontHeight_.md)：获取字体高度
++ [Font:GetHeight()](_Font_GetHeight_.md)：获取字体高度
 
 + [GetTextSize(font, text)](_GetTextSize_.md)：获取文本尺寸
 
