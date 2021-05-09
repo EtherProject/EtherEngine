@@ -384,24 +384,6 @@ For more interactive event types, please refer to [Manual：Interactivity](Inter
 
 
 
-## RAM Management
-
-The role of memory management in game development is extremely important. EtherAPI provides a simple and efficient API for memory unloading of loaded and rendered data. The brief introduction is as follows:
-
-+ [`UnloadImage()`](Graphic/UnloadImage.md) function is used to release the image data loaded from the file or the text texture data rendered, that is, the userdata data of the Image type
-+ [`UnloadFont()`](Graphic/UnloadFont.md) function is used to release the font data loaded from the file, that is, the userdata data of Image type
-+ [`DestroyTexture()`](Graphic/DestroyTexture.md) function is used to destroy the texture data obtained from rendering, that is, the userdata data of Font type
-+ [`UnloadMusic()`](Media/UnloadMusic.md) function is used to release the music data loaded from the file, that is, the userdata data of Music type
-+ [`UnloadSound()`](Media/UnloadSound.md) function is used to release the sound effect data loaded from the file, that is, the userdata data of the Sound type
-
-Special attention is that the destruction and release process of these userdata type data does not participate in Lua's automatic memory management. Simply removing the reference of these variables or setting the variable to `nil` will not completely release the internal data. It must be called The above-mentioned memory release API is destroyed. This design ensures that developers can manage memory data more directly and prevents Lua's memory management strategy from being completely suitable for the developer's intention during the game.
-
-
-
----
-
-
-
 ## Other Tools
 
 Tool module is a kind of module that encapsulates algorithm and system level to assist game development. It covers algorithm, network, time, JSON parsing, string encoding, operating system and other modules. Only its catalog index is placed below. It will be introduced in detail, please refer to the corresponding part of the [full manual](index.md#directory) for specific content:

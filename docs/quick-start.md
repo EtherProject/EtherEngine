@@ -367,18 +367,6 @@ StopTextInput()
 
 更多的交互事件类型详见 [完整手册：Interactivity 模块附录](Interactivity/appendix.md)
 
-## 内存管理  
-
-内存管理在游戏开发中的角色可谓是重要至极，EtherAPI 对于已加载和渲染出的数据的内存卸载提供了简单且高效的 API，简介如下：  
-
-+ [`UnloadImage()`](Graphic/_UnloadImage_.md) 函数用来释放从文件中加载的图片数据或渲染出的文本贴图数据，即 Image 类型的 userdata 数据  
-+ [`UnloadFont()`](Graphic/_UnloadFont_.md) 函数用来释放从文件中加载的字体数据，即 Image 类型的 userdata 数据 
-+ [`DestroyTexture()`](Graphic/_DestroyTexture_.md) 函数用来销毁从渲染得到的纹理数据，即 Font 类型的 userdata 数据  
-+ [`UnloadMusic()`](Media/_UnloadMusic_.md) 函数用来释放从文件中加载的音乐数据，即 Music 类型的 userdata 数据 
-+ [`UnloadSound()`](Media/_UnloadSound_.md) 函数用来释放从文件中加载的音效数据，即 Sound 类型的 userdata 数据 
-
-特别注意的是，这些 userdata 类型数据的销毁释放过程并未参与到 Lua 的自动内存管理中，简单地解除这些变量的引用或将变量设置为 `nil` 并不能完全释放其内部的数据，必须调用上述的内存释放 API 进行销毁，这样的设计保证了开发者更直接地对内存数据进行管理，防止游戏过程中 Lua 的内存管理策略并不完全适合开发者意图的情况出现。
-
 ## 工具模块
 
 工具模块是一类对算法和系统层面封装的、用以辅助游戏开发的模块，涵盖了 算法、网络、时间、JSON解析、字符串编码、操作系统 等模块，下面只放置其目录索引，并不会对其进行详细介绍，具体内容请查看 [完整手册](index.md#目录) 的对应部分：
