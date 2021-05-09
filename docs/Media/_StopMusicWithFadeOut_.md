@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# FadeOutMusic
+# StopMusicWithFadeOut
 
 > 使用淡出效果停止正在播放的音乐
 
 ```lua
 
-FadeOutMusic(delay)
+StopMusicWithFadeOut(delay)
 
 ```
 

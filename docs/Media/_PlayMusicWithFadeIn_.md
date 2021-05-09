@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# FadeInMusic
+# PlayMusicWithFadeIn
 
 > 使用淡入效果播放已加载的音乐
 
 ```lua
 
-FadeInMusic(music, times, delay)
+PlayMusicWithFadeIn(music, times, delay)
 
 ```
 

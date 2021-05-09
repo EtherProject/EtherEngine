@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# GetMusicType
+# Music:GetType
 
-> 获取指定音乐的类型
+> 获取音乐的类型
 
 ```lua
 
-type = GetMusicType(music)
+type = music:GetMusicType()
 
 ```
 

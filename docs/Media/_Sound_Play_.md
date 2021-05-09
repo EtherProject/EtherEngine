@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# PlaySound
+# Sound:Play
 
 > 播放已加载的音效
 
 ```lua
 
-PlaySound(sound, times)
+sound:Play(times)
 
 ```
 

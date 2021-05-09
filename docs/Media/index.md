@@ -8,13 +8,15 @@
 
 + [LoadMusic(path)](_LoadMusic_.md)：加载音乐文件
 
-+ [UnloadMusic(music)](_UnloadMusic_.md)：释放已加载的音乐
++ [Music:GetType()](_Music_GetType_.md)：获取音乐的类型
 
 + [PlayMusic(music, times)](_PlayMusic_.md)：播放已加载的音乐
 
-+ [FadeInMusic(music, times, delay)](_FadeInMusic_.md)：使用淡入效果播放已加载的音乐
++ [PlayMusicWithFadeIn(music, times, delay)](_PlayMusicWithFadeIn_.md)：使用淡入效果播放已加载的音乐
 
-+ [FadeOutMusic(delay)](_FadeOutMusic_.md)：使用淡出效果停止正在播放的音乐
++ [StopMusic()](_StopMusic_.md)：停止正在播放的音乐
+
++ [StopMusicWithFadeOut(delay)](_StopMusicWithFadeOut_.md)：使用淡出效果停止正在播放的音乐
 
 + [SetMusicVolume(value)](_SetMusicVolume_.md)：设置音乐播放的音量
 
@@ -26,10 +28,6 @@
 
 + [RewindMusic()](_RewindMusic_.md)：重新播放当前正在播放的音乐
 
-+ [GetMusicType(music)](_GetMusicType_.md)：获取指定音乐的类型
-
 + [LoadSound(path)](_LoadSound_.md)：加载音效文件
 
-+ [UnloadSound(sound)](_UnloadSound_.md)：释放已加载的音效
-
-+ [PlaySound(sound, times)](_PlaySound_.md)：播放已加载的音效
++ [Sound:Play(times)](_Sound_Play_.md)：播放已加载的音效
