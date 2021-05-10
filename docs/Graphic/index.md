@@ -4,7 +4,7 @@
 
 > Graphic 模块提供图形相关API
 
-## API列表：
+## 模块API列表：
 
 + [SetCursorShow(flag)](_SetCursorShow_.md)：设置鼠标是否显示
 
@@ -72,37 +72,30 @@
 
 + [CreateUTF8TextImageBlended(font, text, color)](_CreateUTF8TextImageBlended_.md)：使用Blended模式创建UTF-8编码格式的文本图像
 
-<details>
-    <summary>Image 对象成员函数</summary>
+## 对象成员API列表
 
-+ [Image:GetSize()](_Image_GetSize_.md)：获取已加载图像尺寸
++ Image 对象成员函数：
 
-+ [Image:SetColorKey(flag, color)](_Image_SetColorKey_.md)：设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
+    + [Image:GetSize()](_Image_GetSize_.md)：获取已加载图像尺寸
 
-</details>
+    + [Image:SetColorKey(flag, color)](_Image_SetColorKey_.md)：设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
 
-<details>
-    <summary>Texture 对象成员函数</summary>
++ Texture 对象成员函数：
 
-+ [Texture:SetAlpha(alpha)](_Texture_SetAlpha_.md)：设置纹理透明度
+    + [Texture:SetAlpha(alpha)](_Texture_SetAlpha_.md)：设置纹理透明度
 
-</details>
++ Font 对象成员函数
 
-<details>
-    <summary>Font 对象成员函数</summary>
+    + [Font:GetStyle()](_Font_GetStyle_.md)：获取已加载字体的样式
 
-+ [Font:GetStyle()](_Font_GetStyle_.md)：获取已加载字体的样式
+    + [Font:SetStyle(style)](_Font_SetStyle_.md)：设置已加载字体的样式
 
-+ [Font:SetStyle(style)](_Font_SetStyle_.md)：设置已加载字体的样式
+    + [Font:GetOutlineWidth()](_Font_GetOutlineWidth_.md)：获取已加载字体的轮廓线宽度
 
-+ [Font:GetOutlineWidth()](_Font_GetOutlineWidth_.md)：获取已加载字体的轮廓线宽度
+    + [Font:SetOutlineWidth(width)](_Font_SetOutlineWidth_.md)：设置已加载字体的轮廓线宽度
 
-+ [Font:SetOutlineWidth(width)](_Font_SetOutlineWidth_.md)：设置已加载字体的轮廓线宽度
+    + [Font:GetKerning()](_Font_GetKerning_.md)：获取字体间距
 
-+ [Font:GetKerning()](_Font_GetKerning_.md)：获取字体间距
+    + [Font:SetKerning(kerning)](_Font_SetKerning_.md)：设置字体间距
 
-+ [Font:SetKerning(kerning)](_Font_SetKerning_.md)：设置字体间距
-
-+ [Font:GetHeight()](_Font_GetHeight_.md)：获取字体高度
-
-</details>
+    + [Font:GetHeight()](_Font_GetHeight_.md)：获取字体高度
