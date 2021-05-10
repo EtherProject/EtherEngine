@@ -2,7 +2,7 @@
 
 ## 模块索引
 
-+ [Algorithm](Algorithm/index.md)：算法相关API
++ [Window](Window/index.md)：窗口相关API
 
 + [Graphic](Graphic/index.md)：图形相关API
 
@@ -14,13 +14,15 @@
 
 + [OS](OS/index.md)：操作系统相关API
 
++ [Algorithm](Algorithm/index.md)：算法相关API
+
 + [String](String/index.md)：字符串相关API
 
 + [JSON](JSON/index.md)：JSON 格式数据相关API
 
 + [Time](Time/index.md)：时间相关API
 
-+ [Window](Window/index.md)：窗口相关API
++ [Compress](Compress/index.md)：压缩/解压缩 相关API
 
 ## 全局 API
 

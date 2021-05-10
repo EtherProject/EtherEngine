@@ -95,10 +95,10 @@ ModuleNetwork::ModuleNetwork()
 				{ "GetRemotePort", request_GetRemotePort },
 				{ "GetVersion", request_GetVersion },
 				{ "GetParams", request_GetParams },
-				{ "HasHeader", request_CheckHeaderExist },
+				{ "CheckHeaderKeyExist", request_CheckHeaderKeyExist },
 				{ "GetHeaderValue", request_GetHeaderValue },
 				{ "GetHeaderValueCount", request_GetHeaderValueCount },
-				{ "HasParam", request_CheckParamExist },
+				{ "HasParam", request_CheckParamKeyExist },
 				{ "GetParamValue", request_GetParamValue },
 				{ "GetParamValueCount", request_GetParamValueCount },
 			}
@@ -110,7 +110,7 @@ ModuleNetwork::ModuleNetwork()
 				{ "SetStatus", response_SetStatus },
 				{ "GetHeaders", response_GetHeaders },
 				{ "SetBody", response_SetBody },
-				{ "CheckHeaderExist", response_CheckHeaderExist },
+				{ "CheckHeaderKeyExist", response_CheckHeaderKeyExist },
 				{ "GetHeaderValue", response_GetHeaderValue },
 				{ "GetHeaderValueCount", response_GetHeaderValueCount },
 				{ "SetHeaderValue", response_SetHeaderValue },
@@ -710,7 +710,7 @@ ETHER_API request_GetParams(lua_State* L)
 }
 
 
-ETHER_API request_CheckHeaderExist(lua_State* L)
+ETHER_API request_CheckHeaderKeyExist(lua_State* L)
 {
 	Request* req = GetServerReqDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -728,7 +728,8 @@ ETHER_API request_GetHeaderValue(lua_State* L)
 #ifdef _ETHER_DEBUG_
 	CheckServerReqDataAtFirstPos(req);
 #endif
-	lua_pushstring(L, req->get_header_value(luaL_checkstring(L, 2)).c_str());
+
+	lua_pushstring(L, req->get_header_value(luaL_checkstring(L, 2), lua_isnumber(L, 3) ? lua_tonumber(L, 3) - 1 : 0).c_str());
 
 	return 1;
 }
@@ -746,7 +747,7 @@ ETHER_API request_GetHeaderValueCount(lua_State* L)
 }
 
 
-ETHER_API request_CheckParamExist(lua_State* L)
+ETHER_API request_CheckParamKeyExist(lua_State* L)
 {
 	Request* req = GetServerReqDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -764,7 +765,7 @@ ETHER_API request_GetParamValue(lua_State* L)
 #ifdef _ETHER_DEBUG_
 	CheckServerReqDataAtFirstPos(req);
 #endif
-	lua_pushstring(L, req->get_param_value(luaL_checkstring(L, 2)).c_str());
+	lua_pushstring(L, req->get_param_value(luaL_checkstring(L, 2), lua_isnumber(L, 3) ? lua_tonumber(L, 3) - 1 : 0).c_str());
 
 	return 1;
 }
@@ -838,7 +839,7 @@ ETHER_API response_SetBody(lua_State* L)
 }
 
 
-ETHER_API response_CheckHeaderExist(lua_State* L)
+ETHER_API response_CheckHeaderKeyExist(lua_State* L)
 {
 	Response* res = GetServerResDataAtFirstPos();
 #ifdef _ETHER_DEBUG_
@@ -856,7 +857,7 @@ ETHER_API response_GetHeaderValue(lua_State* L)
 #ifdef _ETHER_DEBUG_
 	CheckServerResDataAtFirstPos(res);
 #endif
-	lua_pushstring(L, res->get_header_value(luaL_checkstring(L, 2)).c_str());
+	lua_pushstring(L, res->get_header_value(luaL_checkstring(L, 2), lua_isnumber(L, 3) ? lua_tonumber(L, 3) - 1 : 0).c_str());
 
 	return 1;
 }

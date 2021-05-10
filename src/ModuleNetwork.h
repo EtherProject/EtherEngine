@@ -303,27 +303,76 @@ void CallHandler(const Request& req, Response& res, lua_State* L, const string& 
 */
 ETHER_API request_GetMethod(lua_State* L);
 
+/*
+* 获取请求路由
+* 1参数：请求数据对象数据（userdata-Request）
+* 1返回值：请求路由（string）
+*/
 ETHER_API request_GetRoute(lua_State* L);
 
+/*
+* 获取请求头
+* 1参数：请求数据对象数据（userdata-Request）
+* 1返回值：请求头（table）
+* 备注：由于Lua的table不支持一键多值，所以当请求头中一个键对应多个值时，
+*	返回表中对应的键将保存最后一个值，请使用带索引参数的GetHeaderValue函数获取同一个键对应的不同值
+*/
 ETHER_API request_GetHeaders(lua_State* L);
 
+/*
+* 获取请求体
+* 1参数：请求数据对象数据（userdata-Request）
+* 1返回值：请求体（string）
+*/
 ETHER_API request_GetBody(lua_State* L);
 
+/*
+* 获取远程主机地址
+* 1参数：请求数据对象数据（userdata-Request）
+* 1返回值：主机地址（string）
+*/
 ETHER_API request_GetRemoteAddress(lua_State* L);
 
+/*
+* 获取远程主机端口
+* 1参数：请求数据对象数据（userdata-Request）
+* 1返回值：主机端口（number）
+*/
 ETHER_API request_GetRemotePort(lua_State* L);
 
+/*
+* 获取请求的HTTP版本
+* 1参数：请求数据对象数据（userdata-Request）
+* 1返回值：HTTP版本（number）
+*/
 ETHER_API request_GetVersion(lua_State* L);
 
+/*
+* 获取请求参数
+* 1参数：请求数据对象数据（userdata-Request）
+* 1返回值：请求参数（table）
+* 备注：由于Lua的table不支持一键多值，所以当请求参数中一个键对应多个值时，
+*	返回表中对应的键将保存最后一个值，请使用带索引参数的GetParamValue函数获取同一个键对应的不同值
+*/
 ETHER_API request_GetParams(lua_State* L);
 
-ETHER_API request_CheckHeaderExist(lua_State* L);
+/*
+* 判断指定请求头指定键是否存在
+* 2参数：请求数据对象数据（userdata-Request），键（string）
+* 1返回值：是否存在（boolean）
+*/
+ETHER_API request_CheckHeaderKeyExist(lua_State* L);
 
+/*
+* 获取请求头中指定键对应的值
+* 2或3参数：请求数据对象数据（userdata-Request），键（string），索引（number，可选，默认为1）
+* 1返回值：值（string）
+*/
 ETHER_API request_GetHeaderValue(lua_State* L);
 
 ETHER_API request_GetHeaderValueCount(lua_State* L);
 
-ETHER_API request_CheckParamExist(lua_State* L);
+ETHER_API request_CheckParamKeyExist(lua_State* L);
 
 ETHER_API request_GetParamValue(lua_State* L);
 
@@ -339,7 +388,7 @@ ETHER_API response_GetHeaders(lua_State* L);
 
 ETHER_API response_SetBody(lua_State* L);
 
-ETHER_API response_CheckHeaderExist(lua_State* L);
+ETHER_API response_CheckHeaderKeyExist(lua_State* L);
 
 ETHER_API response_GetHeaderValue(lua_State* L);
 
