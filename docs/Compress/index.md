@@ -1,6 +1,6 @@
 ### [[ << 回到主页 ]](../index.md)
 
-# Graphic
+# Compress
 
 > Compress 模块 压缩/解压缩 相关API
 
