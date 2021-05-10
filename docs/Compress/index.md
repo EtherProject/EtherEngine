@@ -2,9 +2,9 @@
 
 # Compress
 
-> Compress 模块 压缩/解压缩 相关API
+> Compress 模块压缩和解压缩相关操作
 
-## API列表：
+## 模块函数列表：
 
 + [CompressData(raw_data)](_CompressData_.md)：压缩数据
 

@@ -2,13 +2,11 @@
 
 # Media
 
-> Media 模块提供媒体相关API
+> Media 模块提供媒体相关操作
 
-## API列表：
+## 模块函数列表：
 
 + [LoadMusic(path)](_LoadMusic_.md)：加载音乐文件
-
-+ [Music:GetType()](_Music_GetType_.md)：获取音乐的类型
 
 + [PlayMusic(music, times)](_PlayMusic_.md)：播放已加载的音乐
 
@@ -30,4 +28,12 @@
 
 + [LoadSound(path)](_LoadSound_.md)：加载音效文件
 
-+ [Sound:Play(times)](_Sound_Play_.md)：播放已加载的音效
+## 对象成员函数列表：
+
++ Music 对象成员函数：
+
+    + [Music:GetType()](_Music_GetType_.md)：获取音乐的类型
+
++ Sound 对象成员函数：
+
+    + [Sound:Play(times)](_Sound_Play_.md)：播放已加载的音效

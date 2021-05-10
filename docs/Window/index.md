@@ -2,9 +2,9 @@
 
 # Window
 
-> Window 模块提供窗口相关API
+> Window 模块提供窗口相关操作
 
-## API列表：
+## 模块函数列表：
 
 + [ShowMessageBox(type, title, content)](_ShowMessageBox_.md)：显示模态的提示信息窗口
 

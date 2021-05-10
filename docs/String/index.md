@@ -2,9 +2,9 @@
 
 # String
 
-> String 模块提供字符串相关API
+> String 模块提供字符串相关操作
 
-## API列表：
+## 模块函数列表：
 
 + [GBKToUTF8(gbkstr)](_GBKToUTF8_.md)：将GBK编码字符串转换为UTF-8编码
 

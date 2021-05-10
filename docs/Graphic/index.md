@@ -2,9 +2,9 @@
 
 # Graphic
 
-> Graphic 模块提供图形相关API
+> Graphic 模块提供图形相关操作
 
-## 模块API列表：
+## 模块函数列表：
 
 + [SetCursorShow(flag)](_SetCursorShow_.md)：设置鼠标是否显示
 
@@ -72,7 +72,7 @@
 
 + [CreateUTF8TextImageBlended(font, text, color)](_CreateUTF8TextImageBlended_.md)：使用Blended模式创建UTF-8编码格式的文本图像
 
-## 对象成员API列表
+## 对象成员函数列表：
 
 + Image 对象成员函数：
 

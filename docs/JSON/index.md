@@ -2,9 +2,9 @@
 
 # JSON
 
-> JSON 模块提供 JSON 解析相关API
+> JSON 模块提供 JSON 数据格式相关操作
 
-## API列表：
+## 模块函数列表：
 
 + [LoadJSON(str)](_LoadJSON_.md)：将已编码的 JSON 对象解码为 Lua 对象
 

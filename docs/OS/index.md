@@ -2,9 +2,9 @@
 
 # OS
 
-> OS 模块提供操作系统相关API
+> OS 模块提供操作系统相关操作
 
-## API列表：
+## 模块函数列表：
 
 + [GetBasePath()](_GetBasePath_.md)：获取程序运行的目录
 

@@ -2,29 +2,29 @@
 
 ## 模块索引
 
-+ [Window](Window/index.md)：窗口相关API
++ [Window](Window/index.md)：窗口相关操作
 
-+ [Graphic](Graphic/index.md)：图形相关API
++ [Graphic](Graphic/index.md)：图形相关操作
 
-+ [Interactivity](Interactivity/index.md)：交互相关API
++ [Interactivity](Interactivity/index.md)：交互相关操作
 
-+ [Media](Media/index.md)：媒体相关API
++ [Media](Media/index.md)：媒体相关操作
 
-+ [Network](Network/index.md)：网络相关API
++ [Network](Network/index.md)：网络相关操作
 
-+ [OS](OS/index.md)：操作系统相关API
++ [OS](OS/index.md)：操作系统相关操作
 
-+ [Algorithm](Algorithm/index.md)：算法相关API
++ [Algorithm](Algorithm/index.md)：算法相关操作
 
-+ [String](String/index.md)：字符串相关API
++ [String](String/index.md)：字符串相关操作
 
-+ [JSON](JSON/index.md)：JSON 格式数据相关API
++ [JSON](JSON/index.md)：JSON 数据格式相关操作
 
-+ [Time](Time/index.md)：时间相关API
++ [Time](Time/index.md)：时间相关操作
 
-+ [Compress](Compress/index.md)：压缩/解压缩 相关API
++ [Compress](Compress/index.md)：压缩和解压缩相关操作
 
-## 全局 API
+## 全局函数
 
 + UsingModule(name)
 

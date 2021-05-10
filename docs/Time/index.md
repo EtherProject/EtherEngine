@@ -2,9 +2,9 @@
 
 # Time
 
-> Time 模块提供时间相关API
+> Time 模块提供时间相关操作
 
-## API列表：
+## 模块函数列表：
 
 + [Pause()](_Pause_.md)：暂停程序
 

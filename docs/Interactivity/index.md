@@ -2,9 +2,9 @@
 
 # Interactivity
 
-> Interactivity 模块提供交互相关API
+> Interactivity 模块提供交互相关操作
 
-## API列表：
+## 模块函数列表：
 
 + [GetCursorPosition()](_GetCursorPosition_.md)：获取当前鼠标位置
 
