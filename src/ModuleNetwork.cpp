@@ -23,9 +23,7 @@ ModuleNetwork::ModuleNetwork()
 {
 	_vCMethods = {
 		{ "CreateClient", createClient },
-		{ "CloseClient", closeClient },
 		{ "CreateServer", createServer },
-		{ "CloseServer", closeServer },
 		{ "SplitLink", splitLink },
 	};
 
@@ -65,12 +63,23 @@ ModuleNetwork::ModuleNetwork()
 				{ "SetCompressResponse", client_SetCompressResponse },
 				{ "SetCACertPath", client_SetCACertPath },
 				{ "SetProxy", client_SetProxy },
-			}
+			},
+			__gc_Client
 		},
 		{
 			METANAME_SERVER,
 			{
+				{ "CheckValid", server_CheckValid },
+				{ "CheckRunning", server_CheckRunning },
 				{ "Get", server_Get },
+				{ "Post", server_Post },
+				{ "Put", server_Put },
+				{ "Patch", server_Patch },
+				{ "Delete", server_Delete },
+				{ "Options", server_Options },
+				{ "SetMountPoint", server_SetMountPoint },
+				{ "RemoveMountPoint", server_RemoveMountPoint },
+				{ "SetFileExtMapToMIMEType", server_SetFileExtMapToMIMEType },
 				{ "SetExceptionHandler", server_SetExceptionHandler },
 				{ "SetMaxKeepAliveCount", server_SetMaxKeepAliveCount },
 				{ "SetKeepAliveTimeout", server_SetKeepAliveTimeout },
@@ -82,7 +91,8 @@ ModuleNetwork::ModuleNetwork()
 				{ "ListenAfterBind", server_ListenAfterBind },
 				{ "Listen", server_Listen },
 				{ "Stop", server_Stop },
-			}
+			},
+			__gc_Server
 		},
 		{
 			METANAME_SERVER_REQ,
@@ -123,7 +133,7 @@ ModuleNetwork::ModuleNetwork()
 }
 
 
-const char* GetRequestParamAtSecondPos(lua_State* L, RequestParam& reqParam)
+const char* GetRequestParamAt2ndPos(lua_State* L, RequestParam& reqParam)
 {
 	if (!lua_istable(L, 2)) return "request parameter must be table";
 	else
@@ -266,13 +276,13 @@ void PushResponseToStack(lua_State* L, const Result& res)
 
 ETHER_API client_Get(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	RequestParam reqParam;
-	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	const char* err = GetRequestParamAt2ndPos(L, reqParam);
 	luaL_argcheck(L, !err, 2, err);
 
 	PushResponseToStack(L, reqParam.headers.empty() 
@@ -286,13 +296,13 @@ ETHER_API client_Get(lua_State* L)
 
 ETHER_API client_Post(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	RequestParam reqParam;
-	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	const char* err = GetRequestParamAt2ndPos(L, reqParam);
 	luaL_argcheck(L, !err, 2, err);
 
 	PushResponseToStack(L, reqParam.str_params.empty() 
@@ -312,13 +322,13 @@ ETHER_API client_Post(lua_State* L)
 
 ETHER_API client_Put(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	RequestParam reqParam;
-	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	const char* err = GetRequestParamAt2ndPos(L, reqParam);
 	luaL_argcheck(L, !err, 2, err);
 
 	PushResponseToStack(L, reqParam.str_params.empty()
@@ -338,13 +348,13 @@ ETHER_API client_Put(lua_State* L)
 
 ETHER_API client_Patch(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	RequestParam reqParam;
-	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	const char* err = GetRequestParamAt2ndPos(L, reqParam);
 	luaL_argcheck(L, !err, 2, err);
 #ifdef _ETHER_DEBUG_
 	luaL_argcheck(L, !reqParam.str_params.empty(), 2, "'params' field must be string");
@@ -360,13 +370,13 @@ ETHER_API client_Patch(lua_State* L)
 
 ETHER_API client_Delete(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	RequestParam reqParam;
-	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	const char* err = GetRequestParamAt2ndPos(L, reqParam);
 	luaL_argcheck(L, !err, 2, err);
 #ifdef _ETHER_DEBUG_
 	luaL_argcheck(L, !reqParam.str_params.empty(), 2, "'params' field must be string");
@@ -382,13 +392,13 @@ ETHER_API client_Delete(lua_State* L)
 
 ETHER_API client_Options(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	RequestParam reqParam;
-	const char* err = GetRequestParamAtSecondPos(L, reqParam);
+	const char* err = GetRequestParamAt2ndPos(L, reqParam);
 	luaL_argcheck(L, !err, 2, err);
 
 	PushResponseToStack(L, reqParam.headers.empty()
@@ -402,9 +412,9 @@ ETHER_API client_Options(lua_State* L)
 
 ETHER_API client_SetDefaultHeaders(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 	Headers headers;
 	if (lua_istable(L, 2))
@@ -430,9 +440,9 @@ ETHER_API client_SetDefaultHeaders(lua_State* L)
 
 ETHER_API client_SetConnectTimeout(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	client->set_connection_timeout(0, luaL_checknumber(L, 2) * 1000);
@@ -443,9 +453,9 @@ ETHER_API client_SetConnectTimeout(lua_State* L)
 
 ETHER_API client_SetReadTimeout(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	client->set_read_timeout(luaL_checknumber(L, 2), 0);
@@ -456,9 +466,9 @@ ETHER_API client_SetReadTimeout(lua_State* L)
 
 ETHER_API client_SetWriteTimeout(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	client->set_read_timeout(luaL_checknumber(L, 2), 0);
@@ -469,9 +479,9 @@ ETHER_API client_SetWriteTimeout(lua_State* L)
 
 ETHER_API client_SetKeepAlive(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	client->set_keep_alive(lua_toboolean(L, 2));
@@ -482,9 +492,9 @@ ETHER_API client_SetKeepAlive(lua_State* L)
 
 ETHER_API client_SetFollowRedirect(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	client->set_follow_location(lua_toboolean(L, 2));
@@ -495,9 +505,9 @@ ETHER_API client_SetFollowRedirect(lua_State* L)
 
 ETHER_API client_SetCompressRequest(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	client->set_compress(lua_toboolean(L, 2));
@@ -508,9 +518,9 @@ ETHER_API client_SetCompressRequest(lua_State* L)
 
 ETHER_API client_SetCompressResponse(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	client->set_decompress(lua_toboolean(L, 2));
@@ -521,9 +531,9 @@ ETHER_API client_SetCompressResponse(lua_State* L)
 
 ETHER_API client_SetCACertPath(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	client->set_ca_cert_path(luaL_checkstring(L, 2));
@@ -534,9 +544,9 @@ ETHER_API client_SetCACertPath(lua_State* L)
 
 ETHER_API client_SetProxy(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 
 	client->set_proxy(luaL_checkstring(L, 2), lua_tointeger(L, 3));
@@ -560,11 +570,11 @@ ETHER_API createClient(lua_State* L)
 }
 
 
-ETHER_API closeClient(lua_State* L)
+ETHER_API __gc_Client(lua_State* L)
 {
-	Client* client = GetClientDataAtFirstPos();
+	Client* client = GetClientDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckClientDataAtFirstPos(client);
+	CheckClientDataAt1stPos(client);
 #endif
 	delete client;
 	client = nullptr;
@@ -604,9 +614,9 @@ void CallHandler(const Request& req, Response& res, lua_State* L, const string& 
 
 ETHER_API request_GetMethod(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushstring(L, req->method.c_str());
 
@@ -616,9 +626,9 @@ ETHER_API request_GetMethod(lua_State* L)
 
 ETHER_API request_GetRoute(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushstring(L, req->path.c_str());
 
@@ -628,9 +638,9 @@ ETHER_API request_GetRoute(lua_State* L)
 
 ETHER_API request_GetHeaders(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_newtable(L);
 	for (auto kv : req->headers)
@@ -646,9 +656,9 @@ ETHER_API request_GetHeaders(lua_State* L)
 
 ETHER_API request_GetBody(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushlstring(L, req->body.c_str(), req->body.size());
 
@@ -658,9 +668,9 @@ ETHER_API request_GetBody(lua_State* L)
 
 ETHER_API request_GetRemoteAddress(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushstring(L, req->remote_addr.c_str());
 
@@ -670,9 +680,9 @@ ETHER_API request_GetRemoteAddress(lua_State* L)
 
 ETHER_API request_GetRemotePort(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushinteger(L, req->remote_port);
 
@@ -682,9 +692,9 @@ ETHER_API request_GetRemotePort(lua_State* L)
 
 ETHER_API request_GetVersion(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushstring(L, req->version.c_str());
 
@@ -694,9 +704,9 @@ ETHER_API request_GetVersion(lua_State* L)
 
 ETHER_API request_GetParams(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_newtable(L);
 	for (auto kv : req->params)
@@ -712,9 +722,9 @@ ETHER_API request_GetParams(lua_State* L)
 
 ETHER_API request_CheckHeaderKeyExist(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushboolean(L, req->has_header(luaL_checkstring(L, 2)));
 
@@ -724,9 +734,9 @@ ETHER_API request_CheckHeaderKeyExist(lua_State* L)
 
 ETHER_API request_GetHeaderValue(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 
 	lua_pushstring(L, req->get_header_value(luaL_checkstring(L, 2), lua_isnumber(L, 3) ? lua_tonumber(L, 3) - 1 : 0).c_str());
@@ -737,9 +747,9 @@ ETHER_API request_GetHeaderValue(lua_State* L)
 
 ETHER_API request_GetHeaderValueCount(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushnumber(L, req->get_header_value_count(luaL_checkstring(L, 2)));
 
@@ -749,9 +759,9 @@ ETHER_API request_GetHeaderValueCount(lua_State* L)
 
 ETHER_API request_CheckParamKeyExist(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushboolean(L, req->has_param(luaL_checkstring(L, 2)));
 
@@ -761,9 +771,9 @@ ETHER_API request_CheckParamKeyExist(lua_State* L)
 
 ETHER_API request_GetParamValue(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushstring(L, req->get_param_value(luaL_checkstring(L, 2), lua_isnumber(L, 3) ? lua_tonumber(L, 3) - 1 : 0).c_str());
 
@@ -773,9 +783,9 @@ ETHER_API request_GetParamValue(lua_State* L)
 
 ETHER_API request_GetParamValueCount(lua_State* L)
 {
-	Request* req = GetServerReqDataAtFirstPos();
+	Request* req = GetServerReqDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerReqDataAtFirstPos(req);
+	CheckServerReqDataAt1stPos(req);
 #endif
 	lua_pushnumber(L, req->get_param_value_count(luaL_checkstring(L, 2)));
 
@@ -785,9 +795,9 @@ ETHER_API request_GetParamValueCount(lua_State* L)
 
 ETHER_API response_SetVersion(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	res->version = luaL_checkstring(L, 2);
 
@@ -797,9 +807,9 @@ ETHER_API response_SetVersion(lua_State* L)
 
 ETHER_API response_SetStatus(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	res->status = luaL_checkinteger(L, 2);
 
@@ -809,9 +819,9 @@ ETHER_API response_SetStatus(lua_State* L)
 
 ETHER_API response_GetHeaders(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	lua_newtable(L);
 	for (auto kv : res->headers)
@@ -827,9 +837,9 @@ ETHER_API response_GetHeaders(lua_State* L)
 
 ETHER_API response_SetBody(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	size_t len;
 	const char* body = luaL_checklstring(L, 2, &len);
@@ -841,9 +851,9 @@ ETHER_API response_SetBody(lua_State* L)
 
 ETHER_API response_CheckHeaderKeyExist(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	lua_pushboolean(L, res->has_header(luaL_checkstring(L, 2)));
 
@@ -853,9 +863,9 @@ ETHER_API response_CheckHeaderKeyExist(lua_State* L)
 
 ETHER_API response_GetHeaderValue(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	lua_pushstring(L, res->get_header_value(luaL_checkstring(L, 2), lua_isnumber(L, 3) ? lua_tonumber(L, 3) - 1 : 0).c_str());
 
@@ -865,9 +875,9 @@ ETHER_API response_GetHeaderValue(lua_State* L)
 
 ETHER_API response_GetHeaderValueCount(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	lua_pushnumber(L, res->get_header_value_count(luaL_checkstring(L, 2)));
 
@@ -877,9 +887,9 @@ ETHER_API response_GetHeaderValueCount(lua_State* L)
 
 ETHER_API response_SetHeaderValue(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	res->set_header(luaL_checkstring(L, 2), luaL_checkstring(L, 3));
 
@@ -889,9 +899,9 @@ ETHER_API response_SetHeaderValue(lua_State* L)
 
 ETHER_API response_SetHeaders(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	luaL_argcheck(L, lua_istable(L, 2), 2, "headers must be table");
 	Headers headers;
@@ -914,9 +924,9 @@ ETHER_API response_SetHeaders(lua_State* L)
 
 ETHER_API response_SetRedirect(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	res->set_redirect(luaL_checkstring(L, 2));
 
@@ -926,9 +936,9 @@ ETHER_API response_SetRedirect(lua_State* L)
 
 ETHER_API response_SetContent(lua_State* L)
 {
-	Response* res = GetServerResDataAtFirstPos();
+	Response* res = GetServerResDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerResDataAtFirstPos(res);
+	CheckServerResDataAt1stPos(res);
 #endif
 	size_t len;
 	res->set_content(luaL_checklstring(L, 2, &len), len, lua_isstring(L, 3) ? lua_tostring(L, 3) : "text/plain");
@@ -937,18 +947,40 @@ ETHER_API response_SetContent(lua_State* L)
 }
 
 
+ETHER_API server_CheckValid(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	lua_pushboolean(L, server->pServer->is_valid());
+
+	return 1;
+}
+
+
+ETHER_API server_CheckRunning(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	lua_pushboolean(L, server->pServer->is_running());
+
+	return 1;
+}
+
+
 ETHER_API server_Get(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
-	string route = luaL_checkstring(L, 2);
-	if (route.empty() || route[0] != '/') route = "/" + route;
-	string refKey = server->id + "_get_" + route;
-	server->refKeys.push_back(refKey);
+	string route, refKey;
+	GetRouteAt2ndPosAndGenRefKey(server, route, refKey, "_get_");
 #ifdef _ETHER_DEBUG_
-	luaL_argcheck(L, lua_isfunction(L, 3), 3, "callback handler must be function");
+	CheckHandlerFunctionAt3rdPos();
 #endif
 	lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
 	server->pServer->Get(
@@ -962,11 +994,166 @@ ETHER_API server_Get(lua_State* L)
 }
 
 
+ETHER_API server_Post(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	string route, refKey;
+	GetRouteAt2ndPosAndGenRefKey(server, route, refKey, "_post_");
+#ifdef _ETHER_DEBUG_
+	CheckHandlerFunctionAt3rdPos();
+#endif
+	lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+	server->pServer->Post(
+		route.c_str(),
+		[=](const Request& req, Response& res) {
+			CallHandler(req, res, L, refKey);
+		}
+	);
+
+	return 0;
+}
+
+
+ETHER_API server_Put(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	string route, refKey;
+	GetRouteAt2ndPosAndGenRefKey(server, route, refKey, "_put_");
+#ifdef _ETHER_DEBUG_
+	CheckHandlerFunctionAt3rdPos();
+#endif
+	lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+	server->pServer->Put(
+		route.c_str(),
+		[=](const Request& req, Response& res) {
+			CallHandler(req, res, L, refKey);
+		}
+	);
+
+	return 0;
+}
+
+
+ETHER_API server_Patch(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	string route, refKey;
+	GetRouteAt2ndPosAndGenRefKey(server, route, refKey, "_patch_");
+#ifdef _ETHER_DEBUG_
+	CheckHandlerFunctionAt3rdPos();
+#endif
+	lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+	server->pServer->Patch(
+		route.c_str(),
+		[=](const Request& req, Response& res) {
+			CallHandler(req, res, L, refKey);
+		}
+	);
+
+	return 0;
+}
+
+
+ETHER_API server_Delete(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	string route, refKey;
+	GetRouteAt2ndPosAndGenRefKey(server, route, refKey, "_delete_");
+#ifdef _ETHER_DEBUG_
+	CheckHandlerFunctionAt3rdPos();
+#endif
+	lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+	server->pServer->Delete(
+		route.c_str(),
+		[=](const Request& req, Response& res) {
+			CallHandler(req, res, L, refKey);
+		}
+	);
+
+	return 0;
+}
+
+
+ETHER_API server_Options(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	string route, refKey;
+	GetRouteAt2ndPosAndGenRefKey(server, route, refKey, "_options_");
+#ifdef _ETHER_DEBUG_
+	CheckHandlerFunctionAt3rdPos();
+#endif
+	lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+	server->pServer->Options(
+		route.c_str(),
+		[=](const Request& req, Response& res) {
+			CallHandler(req, res, L, refKey);
+		}
+	);
+
+	return 0;
+}
+
+
+ETHER_API server_SetMountPoint(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	string mount = luaL_checkstring(L, 2);
+	if (mount.empty() || mount[0] != '/') mount = "/" + mount;
+	server->pServer->set_mount_point(mount.c_str(), luaL_checkstring(L, 3));
+
+	return 0;
+}
+
+
+ETHER_API server_RemoveMountPoint(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	string mount = luaL_checkstring(L, 2);
+	if (mount.empty() || mount[0] != '/') mount = "/" + mount;
+	server->pServer->remove_mount_point(mount.c_str());
+
+	return 0;
+}
+
+
+ETHER_API server_SetFileExtMapToMIMEType(lua_State* L)
+{
+	E_Server* server = GetServerDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckServerDataAt1stPos(server);
+#endif
+	server->pServer->set_file_extension_and_mimetype_mapping(luaL_checkstring(L, 2), luaL_checkstring(L, 3));
+
+	return 0;
+}
+
+
 ETHER_API server_SetExceptionHandler(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 	luaL_argcheck(L, lua_isfunction(L, 2), 2, "callback handler must be function");
 #endif
 	string refKey = server->id + "_error_handler";
@@ -983,9 +1170,9 @@ ETHER_API server_SetExceptionHandler(lua_State* L)
 
 ETHER_API server_SetMaxKeepAliveCount(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
 	server->pServer->set_keep_alive_max_count(luaL_checknumber(L, 2));
 
@@ -995,11 +1182,11 @@ ETHER_API server_SetMaxKeepAliveCount(lua_State* L)
 
 ETHER_API server_SetKeepAliveTimeout(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
-	server->pServer->set_keep_alive_max_count(luaL_checknumber(L, 2));
+	server->pServer->set_keep_alive_timeout(luaL_checknumber(L, 2));
 
 	return 0;
 }
@@ -1007,9 +1194,9 @@ ETHER_API server_SetKeepAliveTimeout(lua_State* L)
 
 ETHER_API server_SetReadTimeout(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
 	server->pServer->set_read_timeout(luaL_checknumber(L, 2), 0);
 
@@ -1019,9 +1206,9 @@ ETHER_API server_SetReadTimeout(lua_State* L)
 
 ETHER_API server_SetWriteTimeout(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
 	server->pServer->set_write_timeout(luaL_checknumber(L, 2), 0);
 
@@ -1031,9 +1218,9 @@ ETHER_API server_SetWriteTimeout(lua_State* L)
 
 ETHER_API server_SetIdleInterval(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
 	server->pServer->set_idle_interval(0, luaL_checknumber(L, 2) * 1000);
 
@@ -1043,9 +1230,9 @@ ETHER_API server_SetIdleInterval(lua_State* L)
 
 ETHER_API server_SetMaxRequestLength(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
 	server->pServer->set_payload_max_length(luaL_checknumber(L, 2));
 
@@ -1055,9 +1242,9 @@ ETHER_API server_SetMaxRequestLength(lua_State* L)
 
 ETHER_API server_BindToAnyPort(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
 	lua_pushinteger(L, server->pServer->bind_to_any_port(luaL_checkstring(L, 2)));
 
@@ -1067,9 +1254,9 @@ ETHER_API server_BindToAnyPort(lua_State* L)
 
 ETHER_API server_ListenAfterBind(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
 	server->pServer->listen_after_bind();
 
@@ -1079,13 +1266,11 @@ ETHER_API server_ListenAfterBind(lua_State* L)
 
 ETHER_API server_Listen(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
-	const char* host = luaL_checkstring(L, 2);
-	int port = luaL_checkinteger(L, 3);
-	server->pServer->listen(host, port);
+	server->pServer->listen(luaL_checkstring(L, 2), luaL_checkinteger(L, 3));
 
 	return 0;
 }
@@ -1093,9 +1278,9 @@ ETHER_API server_Listen(lua_State* L)
 
 ETHER_API server_Stop(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
 	server->pServer->stop();
 
@@ -1105,7 +1290,11 @@ ETHER_API server_Stop(lua_State* L)
 
 ETHER_API createServer(lua_State* L)
 {
-	E_Server* server = new E_Server(new Server(), ModuleNetwork::GetServerID());
+	E_Server* server = new E_Server(
+		lua_isstring(L, 1) 
+		? new SSLServer(lua_tostring(L, 1), luaL_checkstring(L, 2)) 
+		: new Server(), ModuleNetwork::GetServerID()
+	);
 	E_Server** uppServer = (E_Server**)lua_newuserdata(L, sizeof(E_Server*));
 	*uppServer = server;
 	luaL_getmetatable(L, METANAME_SERVER);
@@ -1115,11 +1304,11 @@ ETHER_API createServer(lua_State* L)
 }
 
 
-ETHER_API closeServer(lua_State* L)
+ETHER_API __gc_Server(lua_State* L)
 {
-	E_Server* server = GetServerDataAtFirstPos();
+	E_Server* server = GetServerDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckServerDataAtFirstPos(server);
+	CheckServerDataAt1stPos(server);
 #endif
 	delete server->pServer;
 	server->pServer = nullptr;

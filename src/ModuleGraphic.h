@@ -11,27 +11,27 @@
 #include <SDL_ttf.h>
 #include <SDL2_gfxPrimitives.h>
 
-#define FONT_STYLE_BOLD				1303
-#define FONT_STYLE_ITALIC			1304
-#define FONT_STYLE_UNDERLINE		1305
-#define FONT_STYLE_STRIKETHROUGH	1306
-#define FONT_STYLE_NORMAL			1307
+#define FONT_STYLE_BOLD						1303
+#define FONT_STYLE_ITALIC					1304
+#define FONT_STYLE_UNDERLINE				1305
+#define FONT_STYLE_STRIKETHROUGH			1306
+#define FONT_STYLE_NORMAL					1307
 
-#define FLIP_HORIZONTAL				1010
-#define FLIP_VERTICAL				1011
-#define FLIP_NONE					1012
+#define FLIP_HORIZONTAL						1010
+#define FLIP_VERTICAL						1011
+#define FLIP_NONE							1012
 
-#define METANAME_IMAGE				"Graphic.Image"
-#define METANAME_TEXTURE			"Graphic.Texture"
-#define METANAME_FONT				"Graphic.Font"
+#define METANAME_IMAGE						"Graphic.Image"
+#define METANAME_TEXTURE					"Graphic.Texture"
+#define METANAME_FONT						"Graphic.Font"
 
-#define GetImageDataAtFirstPos()			(SDL_Surface*)(*(void**)luaL_checkudata(L, 1, METANAME_IMAGE))
-#define GetTextureDataAtFirstPos()			(SDL_Texture*)(*(void**)luaL_checkudata(L, 1, METANAME_TEXTURE))
-#define GetFontDataAtFirstPos()				(TTF_Font*)(*(void**)luaL_checkudata(L, 1, METANAME_FONT))
+#define GetImageDataAt1stPos()				(SDL_Surface*)(*(void**)luaL_checkudata(L, 1, METANAME_IMAGE))
+#define GetTextureDataAt1stPos()			(SDL_Texture*)(*(void**)luaL_checkudata(L, 1, METANAME_TEXTURE))
+#define GetFontDataAt1stPos()				(TTF_Font*)(*(void**)luaL_checkudata(L, 1, METANAME_FONT))
 
-#define CheckImageDataAtFirstPos(surface)	luaL_argcheck(L, surface, 1, "get image data failed")
-#define CheckTextureDataAtFirstPos(texture) luaL_argcheck(L, texture, 1, "get texture data failed")
-#define CheckFontDataAtFirstPos(font)		luaL_argcheck(L, font, 1, "get font data failed")
+#define CheckImageDataAt1stPos(surface)		luaL_argcheck(L, surface, 1, "get image data failed")
+#define CheckTextureDataAt1stPos(texture)	luaL_argcheck(L, texture, 1, "get texture data failed")
+#define CheckFontDataAt1stPos(font)			luaL_argcheck(L, font, 1, "get font data failed")
 
 class ModuleGraphic : public Module
 {

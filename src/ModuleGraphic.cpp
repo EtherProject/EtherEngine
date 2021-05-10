@@ -118,9 +118,9 @@ ETHER_API loadImage(lua_State * L)
 
 ETHER_API image_SetColorKey(lua_State * L)
 {
-	SDL_Surface* surface = GetImageDataAtFirstPos();
+	SDL_Surface* surface = GetImageDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckImageDataAtFirstPos(surface);
+	CheckImageDataAt1stPos(surface);
 #endif
 	SDL_Color color;
 #ifdef _ETHER_DEBUG_
@@ -136,9 +136,9 @@ ETHER_API image_SetColorKey(lua_State * L)
 
 ETHER_API __gc_Image(lua_State * L)
 {
-	SDL_Surface* surface = GetImageDataAtFirstPos();
+	SDL_Surface* surface = GetImageDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckImageDataAtFirstPos(surface);
+	CheckImageDataAt1stPos(surface);
 #endif
 	SDL_FreeSurface(surface);
 	surface = nullptr;
@@ -149,9 +149,9 @@ ETHER_API __gc_Image(lua_State * L)
 
 ETHER_API createTexture(lua_State * L)
 {
-	SDL_Surface* surface = GetImageDataAtFirstPos();
+	SDL_Surface* surface = GetImageDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckImageDataAtFirstPos(surface);
+	CheckImageDataAt1stPos(surface);
 	if (!renderer)
 		luaL_error(L, "Texture creation must be done after the window created");
 #endif
@@ -170,9 +170,9 @@ ETHER_API createTexture(lua_State * L)
 
 ETHER_API __gc_Texture(lua_State * L)
 {
-	SDL_Texture* texture = GetTextureDataAtFirstPos();
+	SDL_Texture* texture = GetTextureDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckTextureDataAtFirstPos(texture);
+	CheckTextureDataAt1stPos(texture);
 #endif
 	SDL_DestroyTexture(texture);
 	texture = nullptr;
@@ -183,9 +183,9 @@ ETHER_API __gc_Texture(lua_State * L)
 
 ETHER_API texture_SetAlpha(lua_State * L)
 {
-	SDL_Texture* texture = GetTextureDataAtFirstPos();
+	SDL_Texture* texture = GetTextureDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckTextureDataAtFirstPos(texture);
+	CheckTextureDataAt1stPos(texture);
 #endif
 	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureAlphaMod(texture, luaL_checknumber(L, 2));
@@ -197,9 +197,9 @@ ETHER_API texture_SetAlpha(lua_State * L)
 
 ETHER_API image_GetSize(lua_State * L)
 {
-	SDL_Surface* surface = GetImageDataAtFirstPos();
+	SDL_Surface* surface = GetImageDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckImageDataAtFirstPos(surface);
+	CheckImageDataAt1stPos(surface);
 #endif
 	lua_pushnumber(L, surface->w);
 	lua_pushnumber(L, surface->h);
@@ -210,9 +210,9 @@ ETHER_API image_GetSize(lua_State * L)
 
 ETHER_API copyTexture(lua_State * L)
 {
-	SDL_Texture* texture = GetTextureDataAtFirstPos();
+	SDL_Texture* texture = GetTextureDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckTextureDataAtFirstPos(texture);
+	CheckTextureDataAt1stPos(texture);
 #endif
 	SDL_Rect rect;
 #ifdef _ETHER_DEBUG_
@@ -228,9 +228,9 @@ ETHER_API copyTexture(lua_State * L)
 
 ETHER_API copyRotateTexture(lua_State * L)
 {
-	SDL_Texture* texture = GetTextureDataAtFirstPos();
+	SDL_Texture* texture = GetTextureDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckTextureDataAtFirstPos(texture);
+	CheckTextureDataAt1stPos(texture);
 #endif
 	SDL_Point flipCenter;
 	SDL_Rect showRect;
@@ -282,9 +282,9 @@ ETHER_API copyRotateTexture(lua_State * L)
 
 ETHER_API copyReshapeTexture(lua_State * L)
 {
-	SDL_Texture* texture = GetTextureDataAtFirstPos();
+	SDL_Texture* texture = GetTextureDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckTextureDataAtFirstPos(texture);
+	CheckTextureDataAt1stPos(texture);
 #endif
 	SDL_Rect reshapeRect, showRect;
 #ifdef _ETHER_DEBUG_
@@ -303,9 +303,9 @@ ETHER_API copyReshapeTexture(lua_State * L)
 
 ETHER_API copyRotateReshapeTexture(lua_State * L)
 {
-	SDL_Texture* texture = GetTextureDataAtFirstPos();
+	SDL_Texture* texture = GetTextureDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckTextureDataAtFirstPos(texture);
+	CheckTextureDataAt1stPos(texture);
 #endif
 	SDL_Point flipCenter;
 	SDL_Rect reshapeRect, showRect;
@@ -659,9 +659,9 @@ ETHER_API loadFont(lua_State * L)
 
 ETHER_API __gc_Font(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	TTF_CloseFont(font);
 	font = nullptr;
@@ -672,9 +672,9 @@ ETHER_API __gc_Font(lua_State * L)
 
 ETHER_API font_GetStyle(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	lua_newtable(L);
 	int style = TTF_GetFontStyle(font);
@@ -723,9 +723,9 @@ ETHER_API font_GetStyle(lua_State * L)
 
 ETHER_API font_SetStyle(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 	CheckTableParam(L, 2);
 #endif
 	int style = 0;
@@ -770,9 +770,9 @@ ETHER_API font_SetStyle(lua_State * L)
 
 ETHER_API font_GetOutlineWidth(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	lua_pushnumber(L, TTF_GetFontOutline(font));
 
@@ -782,9 +782,9 @@ ETHER_API font_GetOutlineWidth(lua_State * L)
 
 ETHER_API font_SetOutlineWidth(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	TTF_SetFontOutline(font, luaL_checknumber(L, 2));
 
@@ -794,9 +794,9 @@ ETHER_API font_SetOutlineWidth(lua_State * L)
 
 ETHER_API font_GetKerning(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	lua_pushnumber(L, TTF_GetFontKerning(font));
 
@@ -806,9 +806,9 @@ ETHER_API font_GetKerning(lua_State * L)
 
 ETHER_API font_SetKerning(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	TTF_SetFontKerning(font, luaL_checknumber(L, 2));
 
@@ -818,9 +818,9 @@ ETHER_API font_SetKerning(lua_State * L)
 
 ETHER_API font_GetHeight(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	lua_pushnumber(L, TTF_FontHeight(font));
 
@@ -830,9 +830,9 @@ ETHER_API font_GetHeight(lua_State * L)
 
 ETHER_API getTextSize(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	int width, height;
 	TTF_SizeText(font, luaL_checkstring(L, 2), &width, &height);
@@ -845,9 +845,9 @@ ETHER_API getTextSize(lua_State * L)
 
 ETHER_API getUTF8TextSize(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	int width, height;
 	TTF_SizeUTF8(font, luaL_checkstring(L, 2), &width, &height);
@@ -860,9 +860,9 @@ ETHER_API getUTF8TextSize(lua_State * L)
 
 ETHER_API createTextImageSolid(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	SDL_Color color;
 #ifdef _ETHER_DEBUG_
@@ -885,9 +885,9 @@ ETHER_API createTextImageSolid(lua_State * L)
 
 ETHER_API createUTF8TextImageSolid(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	SDL_Color color;
 #ifdef _ETHER_DEBUG_
@@ -910,9 +910,9 @@ ETHER_API createUTF8TextImageSolid(lua_State * L)
 
 ETHER_API createTextImageShaded(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	SDL_Color fgColor, bgColor;
 #ifdef _ETHER_DEBUG_
@@ -937,9 +937,9 @@ ETHER_API createTextImageShaded(lua_State * L)
 
 ETHER_API createUTF8TextImageShaded(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	SDL_Color fgColor, bgColor;
 #ifdef _ETHER_DEBUG_
@@ -964,9 +964,9 @@ ETHER_API createUTF8TextImageShaded(lua_State * L)
 
 ETHER_API createTextImageBlended(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	SDL_Color color;
 #ifdef _ETHER_DEBUG_
@@ -989,9 +989,9 @@ ETHER_API createTextImageBlended(lua_State * L)
 
 ETHER_API createUTF8TextImageBlended(lua_State * L)
 {
-	TTF_Font* font = GetFontDataAtFirstPos();
+	TTF_Font* font = GetFontDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckFontDataAtFirstPos(font);
+	CheckFontDataAt1stPos(font);
 #endif
 	SDL_Color color;
 #ifdef _ETHER_DEBUG_

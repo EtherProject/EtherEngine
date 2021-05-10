@@ -8,22 +8,22 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
-#define MUSIC_TYPE_WAV		1308
-#define MUSIC_TYPE_MP3		1309
-#define MUSIC_TYPE_OGG		1310
-#define MUSIC_TYPE_CMD		1311
-#define MUSIC_TYPE_MOD		1312
-#define MUSIC_TYPE_MID		1313
-#define MUSIC_TYPE_UNKONWN	1314
+#define MUSIC_TYPE_WAV					1308
+#define MUSIC_TYPE_MP3					1309
+#define MUSIC_TYPE_OGG					1310
+#define MUSIC_TYPE_CMD					1311
+#define MUSIC_TYPE_MOD					1312
+#define MUSIC_TYPE_MID					1313
+#define MUSIC_TYPE_UNKONWN				1314
 
-#define METANAME_MUSIC		"Graphic.Music"
-#define METANAME_SOUND		"Graphic.Sound"
+#define METANAME_MUSIC					"Graphic.Music"
+#define METANAME_SOUND					"Graphic.Sound"
 
-#define GetMusicDataAtFirstPos() (Mix_Music*)(*(void**)luaL_checkudata(L, 1, METANAME_MUSIC))
-#define GetSoundDataAtFirstPos() (Mix_Chunk*)(*(void**)luaL_checkudata(L, 1, METANAME_SOUND))
+#define GetMusicDataAt1stPos()			(Mix_Music*)(*(void**)luaL_checkudata(L, 1, METANAME_MUSIC))
+#define GetSoundDataAt1stPos()			(Mix_Chunk*)(*(void**)luaL_checkudata(L, 1, METANAME_SOUND))
 
-#define CheckMusicDataAtFirstPos(music) luaL_argcheck(L, music, 1, "get music data failed")
-#define CheckSoundDataAtFirstPos(sound) luaL_argcheck(L, sound, 1, "get sound data failed")
+#define CheckMusicDataAt1stPos(music)	luaL_argcheck(L, music, 1, "get music data failed")
+#define CheckSoundDataAt1stPos(sound)	luaL_argcheck(L, sound, 1, "get sound data failed")
 
 class ModuleMedia : public Module
 {

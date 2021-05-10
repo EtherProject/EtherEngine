@@ -35,15 +35,23 @@ using namespace std;
 #define METANAME_SERVER_REQ					"Network.Server.Request"
 #define METANAME_SERVER_RES					"Network.Server.Response"
 
-#define GetClientDataAtFirstPos()			(Client*)(*(void**)luaL_checkudata(L, 1, METANAME_CLIENT))
-#define GetServerDataAtFirstPos()			(E_Server*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER))
-#define GetServerReqDataAtFirstPos()		(Request*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER_REQ))
-#define GetServerResDataAtFirstPos()		(Response*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER_RES))
+#define GetClientDataAt1stPos()				(Client*)(*(void**)luaL_checkudata(L, 1, METANAME_CLIENT))
+#define GetServerDataAt1stPos()				(E_Server*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER))
+#define GetServerReqDataAt1stPos()			(Request*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER_REQ))
+#define GetServerResDataAt1stPos()			(Response*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER_RES))
 
-#define CheckClientDataAtFirstPos(client)	luaL_argcheck(L, client, 1, "get client data failed")
-#define CheckServerDataAtFirstPos(server)	luaL_argcheck(L, server && server->pServer, 1, "get server data failed")
-#define CheckServerReqDataAtFirstPos(req)	luaL_argcheck(L, req, 1, "get request data failed")
-#define CheckServerResDataAtFirstPos(res)	luaL_argcheck(L, res, 1, "get response data failed")
+#define CheckClientDataAt1stPos(client)		luaL_argcheck(L, client, 1, "get client data failed")
+#define CheckServerDataAt1stPos(server)		luaL_argcheck(L, server && server->pServer, 1, "get server data failed")
+#define CheckServerReqDataAt1stPos(req)		luaL_argcheck(L, req, 1, "get request data failed")
+#define CheckServerResDataAt1stPos(res)		luaL_argcheck(L, res, 1, "get response data failed")
+
+#define CheckHandlerFunctionAt3rdPos()		luaL_argcheck(L, lua_isfunction(L, 3), 3, "callback handler must be function")
+
+#define GetRouteAt2ndPosAndGenRefKey(server, route, refKey, cnt)\
+	route = luaL_checkstring(L, 2);\
+	if (route.empty() || route[0] != '/') route = "/" + route;\
+	refKey = server->id + cnt + route;\
+	server->refKeys.push_back(refKey);
 
 struct RequestParam
 {
@@ -76,7 +84,13 @@ private:
 
 };
 
-const char* GetRequestParamAtSecondPos(lua_State* L, RequestParam& reqParam);
+/// <summary>
+/// 将Lua栈中位于第二个参数位置的请求数据解析至结构体
+/// </summary>
+/// <param name="L">Lua虚拟机指针</param>
+/// <param name="reqParam">接受数据的结构体</param>
+/// <returns>错误信息</returns>
+const char* GetRequestParamAt2ndPos(lua_State* L, RequestParam& reqParam);
 
 /// <summary>
 /// 将 Error 转换为宏
@@ -280,14 +294,14 @@ ETHER_API client_SetProxy(lua_State* L);
 ETHER_API createClient(lua_State* L);
 
 /*
-* 关闭指定客户端
+* 客户端数据的GC函数
 * 1参数：客户端数据（userdata-Client）
-* 1返回值：nil
+* 0返回值
 */
-ETHER_API closeClient(lua_State* L);
+ETHER_API __gc_Client(lua_State* L);
 
 /// <summary>
-/// 回调函数代理
+/// 服务端请求回调函数代理
 /// </summary>
 /// <param name="req">请求数据对象</param>
 /// <param name="res">响应数据对象</param>
@@ -315,7 +329,7 @@ ETHER_API request_GetRoute(lua_State* L);
 * 1参数：请求数据对象数据（userdata-Request）
 * 1返回值：请求头（table）
 * 备注：由于Lua的table不支持一键多值，所以当请求头中一个键对应多个值时，
-*	返回表中对应的键将保存最后一个值，请使用带索引参数的GetHeaderValue函数获取同一个键对应的不同值
+*	返回表中对应的键将保存最后一个值，请使用带索引参数的 GetHeaderValue 函数获取同一个键对应的不同值
 */
 ETHER_API request_GetHeaders(lua_State* L);
 
@@ -352,12 +366,12 @@ ETHER_API request_GetVersion(lua_State* L);
 * 1参数：请求数据对象数据（userdata-Request）
 * 1返回值：请求参数（table）
 * 备注：由于Lua的table不支持一键多值，所以当请求参数中一个键对应多个值时，
-*	返回表中对应的键将保存最后一个值，请使用带索引参数的GetParamValue函数获取同一个键对应的不同值
+*	返回表中对应的键将保存最后一个值，请使用带索引参数的 GetParamValue 函数获取同一个键对应的不同值
 */
 ETHER_API request_GetParams(lua_State* L);
 
 /*
-* 判断指定请求头指定键是否存在
+* 判断请求头中指定键是否存在
 * 2参数：请求数据对象数据（userdata-Request），键（string）
 * 1返回值：是否存在（boolean）
 */
@@ -370,70 +384,292 @@ ETHER_API request_CheckHeaderKeyExist(lua_State* L);
 */
 ETHER_API request_GetHeaderValue(lua_State* L);
 
+/*
+* 获取请求头中指定键对应的值的个数
+* 2参数：请求数据对象数据（userdata-Request），键（string）
+* 1返回值：值的个数（number）
+*/
 ETHER_API request_GetHeaderValueCount(lua_State* L);
 
+/*
+* 判断请求参数中指定键是否存在
+* 2参数：请求数据对象数据（userdata-Request），键（string）
+* 1返回值：是否存在（boolean）
+*/
 ETHER_API request_CheckParamKeyExist(lua_State* L);
 
+/*
+* 获取请求参数中指定键对应的值
+* 2或3参数：请求数据对象数据（userdata-Request），键（string），索引（number，可选，默认为1）
+* 1返回值：值（string）
+*/
 ETHER_API request_GetParamValue(lua_State* L);
 
+/*
+* 获取请求参数中指定键对应的值的个数
+* 2参数：请求数据对象数据（userdata-Request），键（string）
+* 1返回值：值的个数（number）
+*/
 ETHER_API request_GetParamValueCount(lua_State* L);
 
-
-
+/*
+* 设置响应的HTTP版本
+* 2参数：响应数据对象数据（userdata-Response），HTTP版本（string）
+* 0返回值
+*/
 ETHER_API response_SetVersion(lua_State* L);
 
+/*
+* 设置响应的状态码
+* 2参数：响应数据对象数据（userdata-Response），状态码（number）
+* 0返回值
+*/
 ETHER_API response_SetStatus(lua_State* L);
 
+/*
+* 获取响应头
+* 1参数：响应数据对象数据（userdata-Response）
+* 1返回值：响应头（table）
+* 备注：由于Lua的table不支持一键多值，所以当响应头中一个键对应多个值时，
+*	返回表中对应的键将保存最后一个值，请使用带索引参数的 GetHeaderValue 函数获取同一个键对应的不同值
+*/
 ETHER_API response_GetHeaders(lua_State* L);
 
+/*
+* 设置响应体
+* 2参数：响应数据对象数据（userdata-Response），响应体（string）
+* 0返回值
+*/
 ETHER_API response_SetBody(lua_State* L);
 
+/*
+* 判断响应头中指定键是否存在
+* 2参数：响应数据对象数据（userdata-Response），键（string）
+* 1返回值：是否存在（boolean）
+*/
 ETHER_API response_CheckHeaderKeyExist(lua_State* L);
 
+/*
+* 获取响应头中指定键对应的值
+* 2或3参数：响应数据对象数据（userdata-Response），键（string），索引（number，可选，默认为1）
+* 1返回值：值（string）
+*/
 ETHER_API response_GetHeaderValue(lua_State* L);
 
+/*
+* 获取响应头中指定键对应的值的个数
+* 2参数：响应数据对象数据（userdata-Response），键（string）
+* 1返回值：值的个数（number）
+*/
 ETHER_API response_GetHeaderValueCount(lua_State* L);
 
+/*
+* 设置响应头中指定键对应的值
+* 3参数：响应数据对象数据（userdata-Response），键（string），值（string）
+* 0返回值
+*/
 ETHER_API response_SetHeaderValue(lua_State* L);
 
+/*
+* 设置响应头
+* 3参数：响应数据对象数据（userdata-Response），响应头（table）
+* 0返回值
+* 备注：由于Lua的table不支持一键多值，所以当响应头中一个键对应多个值时，
+*	返回表中对应的键将保存最后一个值，请使用带索引参数的 SetHeaderValue 函数设置同一个键对应的不同值
+*/
 ETHER_API response_SetHeaders(lua_State* L);
 
+/*
+* 设置响应的重定向
+* 2参数：响应数据对象数据（userdata-Response），重定向地址（string）
+* 0返回值
+*/
 ETHER_API response_SetRedirect(lua_State* L);
 
+/*
+* 设置响应的内容
+* 2或3参数：响应数据对象数据（userdata-Response），响应的内容（string），响应内容的MIME类型（string，可选，默认为 text/plain）
+* 0返回值
+*/
 ETHER_API response_SetContent(lua_State* L);
 
+/*
+* 判断服务端是否创建成功
+* 1参数：服务端数据（userdata-Server）
+* 1返回值：是否创建成功（boolean）
+*/
+ETHER_API server_CheckValid(lua_State* L);
 
+/*
+* 判断服务端是否正在运行
+* 1参数：服务端数据（userdata-Server）
+* 1返回值：是否正在运行（boolean）
+*/
+ETHER_API server_CheckRunning(lua_State* L);
 
-
-
+/*
+* 配置服务端的Get请求路由及对应的回调函数
+* 3参数：服务端数据（userdata-Server），路由（string），回调函数（function）
+* 0返回值
+* 备注：路由支持正则表达式；回调函数接受2个参数：请求数据对象数据（userdata-Request），响应数据对象数据（userdata-Response）
+*/
 ETHER_API server_Get(lua_State* L);
 
+/*
+* 配置服务端的Post请求路由及对应的回调函数
+* 3参数：服务端数据（userdata-Server），路由（string），回调函数（function）
+* 0返回值
+* 备注：路由支持正则表达式；回调函数接受2个参数：请求数据对象数据（userdata-Request），响应数据对象数据（userdata-Response）
+*/
+ETHER_API server_Post(lua_State* L);
+
+/*
+* 配置服务端的Put请求路由及对应的回调函数
+* 3参数：服务端数据（userdata-Server），路由（string），回调函数（function）
+* 0返回值
+* 备注：路由支持正则表达式；回调函数接受2个参数：请求数据对象数据（userdata-Request），响应数据对象数据（userdata-Response）
+*/
+ETHER_API server_Put(lua_State* L);
+
+/*
+* 配置服务端的Patch请求路由及对应的回调函数
+* 3参数：服务端数据（userdata-Server），路由（string），回调函数（function）
+* 0返回值
+* 备注：路由支持正则表达式；回调函数接受2个参数：请求数据对象数据（userdata-Request），响应数据对象数据（userdata-Response）
+*/
+ETHER_API server_Patch(lua_State* L);
+
+/*
+* 配置服务端的Delete请求路由及对应的回调函数
+* 3参数：服务端数据（userdata-Server），路由（string），回调函数（function）
+* 0返回值
+* 备注：路由支持正则表达式；回调函数接受2个参数：请求数据对象数据（userdata-Request），响应数据对象数据（userdata-Response）
+*/
+ETHER_API server_Delete(lua_State* L);
+
+/*
+* 配置服务端的Options请求路由及对应的回调函数
+* 3参数：服务端数据（userdata-Server），路由（string），回调函数（function）
+* 0返回值
+* 备注：路由支持正则表达式；回调函数接受2个参数：请求数据对象数据（userdata-Request），响应数据对象数据（userdata-Response）
+*/
+ETHER_API server_Options(lua_State* L);
+
+/*
+* 添加服务端的静态资源挂载点
+* 3参数：服务端数据（userdata-Server），挂载点（string），文件目录（string）
+* 0返回值
+*/
+ETHER_API server_SetMountPoint(lua_State* L);
+
+/*
+* 移除服务端指定的静态资源挂载点
+* 2参数：服务端数据（userdata-Server），挂载点（string）
+* 0返回值
+*/
+ETHER_API server_RemoveMountPoint(lua_State* L);
+
+/*
+* 设置服务端的静态资源文件扩展名和响应的MIME类型映射
+* 2参数：服务端数据（userdata-Server），静态资源文件扩展名（string），MIME类型（string）
+* 0返回值
+*/
+ETHER_API server_SetFileExtMapToMIMEType(lua_State* L);
+
+/*
+* 设置服务端的异常处理函数
+* 2参数：服务端数据（userdata-Server），异常处理回调函数（function）
+* 0返回值
+* 备注：回调函数接受3个参数：请求数据对象数据（userdata-Request），响应数据对象数据（userdata-Response），异常信息（string）
+*/
 ETHER_API server_SetExceptionHandler(lua_State* L);
 
+/*
+* 设置服务端的最大连接保持数
+* 2参数：服务端数据（userdata-Server），最大链接保持数（number，默认为5）
+* 0返回值
+*/
 ETHER_API server_SetMaxKeepAliveCount(lua_State* L);
 
+/*
+* 设置服务端的连接保持超时时间
+* 2参数：服务端数据（userdata-Server），连接保持超时时间（number，单位为秒，默认为5）
+* 0返回值
+*/
 ETHER_API server_SetKeepAliveTimeout(lua_State* L);
 
+/*
+* 设置服务端的资源读取超时时间
+* 2参数：服务端数据（userdata-Server），超时时间（number，单位为秒）
+* 0返回值
+*/
 ETHER_API server_SetReadTimeout(lua_State* L);
 
+/*
+* 设置服务端的资源写入超时时间
+* 2参数：服务端数据（userdata-Server），超时时间（number，单位为秒）
+* 0返回值
+*/
 ETHER_API server_SetWriteTimeout(lua_State* L);
 
+/*
+* 设置服务端的空闲间隔超时时间
+* 2参数：服务端数据（userdata-Server），超时时间（number，单位为毫秒）
+* 0返回值
+*/
 ETHER_API server_SetIdleInterval(lua_State* L);
 
+/*
+* 设置服务端接收的请求体数据的最大长度
+* 2参数：服务端数据（userdata-Server），最大长度（number，单位为字节）
+* 0返回值
+*/
 ETHER_API server_SetMaxRequestLength(lua_State* L);
 
+/*
+* 将当前服务端绑定到任意可用的端口上
+* 1参数：服务端数据（userdata-Server）
+* 1返回值：已绑定的端口号（number）
+*/
 ETHER_API server_BindToAnyPort(lua_State* L);
 
+/*
+* 启动已绑定端口的服务端的监听
+* 1参数：服务端数据（userdata-Server）
+* 0返回值
+* 备注：服务端启动后将阻塞Lua主线程运行
+*/
 ETHER_API server_ListenAfterBind(lua_State* L);
 
+/*
+* 启动服务端监听
+* 3参数：服务端数据（userdata-Server），主机地址（string），端口号（number）
+* 0返回值
+* 备注：服务端启动后将阻塞Lua主线程运行
+*/
 ETHER_API server_Listen(lua_State* L);
 
+/*
+* 停止服务端监听
+* 1参数：服务端数据（userdata-Server）
+* 0返回值
+*/
 ETHER_API server_Stop(lua_State* L);
 
-
+/*
+* 创建服务端
+* 0或2参数：SSL服务端的证书文件路径（string，可选），SSL服务端的私钥文件路径（string，可选）
+* 1返回值：客户端数据（userdata-Client）
+* 备注：在不使用证书和私钥进行服务端创建的默认类型服务端不支持 HTTPS 协议 
+*/
 ETHER_API createServer(lua_State* L);
 
-ETHER_API closeServer(lua_State* L);
+/*
+* 服务端数据的GC函数
+* 1参数：服务端数据（userdata-Server）
+* 0返回值
+*/
+ETHER_API __gc_Server(lua_State* L);
 
 /*
 * 将 HTTP/HTTPS 链接分割为：主机地址、路由和参数

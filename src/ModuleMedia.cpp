@@ -73,9 +73,9 @@ ETHER_API loadMusic(lua_State * L)
 
 ETHER_API __gc_Music(lua_State * L)
 {
-	Mix_Music* music = GetMusicDataAtFirstPos();
+	Mix_Music* music = GetMusicDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckMusicDataAtFirstPos(music);
+	CheckMusicDataAt1stPos(music);
 #endif
 	Mix_FreeMusic(music);
 	music = nullptr;
@@ -88,9 +88,9 @@ ETHER_API __gc_Music(lua_State * L)
 
 ETHER_API playMusic(lua_State * L)
 {
-	Mix_Music* music = GetMusicDataAtFirstPos();
+	Mix_Music* music = GetMusicDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckMusicDataAtFirstPos(music);
+	CheckMusicDataAt1stPos(music);
 #endif
 	Mix_PlayMusic(music, luaL_checknumber(L, 2));
 
@@ -100,9 +100,9 @@ ETHER_API playMusic(lua_State * L)
 
 ETHER_API playMusicWithFadeIn(lua_State * L)
 {
-	Mix_Music* music = GetMusicDataAtFirstPos();
+	Mix_Music* music = GetMusicDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckMusicDataAtFirstPos(music);
+	CheckMusicDataAt1stPos(music);
 #endif
 	Mix_FadeInMusic(music, luaL_checknumber(L, 2), luaL_checknumber(L, 3));
 
@@ -168,9 +168,9 @@ ETHER_API rewindMusic(lua_State * L)
 
 ETHER_API music_GetType(lua_State * L)
 {
-	Mix_Music* music = GetMusicDataAtFirstPos();
+	Mix_Music* music = GetMusicDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckMusicDataAtFirstPos(music);
+	CheckMusicDataAt1stPos(music);
 #endif
 	switch (Mix_GetMusicType(music))
 	{
@@ -218,9 +218,9 @@ ETHER_API loadSound(lua_State * L)
 
 ETHER_API __gc_Sound(lua_State * L)
 {
-	Mix_Chunk* sound = GetSoundDataAtFirstPos();
+	Mix_Chunk* sound = GetSoundDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckSoundDataAtFirstPos(sound);
+	CheckSoundDataAt1stPos(sound);
 #endif
 	Mix_FreeChunk(sound);
 	sound = nullptr;
@@ -233,9 +233,9 @@ ETHER_API __gc_Sound(lua_State * L)
 
 ETHER_API sound_Play(lua_State * L)
 {
-	Mix_Chunk* sound = GetSoundDataAtFirstPos();
+	Mix_Chunk* sound = GetSoundDataAt1stPos();
 #ifdef _ETHER_DEBUG_
-	CheckSoundDataAtFirstPos(sound);
+	CheckSoundDataAt1stPos(sound);
 #endif
 	Mix_PlayChannel(-1, sound, luaL_checknumber(L, 2));
 
