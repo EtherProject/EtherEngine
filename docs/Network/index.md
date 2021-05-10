@@ -10,7 +10,8 @@
 
 + [CreateClient(domain)](_CreateClient_.md)：创建客户端
 
-+ [CloseClient(client)](_CloseClient_.md)：关闭指定客户端
+<details>
+    <summary>Client 对象成员函数</summary>
 
 + [Client:Get(data)](_Client_Get_.md)：使用 Get 方法请求某路由
 
@@ -43,4 +44,6 @@
 + [Client:SetCACertPath(path)](_Client_SetCACertPath_.md)：设置客户端 CACert 的 SSL 数字证书路径
 
 + [Client:SetProxy(host, port)](_Client_SetProxy_.md)：设置客户端的代理主机
+
+</details>
 
