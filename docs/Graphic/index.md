@@ -10,23 +10,7 @@
 
 + [LoadImage(path)](_LoadImage_.md)：加载图像文件
 
-<details>
-    <summary>Image 对象成员函数</summary>
-
-+ [Image:GetSize()](_Image_GetSize_.md)：获取已加载图像尺寸
-
-+ [Image:SetColorKey(flag, color)](_Image_SetColorKey_.md)：设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
-
-</details>
-
 + [CreateTexture(image)](_CreateTexture_.md)：从图像数据创建属于窗口的可渲染纹理
-
-<details>
-    <summary>Texture 对象成员函数</summary>
-
-+ [Texture:SetAlpha(alpha)](_Texture_SetAlpha_.md)：设置纹理透明度
-
-</details>
 
 + [CopyTexture(texture, rect)](_CopyTexture_.md)：将纹理拷贝至渲染缓冲区内
 
@@ -72,6 +56,38 @@
 
 + [LoadFont(path, size)](_LoadFont_.md)：加载字体文件
 
++ [GetTextSize(font, text)](_GetTextSize_.md)：获取文本尺寸
+
++ [GetUTF8TextSize(font, text)](_GetUTF8TextSize_.md)：获取UTF-8编码格式的文本尺寸
+
++ [CreateTextImageSolid(font, text, color)](_CreateTextImageSolid_.md)：使用Solid模式创建文本图像
+
++ [CreateUTF8TextImageSolid(font, text, color)](_CreateUTF8TextImageSolid_.md)：使用Solid模式创建UTF-8编码格式的文本图像
+
++ [CreateTextImageShaded(font, text, fgColor, bgColor)](_CreateTextImageShaded_.md)：使用Shaded模式创建文本图像
+
++ [CreateUTF8TextImageShaded(font, text, fgColor, bgColor)](_CreateUTF8TextImageShaded_.md)：使用Shaded模式创建UTF-8编码格式的文本图像
+
++ [CreateTextImageBlended(font, text, color)](_CreateTextImageBlended_.md)：使用Blended模式创建文本图像
+
++ [CreateUTF8TextImageBlended(font, text, color)](_CreateUTF8TextImageBlended_.md)：使用Blended模式创建UTF-8编码格式的文本图像
+
+<details>
+    <summary>Image 对象成员函数</summary>
+
++ [Image:GetSize()](_Image_GetSize_.md)：获取已加载图像尺寸
+
++ [Image:SetColorKey(flag, color)](_Image_SetColorKey_.md)：设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
+
+</details>
+
+<details>
+    <summary>Texture 对象成员函数</summary>
+
++ [Texture:SetAlpha(alpha)](_Texture_SetAlpha_.md)：设置纹理透明度
+
+</details>
+
 <details>
     <summary>Font 对象成员函数</summary>
 
@@ -90,19 +106,3 @@
 + [Font:GetHeight()](_Font_GetHeight_.md)：获取字体高度
 
 </details>
-
-+ [GetTextSize(font, text)](_GetTextSize_.md)：获取文本尺寸
-
-+ [GetUTF8TextSize(font, text)](_GetUTF8TextSize_.md)：获取UTF-8编码格式的文本尺寸
-
-+ [CreateTextImageSolid(font, text, color)](_CreateTextImageSolid_.md)：使用Solid模式创建文本图像
-
-+ [CreateUTF8TextImageSolid(font, text, color)](_CreateUTF8TextImageSolid_.md)：使用Solid模式创建UTF-8编码格式的文本图像
-
-+ [CreateTextImageShaded(font, text, fgColor, bgColor)](_CreateTextImageShaded_.md)：使用Shaded模式创建文本图像
-
-+ [CreateUTF8TextImageShaded(font, text, fgColor, bgColor)](_CreateUTF8TextImageShaded_.md)：使用Shaded模式创建UTF-8编码格式的文本图像
-
-+ [CreateTextImageBlended(font, text, color)](_CreateTextImageBlended_.md)：使用Blended模式创建文本图像
-
-+ [CreateUTF8TextImageBlended(font, text, color)](_CreateUTF8TextImageBlended_.md)：使用Blended模式创建UTF-8编码格式的文本图像
