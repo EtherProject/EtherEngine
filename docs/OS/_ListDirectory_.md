@@ -16,7 +16,7 @@ files = ListDirectory(path)
 
 ## 返回值：
 
-+ files [number]：文件列表
++ files [table]：文件列表
 
 ## 示例
 
