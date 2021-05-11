@@ -95,3 +95,34 @@
     + [Server:Listen(host, port)](_Server_Listen_.md)：启动服务端监听
 
     + [Server:Stop()](_Server_Stop_.md)：停止服务端监听
+
++ Request 对象成员函数：
+
+    + [Request:GetMethod()](_Request_GetMethod_.md)：获取请求方法
+    
+    + [Request:GetRoute()](_Request_GetRoute_.md)：获取请求路由
+        
+    + [Request:GetHeaders()](_Request_GetHeaders_.md)：获取请求头
+        
+    + [Request:GetBody()](_Request_GetBody_.md)：获取请求体
+        
+    + [Request:GetRemoteAddress()](_Request_GetRemoteAddress_.md)：获取远程主机地址
+        
+    + [Request:GetRemotePort()](_Request_GetRemotePort_.md)：获取远程主机端口号
+        
+    + [Request:GetVersion()](_Request_GetVersion_.md)：获取请求的 HTTP 版本
+        
+    + [Request:GetParams()](_Request_GetParams_.md)：获取请求参数
+        
+    + [Request:CheckHeaderKeyExist(key)](_Request_CheckHeaderKeyExist_.md)：判断请求头中指定键是否存在
+        
+    + [Request:GetHeaderValue(key)](_Request_GetHeaderValue_.md)：获取请求头中指定键对应的值
+        
+    + [Request:GetHeaderValueCount(key)](_Request_GetHeaderValueCount_.md)：获取请求头中指定键对应的值的个数
+        
+    + [Request:CheckParamKeyExist(key)](_Request_CheckParamKeyExist_.md)：判断请求参数中指定键是否存在
+        
+    + [Request:GetParamValue(key)](_Request_GetParamValue_.md)：获取请求参数中指定键对应的值
+
+    + [Request:GetParamValueCount(key)](_Request_GetParamValueCount_.md)：获取请求参数中指定键对应的值的个数
+    
