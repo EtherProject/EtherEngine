@@ -191,59 +191,56 @@ ETHER_API createWindow(lua_State* L)
 	if (window)
 		luaL_error(L, "bad operation to 'CreateWindow' (only one window can be created)");
 #endif
-	else
-	{
-		SDL_Rect rect;
+	SDL_Rect rect;
 #ifdef _ETHER_DEBUG_
-		CheckRectParam(L, 2, rect);
+	CheckRectParam(L, 2, rect);
 #else
-		GetRectParam(L, 2, rect);
+	GetRectParam(L, 2, rect);
 #endif
-		rect.x = rect.x == WINDOW_POSITION_DEFAULT ? SDL_WINDOWPOS_UNDEFINED : rect.x;
-		rect.y = rect.y == WINDOW_POSITION_DEFAULT ? SDL_WINDOWPOS_UNDEFINED : rect.y;
+	rect.x = rect.x == WINDOW_POSITION_DEFAULT ? SDL_WINDOWPOS_UNDEFINED : rect.x;
+	rect.y = rect.y == WINDOW_POSITION_DEFAULT ? SDL_WINDOWPOS_UNDEFINED : rect.y;
 
-		int flags = SDL_WINDOW_SHOWN;
-		luaL_argcheck(L, lua_istable(L, 3), 3, "table expected");
-		lua_pushnil(L);
-		while (lua_next(L, 3))
+	int flags = SDL_WINDOW_SHOWN;
+	luaL_argcheck(L, lua_istable(L, 3), 3, "table expected");
+	lua_pushnil(L);
+	while (lua_next(L, 3))
+	{
+		lua_pushvalue(L, -2);
+		switch ((int)lua_tonumber(L, -2))
 		{
-			lua_pushvalue(L, -2);
-			switch ((int)lua_tonumber(L, -2))
-			{
-			case WINDOW_FULLSCREEN:
-				flags |= SDL_WINDOW_FULLSCREEN;
-				break;
-			case WINDOW_FULLSCREEN_DESKTOP:
-				flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-				break;
-			case WINDOW_BORDERLESS:
-				flags |= SDL_WINDOW_BORDERLESS;
-				break;
-			case WINDOW_RESIZABLE:
-				flags |= SDL_WINDOW_RESIZABLE;
-				break;
-			case WINDOW_MAXIMIZED:
-				flags |= SDL_WINDOW_MAXIMIZED;
-				break;
-			case WINDOW_MINIMIZED:
-				flags |= SDL_WINDOW_MINIMIZED;
-				break;
-			default:
-				luaL_error(L, "bad argument #3 to 'CreateWindow' (the elements of table must be MACRO number, got %s)", luaL_typename(L, -2));
-				break;
-			}
-			lua_pop(L, 2);
+		case WINDOW_FULLSCREEN:
+			flags |= SDL_WINDOW_FULLSCREEN;
+			break;
+		case WINDOW_FULLSCREEN_DESKTOP:
+			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			break;
+		case WINDOW_BORDERLESS:
+			flags |= SDL_WINDOW_BORDERLESS;
+			break;
+		case WINDOW_RESIZABLE:
+			flags |= SDL_WINDOW_RESIZABLE;
+			break;
+		case WINDOW_MAXIMIZED:
+			flags |= SDL_WINDOW_MAXIMIZED;
+			break;
+		case WINDOW_MINIMIZED:
+			flags |= SDL_WINDOW_MINIMIZED;
+			break;
+		default:
+			luaL_error(L, "bad argument #3 to 'CreateWindow' (the elements of table must be MACRO number, got %s)", luaL_typename(L, -2));
+			break;
 		}
+		lua_pop(L, 2);
+	}
 
-		window = SDL_CreateWindow(luaL_checkstring(L, 1), rect.x, rect.y, rect.w, rect.h, flags);
-		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	window = SDL_CreateWindow(luaL_checkstring(L, 1), rect.x, rect.y, rect.w, rect.h, flags);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 #ifdef __WINDOWS__
-		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
 #else
-		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 #endif
-	}
 
 	return 0;
 }

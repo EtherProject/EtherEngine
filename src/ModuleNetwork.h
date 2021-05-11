@@ -14,6 +14,7 @@ using namespace httplib;
 
 #include <vector>
 #include <mutex>
+#include <iostream>
 using namespace std;
 
 #define ERRCODE_SUCCESS						1354

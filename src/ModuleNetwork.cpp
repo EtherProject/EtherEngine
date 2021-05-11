@@ -613,13 +613,14 @@ void CallHandler(const Request& req, Response& res, lua_State* L, const string& 
 	*uppResponse = &res;
 	luaL_getmetatable(L, METANAME_SERVER_RES);
 	lua_setmetatable(L, -2);
-	if (err)
-	{
-		lua_pushstring(L, err);
-		lua_call(L, 3, 0);
-	}
-	else
-		lua_call(L, 2, 0);
+
+	if (err) lua_pushstring(L, err);
+	if (lua_pcall(L, !err ? 2 : 3, 0, 0))
+#ifdef _ETHER_DEBUG_
+		cout << "[ServerError] " << lua_tostring(L, -1) << endl;
+#else
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Server Error", lua_tostring(L, -1), nullptr);
+#endif
 
 	mtxServer.unlock();
 }
