@@ -12,7 +12,7 @@ image:SetColorKey(flag, color)
 
 ## 参数：
 
-+ image [userdata-IMAGE]：图像数据
++ image [userdata-Image]：图像数据
 + flag [boolean]：是否启用
 + color [table]：ColorKey
 

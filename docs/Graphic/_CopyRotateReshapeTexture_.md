@@ -12,7 +12,7 @@ CopyRotateReshapeTexture(texture, angle, center, mode, shape, rect)
 
 ## 参数：
 
-+ texture [userdata-TEXTURE]：纹理数据
++ texture [userdata-Texture]：纹理数据
 + angle [number]：旋转角度
 + center [table]：旋转中心坐标
 + mode [table]：旋转模式，成员可以为以下旋转模式中的一种或多种：

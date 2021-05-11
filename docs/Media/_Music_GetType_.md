@@ -12,7 +12,7 @@ type = music:GetMusicType()
 
 ## 参数：
 
-+ music [userdata-MUSIC]：音乐数据，nil表示正在播放的音乐
++ music [userdata-Music]：音乐数据，nil表示正在播放的音乐
 
 ## 返回值：
 

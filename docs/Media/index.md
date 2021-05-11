@@ -18,6 +18,8 @@
 
 + [SetMusicVolume(value)](_SetMusicVolume_.md)：设置音乐播放的音量
 
++ [SetMusicPosition(position)](_SetMusicPosition_.md)：设置当音乐的播放位置
+
 + [GetMusicVolume()](_GetMusicVolume_.md)：获取当前音乐播放的音量
 
 + [PauseMusic()](_PauseMusic_.md)：暂停当前正在播放的音乐
@@ -37,3 +39,7 @@
 + Sound 对象成员函数：
 
     + [Sound:Play(times)](_Sound_Play_.md)：播放已加载的音效
+
+    + [Sound:SetVolume(value)](_Sound_SetVolume_.md)：设置音效播放的音量
+
+    + [Sound:GetVolume()](_Sound_GetVolume_.md)：获取音效播放的音量

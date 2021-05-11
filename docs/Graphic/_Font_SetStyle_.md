@@ -12,7 +12,7 @@ font:SetStyle(style)
 
 ## 参数：
 
-+ font [userdata-FONT]：字体数据
++ font [userdata-Font]：字体数据
 + style [table]：用以描述字体样式的表，成员可以为以下样式中的一种或多种：
 
     + FONT_STYLE_BOLD：粗体

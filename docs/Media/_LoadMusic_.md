@@ -16,7 +16,7 @@ music = LoadMusic(path)
 
 ## 返回值：
 
-+ music [userdata-MUSIC]：成功则返回音乐数据，失败则返回nil
++ music [userdata-Music]：成功则返回音乐数据，失败则返回nil
 
 ## 示例
 

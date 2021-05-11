@@ -12,7 +12,7 @@ width, height = image:GetSize()
 
 ## 参数：
 
-+ image [userdata-IMAGE]：图像数据
++ image [userdata-Image]：图像数据
 
 ## 返回值：
 

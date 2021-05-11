@@ -12,11 +12,11 @@ texture = CreateTexture(image)
 
 ## 参数：
 
-+ image [userdata-IMAGE]：图像数据
++ image [userdata-Image]：图像数据
 
 ## 返回值：
 
-+ texture [userdata-TEXTURE]：纹理数据
++ texture [userdata-Texture]：纹理数据
 
 ## 示例
 

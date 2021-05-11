@@ -12,7 +12,7 @@ font:SetKerning(kerning)
 
 ## 参数：
 
-+ font [userdata-FONT]：字体数据
++ font [userdata-Font]：字体数据
 + kerning [number]：字体间距
 
 ## 返回值：

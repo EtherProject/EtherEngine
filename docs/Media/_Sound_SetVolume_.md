@@ -1,19 +1,19 @@
 ### [[ << 回到上层 ]](index.md)
 
-# Sound:Play
+# Sound:SetVolume
 
-> 播放已加载的音效
+> 设置音效播放的音量
 
 ```lua
 
-sound:Play(times)
+sound:SetVolume(value)
 
 ```
 
 ## 参数：
 
 + sound [userdata-Sound]：音效数据
-+ times [number]：音效播放的次数，-1为循环播放
++ value [number]：音量大小，取值范围为0-128
 
 ## 返回值：
 

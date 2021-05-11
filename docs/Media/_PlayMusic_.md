@@ -12,7 +12,7 @@ PlayMusic(music, times)
 
 ## 参数：
 
-+ music [userdata-MUSIC]：音乐数据
++ music [userdata-Music]：音乐数据
 + times [number]：音乐播放的次数，-1为循环播放
 
 ## 返回值：

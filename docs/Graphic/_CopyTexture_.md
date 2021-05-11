@@ -12,7 +12,7 @@ CopyTexture(texture, rect)
 
 ## 参数：
 
-+ texture [userdata-TEXTURE]：纹理数据
++ texture [userdata-Texture]：纹理数据
 + rect [table]：用以描述显示区域的矩形
 
 ## 返回值：

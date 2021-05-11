@@ -12,7 +12,7 @@ width, height = GetUTF8TextSize(font, text)
 
 ## 参数：
 
-+ font [userdata-FONT]：字体数据
++ font [userdata-Font]：字体数据
 + text [string]：UTF-8编码格式的文本内容
 
 ## 返回值：

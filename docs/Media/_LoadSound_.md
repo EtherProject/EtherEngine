@@ -16,7 +16,7 @@ sound = LoadSound(path)
 
 ## 返回值：
 
-+ sound [userdata-SOUND]：成功则返回音效数据，失败则返回nil
++ sound [userdata-Sound]：成功则返回音效数据，失败则返回nil
 
 ## 示例
 

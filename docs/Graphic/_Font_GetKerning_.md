@@ -12,7 +12,7 @@ kerning = font:GetKerning()
 
 ## 参数：
 
-+ font [userdata-FONT]：字体数据
++ font [userdata-Font]：字体数据
 
 ## 返回值：
 

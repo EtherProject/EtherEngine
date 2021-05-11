@@ -16,7 +16,7 @@ image = LoadImage(path)
 
 ## 返回值：
 
-+ image [userdata-IMAGE]：成功则返回图像数据，失败则返回nil
++ image [userdata-Image]：成功则返回图像数据，失败则返回nil
 
 ## 示例
 

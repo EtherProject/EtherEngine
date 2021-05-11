@@ -12,7 +12,7 @@ PlayMusicWithFadeIn(music, times, delay)
 
 ## 参数：
 
-+ music [userdata-MUSIC]：音乐数据
++ music [userdata-Music]：音乐数据
 + times [number]：音乐播放的次数，-1为循环播放
 + delay [number]：淡入音效持续时间，单位为毫秒
 

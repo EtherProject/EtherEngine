@@ -12,7 +12,7 @@ font = LoadFont(path, size)
 
 ## 参数：
 
-+ path [userdata-FONT]：字体文件路径
++ path [userdata-Font]：字体文件路径
 + size [number]：字体大小
 
 ## 返回值：

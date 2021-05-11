@@ -12,7 +12,7 @@ width, height = GetTextSize(font, text)
 
 ## 参数：
 
-+ font [userdata-FONT]：字体数据
++ font [userdata-Font]：字体数据
 + text [string]：文本内容
 
 ## 返回值：
