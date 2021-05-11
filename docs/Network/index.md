@@ -116,13 +116,36 @@
         
     + [Request:CheckHeaderKeyExist(key)](_Request_CheckHeaderKeyExist_.md)：判断请求头中指定键是否存在
         
-    + [Request:GetHeaderValue(key)](_Request_GetHeaderValue_.md)：获取请求头中指定键对应的值
+    + [Request:GetHeaderValue(key [, index])](_Request_GetHeaderValue_.md)：获取请求头中指定键对应的值
         
     + [Request:GetHeaderValueCount(key)](_Request_GetHeaderValueCount_.md)：获取请求头中指定键对应的值的个数
         
     + [Request:CheckParamKeyExist(key)](_Request_CheckParamKeyExist_.md)：判断请求参数中指定键是否存在
         
-    + [Request:GetParamValue(key)](_Request_GetParamValue_.md)：获取请求参数中指定键对应的值
+    + [Request:GetParamValue(key [, index])](_Request_GetParamValue_.md)：获取请求参数中指定键对应的值
 
     + [Request:GetParamValueCount(key)](_Request_GetParamValueCount_.md)：获取请求参数中指定键对应的值的个数
     
++ Response 对象成员函数：
+
+    + [Response:SetVersion(version)](_Response_SetVersion_.md)：设置响应的 HTTP 版本
+    
+    + [Response:SetStatus(status)](_Response_SetStatus_.md)：设置响应的状态码
+    
+    + [Response:GetHeaders(headers)](_Response_GetHeaders_.md)：获取响应头
+    
+    + [Response:SetBody(body)](_Response_SetBody_.md)：设置响应体
+    
+    + [Response:CheckHeaderKeyExist(key)](_Response_CheckHeaderKeyExist_.md)：判断响应头中指定键是否存在
+    
+    + [Response:GetHeaderValue(key [, index])](_Response_GetHeaderValue_.md)：获取响应头中指定键对应的值
+    
+    + [Response:GetHeaderValueCount(key)](_Response_GetHeaderValueCount_.md)：获取响应头中指定键对应的值的个数
+    
+    + [Response:SetHeaderValue(key, value)](_Response_SetHeaderValue_.md)：设置响应头中指定键对应的值
+    
+    + [Response:SetHeaders(headers)](_Response_SetHeaders_.md)：设置响应头
+    
+    + [Response:SetRedirect(url)](_Response_SetRedirect_.md)：设置响应的重定向
+    
+    + [Response:SetContent(content [, type])](_Response_SetContent_.md)：设置响应的内容

@@ -7,8 +7,6 @@
 ![](https://img.shields.io/github/commit-activity/m/VoidmatrixHeathcliff/EtherEngine)
 ![](https://jwenjian-visitor-badge-5.glitch.me/badge?page_id=VoidmatrixHeathcliff.EtherEngine.readme)
 
-> 4.0.0 版本文档正在维护，变更部分 API 请等待文档或使用 3.x 版本
-
 本项目由 EtherEngine 更名为 **EtherAPI**，旨在提供一套跨平台的 Lua 接口，供游戏开发使用（当前版本仅支持 2D 游戏），功能涵盖 **图形、声音、交互、网络** 等方面，目前仍在不断开发和完善中；API 在设计过程中首先考虑的是 **简洁** 和 **易用性**，所以对于性能要求较高的游戏，EtherAPI 或许并不是一个最好的选择；但是在对于性能并不敏感的应用场景（如游戏原型的设计），EtherAPI 可以帮你快速建立起几乎所有类型游戏的演示框架甚至是一个已经可以直接发布的游戏。如果您对本项目感兴趣，欢迎为项目贡献代码或留下您的使用建议，记得点亮右上角的小星星哦 ~  
 
 This project is renamed as **EtherAPI** from EtherEngine, which aims to provide a set of cross platform Lua interface for game development (the current version only supports 2D games), with functions covering **graphics, sound, media, interaction, network** and other aspects, and is still under continuous development and improvement; the first consideration in the design process of API is **SIMPLICITY** and **EASE OF USE**, so EtherAPI may not be the best choice for games with high performance requirements. However, in application scenarios that are not sensitive to performance (such as the design of game prototypes), EtherAPI can help you quickly build up the performance framework of almost all kinds of games, even a game that can be released directly. If you are interested in this project, you are welcome to contribute code to the project or leave your suggestions. Remember to light up the little star in the upper right corner~

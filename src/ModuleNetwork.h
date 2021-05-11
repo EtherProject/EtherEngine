@@ -107,6 +107,13 @@ int ConvertErrorCodeToMacro(const Error& error);
 void PushResponseToStack(lua_State* L, const Result& res);
 
 /*
+* 判断客户端是否创建成功
+* 1参数：客户端数据（userdata-Client）
+* 1返回值：是否创建成功（boolean）
+*/
+ETHER_API client_CheckValid(lua_State* L);
+
+/*
 * 使用 Get 方法请求某路由
 * 2参数：客户端数据（userdata-Client），请求数据（table）结构如下：
 *	{
@@ -343,21 +350,21 @@ ETHER_API request_GetBody(lua_State* L);
 /*
 * 获取远程主机地址
 * 1参数：请求数据对象数据（userdata-Request）
-* 1返回值：主机地址（string）
+* 1返回值：远程主机地址（string）
 */
 ETHER_API request_GetRemoteAddress(lua_State* L);
 
 /*
-* 获取远程主机端口
+* 获取远程主机端口号
 * 1参数：请求数据对象数据（userdata-Request）
-* 1返回值：主机端口（number）
+* 1返回值：远程主机端口号（number）
 */
 ETHER_API request_GetRemotePort(lua_State* L);
 
 /*
 * 获取请求的HTTP版本
 * 1参数：请求数据对象数据（userdata-Request）
-* 1返回值：HTTP版本（number）
+* 1返回值：HTTP版本（string）
 */
 ETHER_API request_GetVersion(lua_State* L);
 
@@ -475,12 +482,12 @@ ETHER_API response_SetHeaderValue(lua_State* L);
 * 3参数：响应数据对象数据（userdata-Response），响应头（table）
 * 0返回值
 * 备注：由于Lua的table不支持一键多值，所以当响应头中一个键对应多个值时，
-*	返回表中对应的键将保存最后一个值，请使用带索引参数的 SetHeaderValue 函数设置同一个键对应的不同值
+*	返回表中对应的键将保存最后一个值，请使用 SetHeaderValue 函数为同一个键设置不同值
 */
 ETHER_API response_SetHeaders(lua_State* L);
 
 /*
-* 设置响应的重定向
+* 设置响应的重定向地址
 * 2参数：响应数据对象数据（userdata-Response），重定向地址（string）
 * 0返回值
 */

@@ -47,6 +47,7 @@ ModuleNetwork::ModuleNetwork()
 		{
 			METANAME_CLIENT,
 			{
+				{ "CheckValid", client_CheckValid },
 				{ "Get", client_Get },
 				{ "Post", client_Post },
 				{ "Put", client_Put },
@@ -108,7 +109,7 @@ ModuleNetwork::ModuleNetwork()
 				{ "CheckHeaderKeyExist", request_CheckHeaderKeyExist },
 				{ "GetHeaderValue", request_GetHeaderValue },
 				{ "GetHeaderValueCount", request_GetHeaderValueCount },
-				{ "HasParam", request_CheckParamKeyExist },
+				{ "CheckParamKeyExist", request_CheckParamKeyExist },
 				{ "GetParamValue", request_GetParamValue },
 				{ "GetParamValueCount", request_GetParamValueCount },
 			}
@@ -271,6 +272,18 @@ void PushResponseToStack(lua_State* L, const Result& res)
 		}
 		lua_settable(L, -3);
 	}	
+}
+
+
+ETHER_API client_CheckValid(lua_State* L)
+{
+	Client* client = GetClientDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckClientDataAt1stPos(client);
+#endif
+	lua_pushboolean(L, client->is_valid());
+
+	return 1;
 }
 
 

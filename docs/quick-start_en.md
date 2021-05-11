@@ -2,6 +2,8 @@
 
 [简体中文](quick-start.md) | English | [日本語](quick-start_ja.md)
 
+> The 4.x version quick start document is under maintenance. Please read the [Full Manual](index.md) or use the 3.x version.
+
 Welcome to EtherAPI (for EtherEngine). EtherAPI consists of a set of lightweight Lua game development interfaces developed based on many C/C++ open source projects for game developers to quickly build game prototypes or conduct various conceptual tests. similarly, it also supports various games (The current version only supports 2D games) in development and production environments.
 
 Here is a quick start guide for EtherAPI, its purpose is to help you quickly get started using the interface library; therefore, this document will only introduce the content of commonly used interfaces, and many important functions will only be briefly introduced or even not mentioned. For more complete information, you should read [Full EtherAPI Manual](index.md).

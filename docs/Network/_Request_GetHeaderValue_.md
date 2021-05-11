@@ -6,7 +6,7 @@
 
 ```lua
 
-value = request:GetHeaderValue(key)
+value = request:GetHeaderValue(key [, index])
 
 ```
 
@@ -14,6 +14,7 @@ value = request:GetHeaderValue(key)
 
 + request [userdata-Request]：请求数据对象数据
 + key [string]：键
++ index [number]：索引，可选，默认为 1
 
 ## 返回值：
 

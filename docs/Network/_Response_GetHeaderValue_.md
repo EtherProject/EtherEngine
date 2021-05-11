@@ -1,18 +1,18 @@
 ### [[ << 回到上层 ]](index.md)
 
-# Request:GetParamValue
+# Response:GetHeaderValue
 
-> 获取请求参数中指定键对应的值
+> 获取响应头中指定键对应的值
 
 ```lua
 
-value = request:GetParamValue(key [, index])
+value = response:GetHeaderValue(key [, index])
 
 ```
 
 ## 参数：
 
-+ request [userdata-Request]：请求数据对象数据
++ response [userdata-Response]：响应数据对象数据
 + key [string]：键
 + index [number]：索引，可选，默认为 1
 
