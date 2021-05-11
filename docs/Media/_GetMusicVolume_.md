@@ -12,11 +12,11 @@ volume = GetMusicVolume()
 
 ## 参数：
 
-+ volume [number]：音量大小，取值范围为0-128
+无
 
 ## 返回值：
 
-无
++ volume [number]：音量大小，取值范围为0-128
 
 ## 示例
 

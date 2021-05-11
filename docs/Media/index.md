@@ -28,6 +28,12 @@
 
 + [RewindMusic()](_RewindMusic_.md)：重新播放当前正在播放的音乐
 
++ [CheckMusicPlaying()](_CheckMusicPlaying_.md)：判断当前音乐是否正在播放
+
++ [CheckMusicPaused()](_CheckMusicPaused_.md)：判断当前音乐是否已暂停
+
++ [GetMusicFadingType()](_GetMusicFadingType_.md)：获取当前正在播放的音乐的淡化效果类型
+
 + [LoadSound(path)](_LoadSound_.md)：加载音效文件
 
 ## 对象成员函数列表：

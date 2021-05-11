@@ -17,6 +17,7 @@ ModuleMedia::ModuleMedia()
 		{ "LoadMusic", loadMusic },
 		{ "PlayMusic", playMusic },
 		{ "PlayMusicWithFadeIn", playMusicWithFadeIn },
+		{ "SetMusicPosition", setMusicPosition },
 		{ "SetMusicVolume", setMusicVolume },
 		{ "GetMusicVolume", getMusicVolume },
 		{ "StopMusic", stopMusic },
@@ -24,6 +25,9 @@ ModuleMedia::ModuleMedia()
 		{ "PauseMusic", pauseMusic },
 		{ "ResumeMusic", resumeMusic },
 		{ "RewindMusic", rewindMusic },
+		{ "CheckMusicPlaying", checkMusicPlaying },
+		{ "CheckMusicPaused", checkMusicPaused },
+		{ "GetMusicFadingType", getMusicFadingType },
 		{ "LoadSound", loadSound },
 	};
 
@@ -49,6 +53,7 @@ ModuleMedia::ModuleMedia()
 			METANAME_SOUND,
 			{
 				{ "Play", sound_Play },
+				{ "SetVolume", sound_SetVolume },
 			},
 			__gc_Sound
 		},
@@ -126,6 +131,14 @@ ETHER_API stopMusicWithFadeOut(lua_State * L)
 }
 
 
+ETHER_API setMusicPosition(lua_State* L)
+{
+	Mix_SetMusicPosition(luaL_checknumber(L, 1));
+
+	return 0;
+}
+
+
 ETHER_API setMusicVolume(lua_State * L)
 {
 	Mix_VolumeMusic(luaL_checknumber(L, 1));
@@ -163,6 +176,43 @@ ETHER_API rewindMusic(lua_State * L)
 	Mix_RewindMusic();
 
 	return 0;
+}
+
+
+ETHER_API checkMusicPlaying(lua_State* L)
+{
+	lua_pushboolean(L, Mix_PlayingMusic());
+
+	return 1;
+}
+
+
+ETHER_API checkMusicPaused(lua_State* L)
+{
+	lua_pushboolean(L, Mix_PausedMusic());
+
+	return 1;
+}
+
+
+ETHER_API getMusicFadingType(lua_State* L)
+{
+	switch (Mix_FadingMusic())
+	{
+	case MIX_NO_FADING:
+		lua_pushinteger(L, FADING_TYPE_NONE);
+		break;
+	case MIX_FADING_OUT:
+		lua_pushinteger(L, FADING_TYPE_OUT);
+		break;
+	case MIX_FADING_IN:
+		lua_pushinteger(L, FADING_TYPE_IN);
+		break;
+	default:
+		break;
+	}
+
+	return 1;
 }
 
 
@@ -240,4 +290,28 @@ ETHER_API sound_Play(lua_State * L)
 	Mix_PlayChannel(-1, sound, luaL_checknumber(L, 2));
 
 	return 0;
+}
+
+
+ETHER_API sound_SetVolume(lua_State* L)
+{
+	Mix_Chunk* sound = GetSoundDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckSoundDataAt1stPos(sound);
+#endif
+	Mix_VolumeChunk(sound, luaL_checknumber(L, 2));
+
+	return 0;
+}
+
+
+ETHER_API sound_GetVolume(lua_State* L)
+{
+	Mix_Chunk* sound = GetSoundDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckSoundDataAt1stPos(sound);
+#endif
+	lua_pushnumber(L, sound->volume);
+
+	return 1;
 }
