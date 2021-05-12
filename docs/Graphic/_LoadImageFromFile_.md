@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# LoadImage
+# LoadImageFromFile
 
-> 加载图像文件
+> 从文件中加载图像
 
 ```lua
 
-image = LoadImage(path)
+image = LoadImageFromFile(path)
 
 ```
 

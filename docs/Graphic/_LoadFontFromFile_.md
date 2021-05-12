@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# LoadFont
+# LoadFontFromFile
 
-> 加载字体文件
+> 从文件中加载字体
 
 ```lua
 
-font = LoadFont(path, size)
+font = LoadFontFromFile(path, size)
 
 ```
 

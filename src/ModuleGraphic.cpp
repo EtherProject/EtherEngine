@@ -15,7 +15,8 @@ ModuleGraphic::ModuleGraphic()
 
 	_vCMethods = {
 		{ "SetCursorShow", setCursorShow },
-		{ "LoadImage", loadImage },
+		{ "LoadImageFromFile", loadImageFromFile },
+		{ "LoadImageFromData", loadImageFromData },
 		{ "CreateTexture", createTexture },
 		{ "CopyTexture", copyTexture },
 		{ "CopyRotateTexture", copyRotateTexture },
@@ -38,7 +39,8 @@ ModuleGraphic::ModuleGraphic()
 		{ "FillPie", fillPie },
 		{ "Triangle", triangle },
 		{ "FillTriangle", fillTriangle },
-		{ "LoadFont", loadFont },
+		{ "LoadFontFromFile", loadFontFromFile },
+		{ "LoadFontFromData", loadFontFromData },
 		{ "GetTextSize", getTextSize },
 		{ "GetUTF8TextSize", getUTF8TextSize },
 		{ "CreateTextImageSolid", createTextImageSolid },
@@ -101,9 +103,25 @@ ETHER_API setCursorShow(lua_State * L)
 	return 0;
 }
 
-ETHER_API loadImage(lua_State * L)
+ETHER_API loadImageFromFile(lua_State * L)
 {
 	SDL_Surface* pSurface = IMG_Load(luaL_checkstring(L, 1));
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pSurface, 1, "load image failed");
+#endif
+	SDL_Surface** uppSurface = (SDL_Surface**)lua_newuserdata(L, sizeof(SDL_Surface*));
+	*uppSurface = pSurface;
+	luaL_getmetatable(L, METANAME_IMAGE);
+	lua_setmetatable(L, -2);
+
+	return 1;
+}
+
+
+ETHER_API loadImageFromData(lua_State* L)
+{
+	size_t size;
+	SDL_Surface* pSurface = IMG_Load_RW(SDL_RWFromMem((void*)luaL_checklstring(L, 1, &size), size), 1);
 #ifdef _ETHER_DEBUG_
 	luaL_argcheck(L, pSurface, 1, "load image failed");
 #endif
@@ -642,9 +660,25 @@ ETHER_API fillTriangle(lua_State * L)
 }
 
 
-ETHER_API loadFont(lua_State * L)
+ETHER_API loadFontFromFile(lua_State * L)
 {
 	TTF_Font* pFont = TTF_OpenFont(luaL_checkstring(L, 1), luaL_checknumber(L, 2));
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, pFont, 1, "load font failed");
+#endif
+	TTF_Font** uppFont = (TTF_Font**)lua_newuserdata(L, sizeof(TTF_Font*));
+	*uppFont = pFont;
+	luaL_getmetatable(L, METANAME_FONT);
+	lua_setmetatable(L, -2);
+
+	return 1;
+}
+
+
+ETHER_API loadFontFromData(lua_State* L)
+{
+	size_t size;
+	TTF_Font* pFont = TTF_OpenFontRW(SDL_RWFromMem((void*)luaL_checklstring(L, 1, &size), size), 1, luaL_checknumber(L, 2));
 #ifdef _ETHER_DEBUG_
 	luaL_argcheck(L, pFont, 1, "load font failed");
 #endif

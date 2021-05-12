@@ -50,10 +50,15 @@ extern SDL_Renderer* renderer;
 // 0返回值
 ETHER_API setCursorShow(lua_State * L);
 
-// 加载图像文件
+// 从文件中加载图像
 // 1参数：图像文件路径（string）
 // 1返回值：成功则返回图像数据（userdata-IMAGE），失败则返回nil
-ETHER_API loadImage(lua_State * L);
+ETHER_API loadImageFromFile(lua_State * L);
+
+// 从缓冲区中加载图像
+// 1参数：缓冲区数据（string）
+// 1返回值：成功则返回图像数据（userdata-IMAGE），失败则返回nil
+ETHER_API loadImageFromData(lua_State* L);
 
 // 设置的图片文件是否启用指定的ColorKey，启用的Color将被透明化
 // 3参数：图像数据（userdata-IMAGE），是否启用（boolean），ColorKey（table）
@@ -190,10 +195,15 @@ ETHER_API triangle(lua_State * L);
 // 0返回值
 ETHER_API fillTriangle(lua_State * L);
 
-// 加载字体文件
+// 从文件中加载字体
 // 2参数：字体文件路径（string）、字体大小（number）
 // 1返回值：成功则返回字体数据（userdata-FONT），失败则返回nil
-ETHER_API loadFont(lua_State * L);
+ETHER_API loadFontFromFile(lua_State * L);
+
+// 从缓冲区中加载字体
+// 2参数：缓冲区数据（string）、字体大小（number）
+// 1返回值：成功则返回字体数据（userdata-FONT），失败则返回nil
+ETHER_API loadFontFromData(lua_State* L);
 
 // 字体数据GC函数
 // 1参数：字体数据（userdata-FONT）

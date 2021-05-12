@@ -8,7 +8,9 @@
 
 + [SetCursorShow(flag)](_SetCursorShow_.md)：设置鼠标是否显示
 
-+ [LoadImage(path)](_LoadImage_.md)：加载图像文件
++ [LoadImageFromFile(path)](_LoadImageFromFile_.md)：从文件中加载图像
+
++ [LoadImageFromData(data)](_LoadImageFromData_.md)：从缓冲区中加载图像
 
 + [CreateTexture(image)](_CreateTexture_.md)：从图像数据创建属于窗口的可渲染纹理
 
@@ -54,7 +56,9 @@
 
 + [FillTriangle(point1, point2, point3)](_FillTriangle_.md)：在指定位置绘制填充三角形
 
-+ [LoadFont(path, size)](_LoadFont_.md)：加载字体文件
++ [LoadFontFromFile(path, size)](_LoadFontFromFile_.md)：从文件中加载字体
+
++ [LoadFontFromData(data, size)](_LoadFontFromData_.md)：从缓冲区中加载字体
 
 + [GetTextSize(font, text)](_GetTextSize_.md)：获取文本尺寸
 
