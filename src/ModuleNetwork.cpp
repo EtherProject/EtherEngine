@@ -3,7 +3,7 @@
 
 size_t ModuleNetwork::_stServerIndex = 0;
 
-mutex mtxServer;
+mutex mtxServerRequest, mtxServerException;
 
 
 ModuleNetwork& ModuleNetwork::Instance()
@@ -598,9 +598,9 @@ ETHER_API __gc_Client(lua_State* L)
 }
 
 
-void CallHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const char* err)
+void CallRequestHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const string& serverID)
 {
-	mtxServer.lock();
+	mtxServerRequest.lock();
 
 	lua_getfield(L, LUA_REGISTRYINDEX, refKey.c_str());
 
@@ -614,15 +614,33 @@ void CallHandler(const Request& req, Response& res, lua_State* L, const string& 
 	luaL_getmetatable(L, METANAME_SERVER_RES);
 	lua_setmetatable(L, -2);
 
-	if (err) lua_pushstring(L, err);
-	if (lua_pcall(L, !err ? 2 : 3, 0, 0))
-#ifdef _ETHER_DEBUG_
-		cout << "[ServerError] " << lua_tostring(L, -1) << endl;
-#else
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Server Error", lua_tostring(L, -1), nullptr);
-#endif
+	if (lua_pcall(L, 2, 0, 0))
+		CallExceptionHandler(req, res, L, GenExpHandlerRefKey(serverID), lua_tostring(L, -1));
+		
+	mtxServerRequest.unlock();
+}
 
-	mtxServer.unlock();
+
+void CallExceptionHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const string& errmsg)
+{
+	mtxServerException.lock();
+
+	lua_getfield(L, LUA_REGISTRYINDEX, refKey.c_str());
+	Request request = req;
+	Request** uppRequest = (Request**)lua_newuserdata(L, sizeof(Request*));
+	*uppRequest = &request;
+	luaL_getmetatable(L, METANAME_SERVER_REQ);
+	lua_setmetatable(L, -2);
+	Response** uppResponse = (Response**)lua_newuserdata(L, sizeof(Response*));
+	*uppResponse = &res;
+	luaL_getmetatable(L, METANAME_SERVER_RES);
+	lua_setmetatable(L, -2);
+	lua_pushstring(L, errmsg.c_str());
+
+	if (lua_pcall(L, 3, 0, 0))
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Unhandle Server Error ", lua_tostring(L, -1), nullptr);
+
+	mtxServerException.unlock();
 }
 
 
@@ -1000,7 +1018,7 @@ ETHER_API server_Get(lua_State* L)
 	server->pServer->Get(
 		route.c_str(),
 		[=](const Request& req, Response& res) {
-			CallHandler(req, res, L, refKey);
+			CallRequestHandler(req, res, L, refKey, server->id);
 		}
 	);
 
@@ -1023,7 +1041,7 @@ ETHER_API server_Post(lua_State* L)
 	server->pServer->Post(
 		route.c_str(),
 		[=](const Request& req, Response& res) {
-			CallHandler(req, res, L, refKey);
+			CallRequestHandler(req, res, L, refKey, server->id);
 		}
 	);
 
@@ -1046,7 +1064,7 @@ ETHER_API server_Put(lua_State* L)
 	server->pServer->Put(
 		route.c_str(),
 		[=](const Request& req, Response& res) {
-			CallHandler(req, res, L, refKey);
+			CallRequestHandler(req, res, L, refKey, server->id);
 		}
 	);
 
@@ -1069,7 +1087,7 @@ ETHER_API server_Patch(lua_State* L)
 	server->pServer->Patch(
 		route.c_str(),
 		[=](const Request& req, Response& res) {
-			CallHandler(req, res, L, refKey);
+			CallRequestHandler(req, res, L, refKey, server->id);
 		}
 	);
 
@@ -1092,7 +1110,7 @@ ETHER_API server_Delete(lua_State* L)
 	server->pServer->Delete(
 		route.c_str(),
 		[=](const Request& req, Response& res) {
-			CallHandler(req, res, L, refKey);
+			CallRequestHandler(req, res, L, refKey, server->id);
 		}
 	);
 
@@ -1115,7 +1133,7 @@ ETHER_API server_Options(lua_State* L)
 	server->pServer->Options(
 		route.c_str(),
 		[=](const Request& req, Response& res) {
-			CallHandler(req, res, L, refKey);
+			CallRequestHandler(req, res, L, refKey, server->id);
 		}
 	);
 
@@ -1170,11 +1188,11 @@ ETHER_API server_SetExceptionHandler(lua_State* L)
 	CheckServerDataAt1stPos(server);
 	luaL_argcheck(L, lua_isfunction(L, 2), 2, "callback handler must be function");
 #endif
-	string refKey = server->id + "_error_handler";
+	string refKey = GenExpHandlerRefKey(server->id);
 	lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
 	server->pServer->set_exception_handler(
 		[=](const Request& req, Response& res, std::exception& e) {
-			CallHandler(req, res, L, refKey, e.what());
+			CallRequestHandler(req, res, L, refKey, e.what());
 		}
 	);
 

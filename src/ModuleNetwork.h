@@ -48,10 +48,12 @@ using namespace std;
 
 #define CheckHandlerFunctionAt3rdPos()		luaL_argcheck(L, lua_isfunction(L, 3), 3, "callback handler must be function")
 
-#define GetRouteAt2ndPosAndGenRefKey(server, route, refKey, cnt)\
+#define GenReqHandlerRefKey(id, route, type) id + type + route
+#define GenExpHandlerRefKey(id)				 id + "_error_handler"
+#define GetRouteAt2ndPosAndGenRefKey(server, route, refKey, type)\
 	route = luaL_checkstring(L, 2);\
 	if (route.empty() || route[0] != '/') route = "/" + route;\
-	refKey = server->id + cnt + route;\
+	refKey = GenReqHandlerRefKey(server->id, route, type);\
 	server->refKeys.push_back(refKey);
 
 struct RequestParam
@@ -315,8 +317,18 @@ ETHER_API __gc_Client(lua_State* L);
 /// <param name="res">响应数据对象</param>
 /// <param name="L">Lua 虚拟机指针</param>
 /// <param name="refKey">回调函数对象在注册表中的索引键</param>
-/// <param name="err">异常信息</param>
-void CallHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const char* err = nullptr);
+/// <param name="serverID">服务端ID</param>
+void CallRequestHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const string& serverID);
+
+/// <summary>
+/// 服务端异常处理回调函数代理
+/// </summary>
+/// <param name="req">请求数据对象</param>
+/// <param name="res">响应数据对象</param>
+/// <param name="L">Lua 虚拟机指针</param>
+/// <param name="refKey">回调函数对象在注册表中的索引键</param>
+/// <param name="errmsg">异常信息</param>
+void CallExceptionHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const string& errmsg);
 
 /*
 * 获取请求方法
