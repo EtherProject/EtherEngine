@@ -47,7 +47,7 @@ ETHER_API loadMusic(lua_State * L);
 
 // 音乐数据GC函数
 // 1参数：音乐数据（userdata-MUSIC）
-// 1返回值：nil
+// 0返回值
 ETHER_API __gc_Music(lua_State * L);
 
 // 播放已加载的音乐
@@ -131,7 +131,7 @@ ETHER_API loadSound(lua_State * L);
 
 // 音效数据GC函数
 // 1参数：音效数据（userdata-SOUND）
-// 1返回值：nil
+// 0返回值
 ETHER_API __gc_Sound(lua_State * L);
 
 // 播放已加载的音效

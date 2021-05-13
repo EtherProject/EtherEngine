@@ -14,47 +14,58 @@ using namespace httplib;
 
 #include <vector>
 #include <mutex>
-#include <iostream>
+#include <unordered_map>
 using namespace std;
 
-#define ERRCODE_SUCCESS						1354
-#define ERRCODE_UNKNOWN						1355
-#define ERRCODE_CONNECTION					1356
-#define ERRCODE_BINDIPADDRESS				1357
-#define ERRCODE_READ						1358
-#define ERRCODE_WRITE						1359
-#define ERRCODE_EXCEEDREDRICTCOUNT			1360
-#define ERRCODE_CANCELED					1361
-#define ERRCODE_SSLCONNECTION				1362
-#define ERRCODE_SSLLOADINGCERTS				1363
-#define ERRCODE_SSLSERVERVERIFY				1364
-#define ERRCODE_UNSUPPORTEDMBC				1365
-#define ERRCODE_COMPRESSION					1366
+#define ERRCODE_SUCCESS							1354
+#define ERRCODE_UNKNOWN							1355
+#define ERRCODE_CONNECTION						1356
+#define ERRCODE_BINDIPADDRESS					1357
+#define ERRCODE_READ							1358
+#define ERRCODE_WRITE							1359
+#define ERRCODE_EXCEEDREDRICTCOUNT				1360
+#define ERRCODE_CANCELED						1361
+#define ERRCODE_SSLCONNECTION					1362
+#define ERRCODE_SSLLOADINGCERTS					1363
+#define ERRCODE_SSLSERVERVERIFY					1364
+#define ERRCODE_UNSUPPORTEDMBC					1365
+#define ERRCODE_COMPRESSION						1366
 
-#define METANAME_CLIENT						"Network.Client"
-#define METANAME_SERVER						"Network.Server"
-#define METANAME_SERVER_REQ					"Network.Server.Request"
-#define METANAME_SERVER_RES					"Network.Server.Response"
+#define METANAME_CLIENT							"Network.Client"
+#define METANAME_SERVER							"Network.Server"
+#define METANAME_SERVER_REQ						"Network.Server.Request"
+#define METANAME_SERVER_RES						"Network.Server.Response"
 
-#define GetClientDataAt1stPos()				(Client*)(*(void**)luaL_checkudata(L, 1, METANAME_CLIENT))
-#define GetServerDataAt1stPos()				(E_Server*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER))
-#define GetServerReqDataAt1stPos()			(Request*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER_REQ))
-#define GetServerResDataAt1stPos()			(Response*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER_RES))
+#define GetClientDataAt1stPos()					(Client*)(*(void**)luaL_checkudata(L, 1, METANAME_CLIENT))
+#define GetServerDataAt1stPos()					(E_Server*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER))
+#define GetServerReqDataAt1stPos()				(Request*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER_REQ))
+#define GetServerResDataAt1stPos()				(Response*)(*(void**)luaL_checkudata(L, 1, METANAME_SERVER_RES))
 
-#define CheckClientDataAt1stPos(client)		luaL_argcheck(L, client, 1, "get client data failed")
-#define CheckServerDataAt1stPos(server)		luaL_argcheck(L, server && server->pServer, 1, "get server data failed")
-#define CheckServerReqDataAt1stPos(req)		luaL_argcheck(L, req, 1, "get request data failed")
-#define CheckServerResDataAt1stPos(res)		luaL_argcheck(L, res, 1, "get response data failed")
+#define CheckClientDataAt1stPos(client)			luaL_argcheck(L, client, 1, "get client data failed")
+#define CheckServerDataAt1stPos(server)			luaL_argcheck(L, server && server->pServer, 1, "get server data failed")
+#define CheckServerReqDataAt1stPos(req)			luaL_argcheck(L, req, 1, "get request data failed")
+#define CheckServerResDataAt1stPos(res)			luaL_argcheck(L, res, 1, "get response data failed")
 
-#define CheckHandlerFunctionAt3rdPos()		luaL_argcheck(L, lua_isfunction(L, 3), 3, "callback handler must be function")
+#define CheckHandlerFunctionAt3rdPos()			luaL_argcheck(L, lua_isfunction(L, 3), 3, "callback handler must be function")
 
-#define GenReqHandlerRefKey(id, route, type) id + type + route
-#define GenExpHandlerRefKey(id)				 id + "_error_handler"
+#define GenReqHandlerRefKey(id, route, type)	id + type + route
+#define GenExpHandlerRefKey(id)					id + "_error_handler"
 #define GetRouteAt2ndPosAndGenRefKey(server, route, refKey, type)\
 	route = luaL_checkstring(L, 2);\
 	if (route.empty() || route[0] != '/') route = "/" + route;\
 	refKey = GenReqHandlerRefKey(server->id, route, type);\
 	server->refKeys.push_back(refKey);
+
+#define PushReqAndResToCallbackStack(req, res)\
+	Request request = req;\
+	Request** uppRequest = (Request**)lua_newuserdata(L, sizeof(Request*));\
+	*uppRequest = &request;\
+	luaL_getmetatable(L, METANAME_SERVER_REQ);\
+	lua_setmetatable(L, -2);\
+	Response** uppResponse = (Response**)lua_newuserdata(L, sizeof(Response*));\
+	*uppResponse = &res;\
+	luaL_getmetatable(L, METANAME_SERVER_RES);\
+	lua_setmetatable(L, -2);
 
 struct RequestParam
 {
@@ -70,13 +81,14 @@ struct E_Server
 	Server* pServer;
 	string id;
 	vector<string> refKeys;
-	E_Server(Server* pServer, string id)
+	E_Server(Server* pServer, const string& id)
 		: pServer(pServer), id(id) {}
 };
 
 class ModuleNetwork : public Module
 {
 public:
+	static unordered_map<int, int> mapErrorList;
 	static ModuleNetwork& Instance();
 	static string GetServerID();
 	~ModuleNetwork() {};
@@ -96,11 +108,11 @@ private:
 const char* GetRequestParamAt2ndPos(lua_State* L, RequestParam& reqParam);
 
 /// <summary>
-/// 将 Error 转换为宏
+/// 将 ErrorCode 转换为宏
 /// </summary>
-/// <param name="error">Error</param>
+/// <param name="error">ErrorCode</param>
 /// <returns>宏</returns>
-int ConvertErrorCodeToMacro(const Error& error);
+inline int ConvertErrorCodeToMacro(const Error& error);
 
 /// <summary>
 /// 将 response 压入 Lua 栈中

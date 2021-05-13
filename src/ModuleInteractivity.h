@@ -7,6 +7,9 @@
 #include <lua.hpp>
 #include <SDL.h>
 
+#include <unordered_map>
+using namespace std;
+
 #define EVENT_QUIT						1016
 
 #define EVENT_MOUSEMOTION				1017
@@ -303,6 +306,8 @@
 class ModuleInteractivity : public Module
 {
 public:
+	static unordered_map<int, unordered_map<int, int>> mapMultiEventList;
+	static unordered_map<int, int> mapSingleEventList;
 	static ModuleInteractivity& Instance();
 	~ModuleInteractivity() {};
 
@@ -312,6 +317,13 @@ private:
 };
 
 extern SDL_Event event;
+
+/// <summary>
+/// 根据事件Map的一级Key获取Map的二级Value
+/// </summary>
+/// <param name="firstLevelKey">一级Key</param>
+/// <returns>Map的二级Value</returns>
+inline int Get2ndLevelValue(int firstLevelKey);
 
 // 获取当前鼠标位置
 // 0参数

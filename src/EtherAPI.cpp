@@ -9,29 +9,30 @@ SDL_Renderer* renderer = nullptr;
 
 lua_State* pL = luaL_newstate();
 
-map<string, Module*> _mapMoudles = {
-	{MODULENAME_ALGORITHM, &ModuleAlgorithm::Instance()},
-	{MODULENAME_GRAPHIC, &ModuleGraphic::Instance()},
-	{MODULENAME_INTERACTIVITY, &ModuleInteractivity::Instance()},
-	{MODULENAME_JSON, &ModuleJSON::Instance()},
-	{MODULENAME_MEDIA, &ModuleMedia::Instance()},
-	{MODULENAME_NETWORK, &ModuleNetwork::Instance()},
-	{MODULENAME_OS, &ModuleOS::Instance()},
-	{MODULENAME_STRING, &ModuleString::Instance()},
-	{MODULENAME_TIME, &ModuleTime::Instance()},
-	{MODULENAME_WINDOW, &ModuleWindow::Instance()},
-	{MODULENAME_COMPRESS, &ModuleCompress::Instance()},
+map<string, function<Module*()>> _mapMoudles = {
+	{ MODULENAME_ALGORITHM, [] {return &ModuleAlgorithm::Instance();} },
+	{ MODULENAME_GRAPHIC, [] {return &ModuleGraphic::Instance(); } },
+	{ MODULENAME_INTERACTIVITY, [] {return &ModuleInteractivity::Instance(); } },
+	{ MODULENAME_JSON, [] {return &ModuleJSON::Instance(); } },
+	{ MODULENAME_MEDIA, [] {return &ModuleMedia::Instance(); } },
+	{ MODULENAME_NETWORK, [] {return &ModuleNetwork::Instance(); } },
+	{ MODULENAME_OS, [] {return &ModuleOS::Instance(); } },
+	{ MODULENAME_STRING, [] {return &ModuleString::Instance(); } },
+	{ MODULENAME_TIME, [] {return &ModuleTime::Instance(); } },
+	{ MODULENAME_WINDOW, [] {return &ModuleWindow::Instance(); } },
+	{ MODULENAME_COMPRESS, [] {return &ModuleCompress::Instance(); } },
 };
 
 
 ETHER_API usingModule(lua_State* L)
 {
-	Module* pModule;
+	
 	auto iter = _mapMoudles.find(luaL_checkstring(L, 1));
 	if (iter != _mapMoudles.end())
 	{
-		iter->second->PushMetaDataToGlobal(L);
-		iter->second->PushMoudleDataToStack(L);
+		Module* pModule = iter->second();
+		pModule->PushMetaDataToGlobal(L);
+		pModule->PushMoudleDataToStack(L);
 	}	
 	else
 	{

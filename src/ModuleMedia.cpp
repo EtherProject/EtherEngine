@@ -85,9 +85,7 @@ ETHER_API __gc_Music(lua_State * L)
 	Mix_FreeMusic(music);
 	music = nullptr;
 
-	lua_pushnil(L);
-
-	return 1;
+	return 0;
 }
 
 
@@ -275,9 +273,7 @@ ETHER_API __gc_Sound(lua_State * L)
 	Mix_FreeChunk(sound);
 	sound = nullptr;
 
-	lua_pushnil(L);
-
-	return 1;
+	return 0;
 }
 
 

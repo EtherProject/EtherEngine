@@ -3,6 +3,22 @@
 
 size_t ModuleNetwork::_stServerIndex = 0;
 
+unordered_map<int, int> ModuleNetwork::mapErrorList = {
+	{ httplib::Success, ERRCODE_SUCCESS },
+	{ httplib::Unknown, ERRCODE_UNKNOWN },
+	{ httplib::Connection, ERRCODE_CONNECTION },
+	{ httplib::BindIPAddress, ERRCODE_BINDIPADDRESS },
+	{ httplib::Read, ERRCODE_READ },
+	{ httplib::Write, ERRCODE_WRITE },
+	{ httplib::ExceedRedirectCount, ERRCODE_EXCEEDREDRICTCOUNT },
+	{ httplib::Canceled, ERRCODE_CANCELED },
+	{ httplib::SSLConnection, ERRCODE_SSLCONNECTION },
+	{ httplib::SSLLoadingCerts, ERRCODE_SSLLOADINGCERTS },
+	{ httplib::SSLServerVerification, ERRCODE_SSLSERVERVERIFY },
+	{ httplib::UnsupportedMultipartBoundaryChars, ERRCODE_UNSUPPORTEDMBC },
+	{ httplib::Compression, ERRCODE_COMPRESSION },
+};
+
 mutex mtxServerRequest, mtxServerException;
 
 
@@ -196,51 +212,11 @@ const char* GetRequestParamAt2ndPos(lua_State* L, RequestParam& reqParam)
 
 int ConvertErrorCodeToMacro(const Error& error)
 {
-	switch (error)
-	{
-	case httplib::Success:
-		return ERRCODE_SUCCESS;
-		break;
-	case httplib::Unknown:
+	auto itor = ModuleNetwork::mapErrorList.find(error);
+	if (itor != ModuleNetwork::mapErrorList.end())
+		return itor->second;
+	else
 		return ERRCODE_UNKNOWN;
-		break;
-	case httplib::Connection:
-		return ERRCODE_CONNECTION;
-		break;
-	case httplib::BindIPAddress:
-		return ERRCODE_BINDIPADDRESS;
-		break;
-	case httplib::Read:
-		return ERRCODE_READ;
-		break;
-	case httplib::Write:
-		return ERRCODE_WRITE;
-		break;
-	case httplib::ExceedRedirectCount:
-		return ERRCODE_EXCEEDREDRICTCOUNT;
-		break;
-	case httplib::Canceled:
-		return ERRCODE_CANCELED;
-		break;
-	case httplib::SSLConnection:
-		return ERRCODE_SSLCONNECTION;
-		break;
-	case httplib::SSLLoadingCerts:
-		return ERRCODE_SSLLOADINGCERTS;
-		break;
-	case httplib::SSLServerVerification:
-		return ERRCODE_SSLSERVERVERIFY;
-		break;
-	case httplib::UnsupportedMultipartBoundaryChars:
-		return ERRCODE_UNSUPPORTEDMBC;
-		break;
-	case httplib::Compression:
-		return ERRCODE_COMPRESSION;
-		break;
-	default:
-		return httplib::Success;
-		break;
-	}
 }
 
 
@@ -257,7 +233,7 @@ void PushResponseToStack(lua_State* L, const Result& res)
 		lua_pushstring(L, "status");
 		lua_pushinteger(L, res->status);
 		lua_settable(L, -3);
-		
+
 		lua_pushstring(L, "body");
 		lua_pushlstring(L, res->body.c_str(), res->body.size());
 		lua_settable(L, -3);
@@ -271,7 +247,7 @@ void PushResponseToStack(lua_State* L, const Result& res)
 			lua_settable(L, -3);
 		}
 		lua_settable(L, -3);
-	}	
+	}
 }
 
 
@@ -298,8 +274,8 @@ ETHER_API client_Get(lua_State* L)
 	const char* err = GetRequestParamAt2ndPos(L, reqParam);
 	luaL_argcheck(L, !err, 2, err);
 
-	PushResponseToStack(L, reqParam.headers.empty() 
-		? client->Get(reqParam.route.c_str()) 
+	PushResponseToStack(L, reqParam.headers.empty()
+		? client->Get(reqParam.route.c_str())
 		: client->Get(reqParam.route.c_str(), reqParam.headers)
 	);
 
@@ -592,9 +568,7 @@ ETHER_API __gc_Client(lua_State* L)
 	delete client;
 	client = nullptr;
 
-	lua_pushnil(L);
-
-	return 1;
+	return 0;
 }
 
 
@@ -604,15 +578,7 @@ void CallRequestHandler(const Request& req, Response& res, lua_State* L, const s
 
 	lua_getfield(L, LUA_REGISTRYINDEX, refKey.c_str());
 
-	Request request = req;
-	Request** uppRequest = (Request**)lua_newuserdata(L, sizeof(Request*));
-	*uppRequest = &request;
-	luaL_getmetatable(L, METANAME_SERVER_REQ);
-	lua_setmetatable(L, -2);
-	Response** uppResponse = (Response**)lua_newuserdata(L, sizeof(Response*));
-	*uppResponse = &res;
-	luaL_getmetatable(L, METANAME_SERVER_RES);
-	lua_setmetatable(L, -2);
+	PushReqAndResToCallbackStack(req, res);
 
 	if (lua_pcall(L, 2, 0, 0))
 		CallExceptionHandler(req, res, L, GenExpHandlerRefKey(serverID), lua_tostring(L, -1));
@@ -625,17 +591,7 @@ void CallExceptionHandler(const Request& req, Response& res, lua_State* L, const
 {
 	mtxServerException.lock();
 
-	lua_getfield(L, LUA_REGISTRYINDEX, refKey.c_str());
-	Request request = req;
-	Request** uppRequest = (Request**)lua_newuserdata(L, sizeof(Request*));
-	*uppRequest = &request;
-	luaL_getmetatable(L, METANAME_SERVER_REQ);
-	lua_setmetatable(L, -2);
-	Response** uppResponse = (Response**)lua_newuserdata(L, sizeof(Response*));
-	*uppResponse = &res;
-	luaL_getmetatable(L, METANAME_SERVER_RES);
-	lua_setmetatable(L, -2);
-	lua_pushstring(L, errmsg.c_str());
+	PushReqAndResToCallbackStack(req, res);
 
 	if (lua_pcall(L, 3, 0, 0))
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Unhandle Server Error ", lua_tostring(L, -1), nullptr);
@@ -1350,10 +1306,8 @@ ETHER_API __gc_Server(lua_State* L)
 		lua_setfield(L, LUA_REGISTRYINDEX, refKey.c_str());
 	}
 	delete server;
-	server = nullptr;
-	lua_pushnil(L);
 
-	return 1;
+	return 0;
 }
 
 
