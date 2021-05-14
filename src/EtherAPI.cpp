@@ -9,7 +9,7 @@ SDL_Renderer* renderer = nullptr;
 
 lua_State* pL = luaL_newstate();
 
-map<string, function<Module*()>> _mapMoudles = {
+unordered_map<string, function<Module*()>> _mapMoudles = {
 	{ MODULENAME_ALGORITHM, [] {return &ModuleAlgorithm::Instance();} },
 	{ MODULENAME_GRAPHIC, [] {return &ModuleGraphic::Instance(); } },
 	{ MODULENAME_INTERACTIVITY, [] {return &ModuleInteractivity::Instance(); } },
