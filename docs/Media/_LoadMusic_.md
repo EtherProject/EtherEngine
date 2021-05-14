@@ -16,7 +16,7 @@ music = LoadMusic(path)
 
 ## 返回值：
 
-+ music [userdata-Music]：成功则返回音乐数据，失败则返回nil
++ music [userdata-Music]：成功则返回音乐数据，在 `_ETHER_DEBUG_` 模式下失败将触发异常
 
 ## 示例
 

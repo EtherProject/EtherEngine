@@ -59,27 +59,27 @@ char* LuaVaule2JSONStr(lua_State* L, bool bIsFormat);
 * 1参数：已编码的 JSON 对象字符串（string）
 * 1返回值：解码后的 Lua 对象（nil / boolean / number / string / table）
 */
-ETHER_API api_LoadJSON(lua_State* L);
+ETHER_API loadJSON(lua_State* L);
 
 /*
 * 将指定路径文件中已编码的 JSON 对象解码为 Lua 对象
 * 1参数：存储已编码 JSON 对象的文件路径（string）
 * 1返回值：解码后的 Lua 对象（nil / boolean / number / string / table）
 */
-ETHER_API api_LoadJSONFromFile(lua_State* L);
+ETHER_API loadJSONFromFile(lua_State* L);
 
 /*
 * 将 Lua 对象编码成 JSON 字符串
 * 1或2参数：Lua 对象（nil / boolean / number / string / table），【可选】是否对编码后的字符串格式化，默认不进行格式化（boolean）
 * 1返回值：已编码的 JSON 对象字符串（string）
 */
-ETHER_API api_DumpJSON(lua_State* L);
+ETHER_API dumpJSON(lua_State* L);
 
 /*
 * 将 Lua 对象编码成 JSON 字符串并存储到指定路径的文件中
 * 2或3参数：Lua 对象（nil / boolean / number / string / table），用以存储已编码 JSON 对象的文件路径（string），【可选】是否对编码后的字符串格式化，默认不进行格式化（boolean）
 * 0返回值
 */
-ETHER_API api_DumpJSONToFile(lua_State* L);
+ETHER_API dumpJSONToFile(lua_State* L);
 
 #endif // !_JSON_H_

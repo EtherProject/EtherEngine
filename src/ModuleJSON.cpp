@@ -11,10 +11,10 @@ ModuleJSON& ModuleJSON::Instance()
 ModuleJSON::ModuleJSON()
 {
 	_vCMethods = {
-		{ "LoadJSON", api_LoadJSON },
-		{ "LoadJSONFromFile", api_LoadJSONFromFile },
-		{ "DumpJSON", api_DumpJSON },
-		{ "DumpJSONToFile", api_DumpJSONToFile },
+		{ "LoadJSON", loadJSON },
+		{ "LoadJSONFromFile", loadJSONFromFile },
+		{ "DumpJSON", dumpJSON },
+		{ "DumpJSONToFile", dumpJSONToFile },
 	};
 }
 
@@ -201,7 +201,7 @@ void CJson2LuaObj(cJSON* pJsonNode, lua_State* L)
 }
 
 
-ETHER_API api_LoadJSON(lua_State* L)
+ETHER_API loadJSON(lua_State* L)
 {
 	cJSON* pJsonRoot = cJSON_Parse(luaL_checkstring(L, 1));
 	luaL_argcheck(L, pJsonRoot, 1, string("JSON parse error before: ").append(cJSON_GetErrorPtr()).c_str());
@@ -211,7 +211,7 @@ ETHER_API api_LoadJSON(lua_State* L)
 }
 
 
-ETHER_API api_LoadJSONFromFile(lua_State* L)
+ETHER_API loadJSONFromFile(lua_State* L)
 {
 	ifstream fin(luaL_checkstring(L, 1));
 	luaL_argcheck(L, fin.good(), 1, "no such JSON file");
@@ -225,7 +225,7 @@ ETHER_API api_LoadJSONFromFile(lua_State* L)
 	return 1;
 }
 
-ETHER_API api_DumpJSON(lua_State* L)
+ETHER_API dumpJSON(lua_State* L)
 {
 	char* strJSON = LuaVaule2JSONStr(L, lua_toboolean(L, 2));
 	lua_pushstring(L, strJSON);
@@ -233,7 +233,7 @@ ETHER_API api_DumpJSON(lua_State* L)
 	return 1;
 }
 
-ETHER_API api_DumpJSONToFile(lua_State* L)
+ETHER_API dumpJSONToFile(lua_State* L)
 {
 	ofstream fout(luaL_checkstring(L, 2));
 	luaL_argcheck(L, fout.good(), 1, "cannot open or create such JSON file");

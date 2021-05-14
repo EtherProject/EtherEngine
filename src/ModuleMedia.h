@@ -42,21 +42,21 @@ private:
 
 // 加载音乐文件
 // 1参数：音乐文件路径
-// 1返回值：成功则返回音乐数据（userdata-MUSIC），失败则返回nil
+// 1返回值：成功则返回音乐数据（userdata-Music），失败则返回nil
 ETHER_API loadMusic(lua_State * L);
 
 // 音乐数据GC函数
-// 1参数：音乐数据（userdata-MUSIC）
+// 1参数：音乐数据（userdata-Music）
 // 0返回值
 ETHER_API __gc_Music(lua_State * L);
 
 // 播放已加载的音乐
-// 2参数：音乐数据（userdata-MUSIC）、音乐播放的次数（number，-1为循环播放）
+// 2参数：音乐数据（userdata-Music）、音乐播放的次数（number，-1为循环播放）
 // 0返回值
 ETHER_API playMusic(lua_State * L);
 
 // 使用淡入效果播放已加载的音乐
-// 3参数：音乐数据（userdata-MUSIC）、音乐播放的次数（number，-1为循环播放），淡入音效持续时间（number，单位为毫秒）
+// 3参数：音乐数据（userdata-Music）、音乐播放的次数（number，-1为循环播放），淡入音效持续时间（number，单位为毫秒）
 // 0返回值
 ETHER_API playMusicWithFadeIn(lua_State * L);
 
@@ -120,32 +120,37 @@ ETHER_API checkMusicPaused(lua_State* L);
 ETHER_API getMusicFadingType(lua_State* L);
 
 // 获取指定音乐的类型
-// 1参数：音乐数据（userdata-MUSIC，nil表示正在播放的音乐）
+// 1参数：音乐数据（userdata-Music，nil表示正在播放的音乐）
 // 1返回值：音乐类型（MACRO number）
 ETHER_API music_GetType(lua_State * L);
 
-// 加载音效文件
+// 从文件中加载音效
 // 1参数：音效文件路径
-// 1返回值：成功则返回音效数据（userdata-SOUND），失败则返回nil
-ETHER_API loadSound(lua_State * L);
+// 1返回值：成功则返回音效数据（userdata-Sound），失败则返回nil
+ETHER_API loadSoundFromFile(lua_State * L);
+
+// 从缓冲区中加载音效
+// 1参数：缓冲区数据（string）
+// 1返回值：成功则返回音效数据（userdata-Sound），失败则返回nil
+ETHER_API loadSoundFromData(lua_State* L);
 
 // 音效数据GC函数
-// 1参数：音效数据（userdata-SOUND）
+// 1参数：音效数据（userdata-Sound）
 // 0返回值
 ETHER_API __gc_Sound(lua_State * L);
 
 // 播放已加载的音效
-// 2参数：音效数据（userdata-SOUND）、音效播放的次数（number，-1为循环播放）
+// 2参数：音效数据（userdata-Sound）、音效播放的次数（number，-1为循环播放）
 // 0返回值
 ETHER_API sound_Play(lua_State * L);
 
 // 设置音效播放的音量
-// 2参数：音效数据（userdata-SOUND），音量大小（number，取值范围为0-128）
+// 2参数：音效数据（userdata-Sound），音量大小（number，取值范围为0-128）
 // 0返回值
 ETHER_API sound_SetVolume(lua_State* L);
 
 // 获取音效播放的音量
-// 1参数：音效数据（userdata-SOUND）
+// 1参数：音效数据（userdata-Sound）
 // 1返回值：音量大小（number，取值范围为0-128）
 ETHER_API sound_GetVolume(lua_State* L);
 

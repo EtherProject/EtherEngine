@@ -17,7 +17,7 @@ font = LoadFontFromData(data, size)
 
 ## 返回值：
 
-+ font [boolean]：成功则返回字体数据，失败则返回nil
++ font [boolean]：成功则返回字体数据，在 `_ETHER_DEBUG_` 模式下失败将触发异常
 
 ## 示例
 
