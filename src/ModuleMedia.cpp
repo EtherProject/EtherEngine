@@ -28,7 +28,8 @@ ModuleMedia::ModuleMedia()
 		{ "CheckMusicPlaying", checkMusicPlaying },
 		{ "CheckMusicPaused", checkMusicPaused },
 		{ "GetMusicFadingType", getMusicFadingType },
-		{ "LoadSound", loadSound },
+		{ "LoadSoundFromFile", loadSoundFromFile },
+		{ "LoadSoundFromData", loadSoundFromData },
 	};
 
 	_vMacros = {
@@ -249,9 +250,25 @@ ETHER_API music_GetType(lua_State * L)
 }
 
 
-ETHER_API loadSound(lua_State * L)
+ETHER_API loadSoundFromFile(lua_State * L)
 {
 	Mix_Chunk* sound = Mix_LoadWAV(luaL_checkstring(L, 1));
+#ifdef _ETHER_DEBUG_
+	luaL_argcheck(L, sound, 1, "load sound failed");
+#endif
+	Mix_Chunk** uppSound = (Mix_Chunk**)lua_newuserdata(L, sizeof(Mix_Chunk*));
+	*uppSound = sound;
+	luaL_getmetatable(L, METANAME_SOUND);
+	lua_setmetatable(L, -2);
+
+	return 1;
+}
+
+
+ETHER_API loadSoundFromData(lua_State* L)
+{
+	size_t size;
+	Mix_Chunk* sound = Mix_LoadWAV_RW(SDL_RWFromMem((void*)luaL_checklstring(L, 1, &size), size), 1);
 #ifdef _ETHER_DEBUG_
 	luaL_argcheck(L, sound, 1, "load sound failed");
 #endif

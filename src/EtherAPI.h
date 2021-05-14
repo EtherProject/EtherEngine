@@ -13,6 +13,7 @@
 #include "ModuleString.h"
 #include "ModuleJSON.h"
 #include "ModuleCompress.h"
+#include "ModuleXML.h"
 
 #include <lua.hpp>
 #include <cJSON.h>
@@ -21,7 +22,7 @@
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 
-#include <map>
+#include <unordered_map>
 using namespace std;
 
 #ifndef _ETHER_DEBUG_
@@ -43,6 +44,7 @@ using namespace std;
 #define MODULENAME_STRING			"String"
 #define MODULENAME_JSON				"JSON"
 #define MODULENAME_COMPRESS			"Compress"
+#define MODULENAME_XML				"XML"
 
 #define DEFAULTNAME_ENTRY			"Main.lua"
 

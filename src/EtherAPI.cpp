@@ -21,6 +21,7 @@ unordered_map<string, function<Module*()>> _mapMoudles = {
 	{ MODULENAME_TIME, [] {return &ModuleTime::Instance(); } },
 	{ MODULENAME_WINDOW, [] {return &ModuleWindow::Instance(); } },
 	{ MODULENAME_COMPRESS, [] {return &ModuleCompress::Instance(); } },
+	{ MODULENAME_XML, [] {return &ModuleXML::Instance(); } },
 };
 
 

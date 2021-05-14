@@ -34,7 +34,9 @@
 
 + [GetMusicFadingType()](_GetMusicFadingType_.md)：获取当前正在播放的音乐的淡化效果类型
 
-+ [LoadSound(path)](_LoadSound_.md)：加载音效文件
++ [LoadSoundFromFile(path)](_LoadSoundFromFile_.md)：从文件中加载音效
+
++ [LoadSoundFromData(data)](_LoadSoundFromData_.md)：从缓冲区中加载音效
 
 ## 对象成员函数列表：
 

@@ -16,7 +16,7 @@ image = LoadImageFromFile(path)
 
 ## 返回值：
 
-+ image [userdata-Image]：成功则返回图像数据，失败则返回nil
++ image [userdata-Image]：成功则返回图像数据，在 `_ETHER_DEBUG_` 模式下失败将触发异常
 
 ## 示例
 
