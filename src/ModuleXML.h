@@ -28,10 +28,12 @@ using namespace std;
 #define GetDocumentDataAt1stPos()			(xml_document*)(*(void**)luaL_checkudata(L, 1, METANAME_DOCUMENT))
 #define GetNodeDataAt1stPos()				(xml_node*)(*(void**)luaL_checkudata(L, 1, METANAME_NODE))
 #define GetAttributeDataAt1stPos()			(xml_attribute*)(*(void**)luaL_checkudata(L, 1, METANAME_ATTRIBUTE))
+#define GetAttributeDataAt2stPos()			(xml_attribute*)(*(void**)luaL_checkudata(L, 2, METANAME_ATTRIBUTE))
 
 #define CheckDocumentDataAt1stPos(doc)		luaL_argcheck(L, doc, 1, "get document data failed")
 #define CheckNodeDataAt1stPos(node)			luaL_argcheck(L, node, 1, "get node data failed")
 #define CheckAttributeDataAt1stPos(attri)	luaL_argcheck(L, attri, 1, "get attribute data failed")
+#define CheckAttributeDataAt2stPos(attri)	luaL_argcheck(L, attri, 2, "get attribute data failed")
 
 #define LoadXMLAndCheck(doc, res)\
 	xml_parse_result result = res;\
