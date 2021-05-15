@@ -283,6 +283,82 @@ ETHER_API node_GetLastAttribute(lua_State* L)
 }
 
 
+ETHER_API node_SetName(lua_State* L)
+{
+	xml_node* node = GetNodeDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckNodeDataAt1stPos(node);
+#endif
+	node->set_name(luaL_checkstring(L, 2));
+
+	return 1;
+}
+
+
+ETHER_API node_SetValue(lua_State* L)
+{
+	xml_node* node = GetNodeDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckNodeDataAt1stPos(node);
+#endif
+	node->set_value(luaL_checkstring(L, 2));
+
+	return 1;
+}
+
+
+ETHER_API node_AppendAttribute(lua_State* L)
+{
+	xml_node* node = GetNodeDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckNodeDataAt1stPos(node);
+#endif
+	luaL_argcheck(L, !node->append_attribute(luaL_checkstring(L, 2)).empty(), 2, "append failed");
+
+	return 1;
+}
+
+
+ETHER_API node_PrependAttribute(lua_State* L)
+{
+	xml_node* node = GetNodeDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckNodeDataAt1stPos(node);
+#endif
+	luaL_argcheck(L, !node->prepend_attribute(luaL_checkstring(L, 2)).empty(), 2, "prepend failed");
+
+	return 1;
+}
+
+
+ETHER_API node_InsertAttributeAfter(lua_State* L)
+{
+	xml_node* node = GetNodeDataAt1stPos();
+	xml_attribute* attribute = GetAttributeDataAt2stPos();
+#ifdef _ETHER_DEBUG_
+	CheckNodeDataAt1stPos(node);
+	CheckAttributeDataAt2stPos(attribute);
+#endif
+	node->insert_attribute_after(luaL_checkstring(L, 2), *attribute);
+
+	return 1;
+}
+
+
+ETHER_API node_InsertAttributeBefore(lua_State* L)
+{
+	xml_node* node = GetNodeDataAt1stPos();
+	xml_attribute* attribute = GetAttributeDataAt2stPos();
+#ifdef _ETHER_DEBUG_
+	CheckNodeDataAt1stPos(node);
+	CheckAttributeDataAt2stPos(attribute);
+#endif
+	node->insert_attribute_before(luaL_checkstring(L, 2), *attribute);
+
+	return 1;
+}
+
+
 ETHER_API __gc_Node(lua_State* L)
 {
 	xml_node* node = GetNodeDataAt1stPos();
