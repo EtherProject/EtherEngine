@@ -26,14 +26,12 @@ using namespace std;
 #define METANAME_ATTRIBUTE					"XML.Attribute"
 
 #define GetDocumentDataAt1stPos()			(xml_document*)(*(void**)luaL_checkudata(L, 1, METANAME_DOCUMENT))
-#define GetNodeDataAt1stPos()				(xml_node*)(*(void**)luaL_checkudata(L, 1, METANAME_NODE))
-#define GetAttributeDataAt1stPos()			(xml_attribute*)(*(void**)luaL_checkudata(L, 1, METANAME_ATTRIBUTE))
-#define GetAttributeDataAt2stPos()			(xml_attribute*)(*(void**)luaL_checkudata(L, 2, METANAME_ATTRIBUTE))
+#define GetNodeData(idx)					(xml_node*)(*(void**)luaL_checkudata(L, idx, METANAME_NODE))
+#define GetAttributeData(idx)				(xml_attribute*)(*(void**)luaL_checkudata(L, idx, METANAME_ATTRIBUTE))
 
 #define CheckDocumentDataAt1stPos(doc)		luaL_argcheck(L, doc, 1, "get document data failed")
-#define CheckNodeDataAt1stPos(node)			luaL_argcheck(L, node, 1, "get node data failed")
-#define CheckAttributeDataAt1stPos(attri)	luaL_argcheck(L, attri, 1, "get attribute data failed")
-#define CheckAttributeDataAt2stPos(attri)	luaL_argcheck(L, attri, 2, "get attribute data failed")
+#define CheckNodeData(node, idx)			luaL_argcheck(L, node, idx, "get node data failed")
+#define CheckAttributeData(attri, idx)		luaL_argcheck(L, attri, idx, "get attribute data failed")
 
 #define LoadXMLAndCheck(doc, res)\
 	xml_parse_result result = res;\
@@ -41,7 +39,7 @@ using namespace std;
 	xml_document** uppdoc = (xml_document**)lua_newuserdata(L, sizeof(xml_document*));\
 	*uppdoc = doc; luaL_getmetatable(L, METANAME_DOCUMENT); lua_setmetatable(L, -2);
 
-#define CopyAndPushNewUserdataToStack(L, T, src, name)\
+#define CopyAndPushNewUserdataToStack(T, src, name)\
 	T* p = new T(src);\
 	if (p->empty()) lua_pushnil(L);\
 	else { T** upp = (T**)lua_newuserdata(L, sizeof(T*));\
@@ -93,9 +91,47 @@ ETHER_API node_GetFirstAttribute(lua_State* L);
 
 ETHER_API node_GetLastAttribute(lua_State* L);
 
+ETHER_API node_SetName(lua_State* L);
+
+ETHER_API node_SetValue(lua_State* L);
+
+ETHER_API node_AppendAttribute(lua_State* L);
+
+ETHER_API node_PrependAttribute(lua_State* L);
+
+ETHER_API node_InsertAttributeAfter(lua_State* L);
+
+ETHER_API node_InsertAttributeBefore(lua_State* L);
+
+ETHER_API node_AppendAttributeCopy(lua_State* L);
+
+ETHER_API node_PrependAttributeCopy(lua_State* L);
+
+ETHER_API node_InsertAttributeCopyAfter(lua_State* L);
+
+ETHER_API node_InsertAttributeCopyBefore(lua_State* L);
+
+ETHER_API node_MoveNodeToChildAppend(lua_State* L);
+
+ETHER_API node_MoveNodeToChildPrepend(lua_State* L);
+
+ETHER_API node_MoveNodeToChildInsertAfter(lua_State* L);
+
+ETHER_API node_MoveNodeToChildInsertBefore(lua_State* L);
+
+ETHER_API node_RemoveAttribute(lua_State* L);
+
+ETHER_API node_RemoveAttributes(lua_State* L);
+
+ETHER_API node_RemoveChild(lua_State* L);
+
+ETHER_API node_RemoveChildren(lua_State* L);
+
 ETHER_API __gc_Node(lua_State* L);
 
 ETHER_API document_GetChild(lua_State* L);
+
+ETHER_API document_SaveAsFile(lua_State* L);
 
 ETHER_API __gc_Document(lua_State* L);
 
