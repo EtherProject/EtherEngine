@@ -57,6 +57,32 @@ private:
 
 };
 
+ETHER_API attribute_GetName(lua_State* L);
+
+ETHER_API attribute_GetValue(lua_State* L);
+
+ETHER_API attribute_GetValueAsInteger(lua_State* L);
+
+ETHER_API attribute_GetValueAsNumber(lua_State* L);
+
+ETHER_API attribute_GetValueAsBoolean(lua_State* L);
+
+ETHER_API attribute_SetName(lua_State* L);
+
+ETHER_API attribute_SetValue(lua_State* L);
+
+ETHER_API attribute_SetIntegerValue(lua_State* L);
+
+ETHER_API attribute_SetNumberValue(lua_State* L);
+
+ETHER_API attribute_SetBooleanValue(lua_State* L);
+
+ETHER_API attribute_GetNextAttribute(lua_State* L);
+
+ETHER_API attribute_GetPreviousAttribute(lua_State* L);
+
+ETHER_API __gc_Attribute(lua_State* L);
+
 ETHER_API node_GetRoot(lua_State* L);
 
 ETHER_API node_GetParent(lua_State* L);
@@ -84,6 +110,8 @@ ETHER_API node_GetText(lua_State* L);
 ETHER_API node_GetTextAsInteger(lua_State* L);
 
 ETHER_API node_GetTextAsNumber(lua_State* L);
+
+ETHER_API node_GetTextAsBoolean(lua_State* L);
 
 ETHER_API node_GetAttribute(lua_State* L);
 

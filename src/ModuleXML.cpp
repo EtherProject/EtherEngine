@@ -55,8 +55,10 @@ ModuleXML::ModuleXML()
 				{ "GetText", node_GetText },
 				{ "GetTextAsInteger", node_GetTextAsInteger },
 				{ "GetTextAsNumber", node_GetTextAsNumber },
+				{ "GetTextAsBoolean", node_GetTextAsBoolean },
 				{ "GetAttribute", node_GetAttribute },
 				{ "GetFirstAttribute", node_GetFirstAttribute },
+				{ "GetLastAttribute", node_GetLastAttribute },
 				{ "SetName", node_SetName },
 				{ "SetValue", node_SetValue },
 				{ "AppendAttribute", node_AppendAttribute },
@@ -78,7 +80,191 @@ ModuleXML::ModuleXML()
 			},
 			__gc_Node
 		},
+		{
+			METANAME_ATTRIBUTE,
+			{
+				{ "GetName", attribute_GetName },
+				{ "GetValue", attribute_GetValue },
+				{ "GetValueAsInteger", attribute_GetValueAsInteger },
+				{ "GetValueAsNumber", attribute_GetValueAsNumber },
+				{ "GetValueAsBoolean", attribute_GetValueAsBoolean },
+				{ "SetName", attribute_SetName },
+				{ "SetValue", attribute_SetValue },
+				{ "SetIntegerValue", attribute_SetIntegerValue },
+				{ "SetNumberValue", attribute_SetNumberValue },
+				{ "SetBooleanValue", attribute_SetBooleanValue },
+				{ "GetNextAttribute", attribute_GetNextAttribute },
+				{ "GetPreviousAttribute", attribute_GetPreviousAttribute },
+			},
+			__gc_Attribute
+		}
 	};
+}
+
+
+ETHER_API attribute_GetName(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	lua_pushstring(L, attribute->name());
+
+	return 1;
+}
+
+
+ETHER_API attribute_GetValue(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	lua_pushstring(L, attribute->value());
+
+	return 1;
+}
+
+
+ETHER_API attribute_GetValueAsInteger(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	lua_pushinteger(L, attribute->as_llong());
+
+	return 1;
+}
+
+
+ETHER_API attribute_GetValueAsNumber(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	lua_pushnumber(L, attribute->as_double());
+
+	return 1;
+}
+
+
+ETHER_API attribute_GetValueAsBoolean(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	lua_pushboolean(L, attribute->as_bool());
+
+	return 1;
+}
+
+
+ETHER_API attribute_SetName(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	if (!attribute->set_name(luaL_checkstring(L, 2)))
+		luaL_error(L, "set attribute name failed");
+
+	return 1;
+}
+
+
+ETHER_API attribute_SetValue(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	if (!attribute->set_value(luaL_checkstring(L, 2)))
+		luaL_error(L, "set attribute value failed");
+
+	return 1;
+}
+
+
+ETHER_API attribute_SetIntegerValue(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	if (!attribute->set_value(lua_tointeger(L, 2)))
+		luaL_error(L, "set attribute value failed");
+
+	return 1;
+}
+
+
+ETHER_API attribute_SetNumberValue(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	if (lua_gettop(L) > 2
+		? (!attribute->set_value(lua_tonumber(L, 2)))
+		: (!attribute->set_value(lua_tonumber(L, 2), lua_tointeger(L, 3))))
+		luaL_error(L, "set attribute value failed");
+
+	return 1;
+}
+
+
+ETHER_API attribute_SetBooleanValue(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	if (!attribute->set_value((bool)lua_toboolean(L, 2)))
+		luaL_error(L, "set attribute value failed");
+
+	return 1;
+}
+
+
+ETHER_API attribute_GetNextAttribute(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	CopyAndPushNewUserdataToStack(xml_attribute,
+		attribute->next_attribute(), METANAME_ATTRIBUTE);
+
+	return 1;
+}
+
+
+ETHER_API attribute_GetPreviousAttribute(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	CopyAndPushNewUserdataToStack(xml_attribute,
+		attribute->previous_attribute(), METANAME_ATTRIBUTE);
+
+	return 1;
+}
+
+
+ETHER_API __gc_Attribute(lua_State* L)
+{
+	xml_attribute* attribute = GetAttributeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckAttributeData(attribute, 1);
+#endif
+	delete attribute;
+	attribute = nullptr;
+
+	return 1;
 }
 
 
@@ -257,6 +443,18 @@ ETHER_API node_GetTextAsNumber(lua_State* L)
 	CheckNodeData(node, 1);
 #endif
 	lua_pushnumber(L, node->text().as_double());
+
+	return 1;
+}
+
+
+ETHER_API node_GetTextAsBoolean(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	lua_pushboolean(L, node->text().as_bool());
 
 	return 1;
 }
