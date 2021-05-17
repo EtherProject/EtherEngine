@@ -46,7 +46,8 @@ using namespace std;
 #define CheckServerReqDataAt1stPos(req)			luaL_argcheck(L, req, 1, "get request data failed")
 #define CheckServerResDataAt1stPos(res)			luaL_argcheck(L, res, 1, "get response data failed")
 
-#define CheckHandlerFunctionAt3rdPos()			luaL_argcheck(L, lua_isfunction(L, 3), 3, "callback handler must be function")
+#define CheckHandlerFunctionAt3rdPos()			luaL_argcheck(L, lua_isfunction(L, 3) && lua_gettop(L) == 3,\
+													3, "the last param callback handler must be function")
 
 #define GenReqHandlerRefKey(id, route, type)	id + type + route
 #define GenExpHandlerRefKey(id)					id + "_error_handler"

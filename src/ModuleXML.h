@@ -33,6 +33,12 @@ using namespace std;
 #define CheckNodeData(node, idx)			luaL_argcheck(L, node, idx, "get node data failed")
 #define CheckAttributeData(attri, idx)		luaL_argcheck(L, attri, idx, "get attribute data failed")
 
+#define CheckHandlerFunctionAt2ndPos()		luaL_argcheck(L, lua_isfunction(L, 2) && lua_gettop(L) == 2,\
+												2, "the last param callback handler must be function")
+
+#define REFKEY_NODE_FIND_HANDLER			"temp_xml_node_find_handler"
+#define REFKEY_ATTRIBUTE_FIND_HANDLER		"temp_xml_attribute_find_handler"
+
 #define LoadXMLAndCheck(doc, res)\
 	xml_parse_result result = res;\
 	luaL_argcheck(L, !result.status, 1, string("XML parse error: ").append(result.description()).c_str());\
@@ -44,6 +50,38 @@ using namespace std;
 	if (p->empty()) lua_pushnil(L);\
 	else { T** upp = (T**)lua_newuserdata(L, sizeof(T*));\
 		*upp = p; luaL_getmetatable(L, name); lua_setmetatable(L, -2); }
+
+#define CopyAndPushSearcherParamToStack(T, src, name)\
+	T* p = new T(src);\
+	T** upp = (T**)lua_newuserdata(_L, sizeof(T*));\
+	*upp = p; luaL_getmetatable(_L, name); lua_setmetatable(_L, -2);
+
+struct XML_Searcher
+{
+	lua_State* _L;
+
+	XML_Searcher(lua_State* L) : _L(L) {}
+
+	bool operator()(pugi::xml_node node) const
+	{
+		lua_getfield(_L, LUA_REGISTRYINDEX, REFKEY_NODE_FIND_HANDLER);
+		CopyAndPushSearcherParamToStack(xml_node, node, METANAME_NODE);
+		lua_call(_L, 1, 1);
+		bool flag = lua_toboolean(_L, -1);
+		lua_pop(_L, 1);
+		return flag;
+	}
+
+	bool operator()(pugi::xml_attribute attr) const
+	{
+		lua_getfield(_L, LUA_REGISTRYINDEX, REFKEY_ATTRIBUTE_FIND_HANDLER);
+		CopyAndPushSearcherParamToStack(xml_attribute, attr, METANAME_ATTRIBUTE);
+		lua_call(_L, 1, 1);
+		bool flag = lua_toboolean(_L, -1);
+		lua_pop(_L, 1);
+		return flag;
+	}
+};
 
 class ModuleXML : public Module
 {
@@ -93,6 +131,8 @@ ETHER_API node_GetPreviousSibling(lua_State* L);
 
 ETHER_API node_GetChild(lua_State* L);
 
+ETHER_API node_GetChildByAttribute(lua_State* L);
+
 ETHER_API node_GetFirstChild(lua_State* L);
 
 ETHER_API node_GetLastChild(lua_State* L);
@@ -122,6 +162,14 @@ ETHER_API node_GetLastAttribute(lua_State* L);
 ETHER_API node_SetName(lua_State* L);
 
 ETHER_API node_SetValue(lua_State* L);
+
+ETHER_API node_SetText(lua_State* L);
+
+ETHER_API node_SetTextAsInteger(lua_State* L);
+
+ETHER_API node_SetTextAsNumber(lua_State* L);
+
+ETHER_API node_SetTextAsBoolean(lua_State* L);
 
 ETHER_API node_AppendAttribute(lua_State* L);
 
@@ -154,6 +202,12 @@ ETHER_API node_RemoveAttributes(lua_State* L);
 ETHER_API node_RemoveChild(lua_State* L);
 
 ETHER_API node_RemoveChildren(lua_State* L);
+
+ETHER_API node_FindDirectChild(lua_State* L);
+
+ETHER_API node_FindDescendedChild(lua_State* L);
+
+ETHER_API node_FindAttribute(lua_State* L);
 
 ETHER_API __gc_Node(lua_State* L);
 

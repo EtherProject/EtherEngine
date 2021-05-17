@@ -61,6 +61,10 @@ ModuleXML::ModuleXML()
 				{ "GetLastAttribute", node_GetLastAttribute },
 				{ "SetName", node_SetName },
 				{ "SetValue", node_SetValue },
+				{ "SetText", node_SetText },
+				{ "SetTextAsInteger", node_SetTextAsInteger },
+				{ "SetTextAsNumber", node_SetTextAsNumber },
+				{ "SetTextAsBoolean", node_SetTextAsBoolean },
 				{ "AppendAttribute", node_AppendAttribute },
 				{ "PrependAttribute", node_PrependAttribute },
 				{ "InsertAttributeAfter", node_InsertAttributeAfter },
@@ -77,6 +81,9 @@ ModuleXML::ModuleXML()
 				{ "RemoveAttributes", node_RemoveAttributes },
 				{ "RemoveChild", node_RemoveChild },
 				{ "RemoveChildren", node_RemoveChildren },
+				{ "FindDirectChild", node_FindDirectChild },
+				{ "FindDescendedChild", node_FindDescendedChild },
+				{ "FindAttribute", node_FindAttribute },
 			},
 			__gc_Node
 		},
@@ -301,7 +308,8 @@ ETHER_API node_GetNextSibling(lua_State* L)
 	CheckNodeData(node, 1);
 #endif
 	CopyAndPushNewUserdataToStack(xml_node,
-		node->next_sibling(), METANAME_NODE);
+		lua_gettop(L) > 1 ? node->next_sibling(luaL_checkstring(L, 2)) 
+		: node->next_sibling(), METANAME_NODE);
 
 	return 1;
 }
@@ -314,7 +322,8 @@ ETHER_API node_GetPreviousSibling(lua_State* L)
 	CheckNodeData(node, 1);
 #endif
 	CopyAndPushNewUserdataToStack(xml_node,
-		node->previous_sibling(), METANAME_NODE);
+		lua_gettop(L) > 1 ? node->previous_sibling(luaL_checkstring(L, 2))
+		: node->previous_sibling(), METANAME_NODE);
 
 	return 1;
 }
@@ -354,6 +363,21 @@ ETHER_API node_GetLastChild(lua_State* L)
 #endif
 	CopyAndPushNewUserdataToStack(xml_node,
 		node->last_child(), METANAME_NODE);
+
+	return 1;
+}
+
+
+ETHER_API node_GetChildByAttribute(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	CopyAndPushNewUserdataToStack(xml_node,
+		lua_gettop(L) > 3 ?
+		node->find_child_by_attribute(luaL_checkstring(L, 2), luaL_checkstring(L, 3), luaL_checkstring(L, 4))
+		: node->find_child_by_attribute(luaL_checkstring(L, 2), luaL_checkstring(L, 3)), METANAME_NODE);
 
 	return 1;
 }
@@ -505,7 +529,8 @@ ETHER_API node_SetName(lua_State* L)
 #ifdef _ETHER_DEBUG_
 	CheckNodeData(node, 1);
 #endif
-	node->set_name(luaL_checkstring(L, 2));
+	if (!node->set_name(luaL_checkstring(L, 2)))
+		luaL_error(L, "set node name failed");
 
 	return 1;
 }
@@ -517,7 +542,60 @@ ETHER_API node_SetValue(lua_State* L)
 #ifdef _ETHER_DEBUG_
 	CheckNodeData(node, 1);
 #endif
-	node->set_value(luaL_checkstring(L, 2));
+	if (!node->set_value(luaL_checkstring(L, 2)))
+		luaL_error(L, "set node value failed");
+
+	return 1;
+}
+
+
+ETHER_API node_SetText(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	if (!node->text().set(luaL_checkstring(L, 2)))
+		luaL_error(L, "set node text failed");
+
+	return 1;
+}
+
+
+ETHER_API node_SetTextAsInteger(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	if (!node->text().set(luaL_checkinteger(L, 2)))
+		luaL_error(L, "set node text failed");
+
+	return 1;
+}
+
+
+ETHER_API node_SetTextAsNumber(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	if (!node->text().set(luaL_checknumber(L, 2)))
+		luaL_error(L, "set node text failed");
+
+	return 1;
+}
+
+
+ETHER_API node_SetTextAsBoolean(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	if (!node->text().set((bool)lua_toboolean(L, 2)))
+		luaL_error(L, "set node text failed");
 
 	return 1;
 }
@@ -780,6 +858,55 @@ ETHER_API node_RemoveChildren(lua_State* L)
 #endif
 	if (!node->remove_children())
 		luaL_error(L, "remove children failed");
+
+	return 1;
+}
+
+
+ETHER_API node_FindDirectChild(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	CheckHandlerFunctionAt2ndPos();
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_NODE_FIND_HANDLER);
+	CopyAndPushNewUserdataToStack(xml_node,
+		node->find_child(XML_Searcher(L)), METANAME_NODE);
+	lua_pushnil(L);
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_NODE_FIND_HANDLER);
+
+	return 1;
+}
+
+
+ETHER_API node_FindDescendedChild(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	CheckHandlerFunctionAt2ndPos();
+	CopyAndPushNewUserdataToStack(xml_node,
+		node->find_node(XML_Searcher(L)), METANAME_NODE);
+	lua_pushnil(L);
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_NODE_FIND_HANDLER);
+
+	return 1;
+}
+
+
+ETHER_API node_FindAttribute(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	CheckHandlerFunctionAt2ndPos();
+	CopyAndPushNewUserdataToStack(xml_attribute,
+		node->find_attribute(XML_Searcher(L)), METANAME_ATTRIBUTE);
+	lua_pushnil(L);
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_ATTRIBUTE_FIND_HANDLER);
 
 	return 1;
 }
