@@ -38,6 +38,7 @@ using namespace std;
 
 #define REFKEY_NODE_FIND_HANDLER			"temp_xml_node_find_handler"
 #define REFKEY_ATTRIBUTE_FIND_HANDLER		"temp_xml_attribute_find_handler"
+#define REFKEY_NODE_TRAVERSE_HANDLER		"temp_xml_node_traverse_handler"
 
 #define LoadXMLAndCheck(doc, res)\
 	xml_parse_result result = res;\
@@ -46,14 +47,18 @@ using namespace std;
 	*uppdoc = doc; luaL_getmetatable(L, METANAME_DOCUMENT); lua_setmetatable(L, -2);
 
 #define CopyAndPushNewUserdataToStack(T, src, name)\
-	T* p = new T(src);\
-	if (p->empty()) lua_pushnil(L);\
+	T* p = new T(src); if (p->empty()) lua_pushnil(L);\
 	else { T** upp = (T**)lua_newuserdata(L, sizeof(T*));\
 		*upp = p; luaL_getmetatable(L, name); lua_setmetatable(L, -2); }
 
-#define CopyAndPushSearcherParamToStack(T, src, name)\
-	T* p = new T(src);\
-	T** upp = (T**)lua_newuserdata(_L, sizeof(T*));\
+#define CopyAndPushNewUserdataToTable(T, src, name, idx)\
+	lua_pushnumber(L, idx); T* p = new T(src);\
+	T** upp = (T**)lua_newuserdata(L, sizeof(T*));\
+	**upp = *p; luaL_getmetatable(L, name);\
+	lua_setmetatable(L, -2); lua_settable(L, -3); idx++;
+
+#define CopyAndPushHandlerParamToStack(T, src, name)\
+	T* p = new T(src); T** upp = (T**)lua_newuserdata(_L, sizeof(T*));\
 	*upp = p; luaL_getmetatable(_L, name); lua_setmetatable(_L, -2);
 
 struct XML_Searcher
@@ -65,7 +70,7 @@ struct XML_Searcher
 	bool operator()(pugi::xml_node node) const
 	{
 		lua_getfield(_L, LUA_REGISTRYINDEX, REFKEY_NODE_FIND_HANDLER);
-		CopyAndPushSearcherParamToStack(xml_node, node, METANAME_NODE);
+		CopyAndPushHandlerParamToStack(xml_node, node, METANAME_NODE);
 		lua_call(_L, 1, 1);
 		bool flag = lua_toboolean(_L, -1);
 		lua_pop(_L, 1);
@@ -75,11 +80,41 @@ struct XML_Searcher
 	bool operator()(pugi::xml_attribute attr) const
 	{
 		lua_getfield(_L, LUA_REGISTRYINDEX, REFKEY_ATTRIBUTE_FIND_HANDLER);
-		CopyAndPushSearcherParamToStack(xml_attribute, attr, METANAME_ATTRIBUTE);
+		CopyAndPushHandlerParamToStack(xml_attribute, attr, METANAME_ATTRIBUTE);
 		lua_call(_L, 1, 1);
 		bool flag = lua_toboolean(_L, -1);
 		lua_pop(_L, 1);
 		return flag;
+	}
+};
+
+struct XML_Walker : xml_tree_walker
+{
+	lua_State* _L;
+
+	XML_Walker(lua_State* L) : _L(L) {}
+
+	virtual bool for_each(xml_node& node)
+	{
+		lua_getfield(_L, LUA_REGISTRYINDEX, REFKEY_NODE_TRAVERSE_HANDLER);
+		CopyAndPushHandlerParamToStack(xml_node, node, METANAME_NODE);
+		lua_pushnumber(_L, depth() + 1);
+		lua_call(_L, 2, 1);
+		bool flag = lua_isnil(_L, -1) ? true : lua_toboolean(_L, -1);
+		lua_pop(_L, 1);
+		return flag;
+	}
+};
+
+struct XML_Writer : xml_writer
+{
+	lua_State* _L;
+
+	XML_Writer(lua_State* L) : _L(L) {}
+
+	virtual void write(const void* data, size_t size)
+	{
+		lua_pushlstring(_L, (char*)data, size);
 	}
 };
 
@@ -137,6 +172,8 @@ ETHER_API node_GetFirstChild(lua_State* L);
 
 ETHER_API node_GetLastChild(lua_State* L);
 
+ETHER_API node_GetChildren(lua_State* L);
+
 ETHER_API node_GetName(lua_State* L);
 
 ETHER_API node_GetValue(lua_State* L);
@@ -158,6 +195,8 @@ ETHER_API node_GetAttribute(lua_State* L);
 ETHER_API node_GetFirstAttribute(lua_State* L);
 
 ETHER_API node_GetLastAttribute(lua_State* L);
+
+ETHER_API node_GetAttributes(lua_State* L);
 
 ETHER_API node_SetName(lua_State* L);
 
@@ -209,11 +248,19 @@ ETHER_API node_FindDescendedChild(lua_State* L);
 
 ETHER_API node_FindAttribute(lua_State* L);
 
+ETHER_API node_Traverse(lua_State* L);
+
+ETHER_API node_Print(lua_State* L);
+
 ETHER_API __gc_Node(lua_State* L);
 
 ETHER_API document_GetChild(lua_State* L);
 
 ETHER_API document_SaveAsFile(lua_State* L);
+
+ETHER_API document_Traverse(lua_State* L);
+
+ETHER_API document_Print(lua_State* L);
 
 ETHER_API __gc_Document(lua_State* L);
 

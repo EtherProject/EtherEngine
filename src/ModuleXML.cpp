@@ -35,6 +35,8 @@ ModuleXML::ModuleXML()
 			{
 				{ "GetChild", document_GetChild },
 				{ "SaveAsFile", document_SaveAsFile },
+				{ "Traverse", document_Traverse },
+				{ "Print", document_Print },
 			},
 			__gc_Document
 		},
@@ -48,6 +50,7 @@ ModuleXML::ModuleXML()
 				{ "GetChild", node_GetChild },
 				{ "GetFirstChild", node_GetFirstChild },
 				{ "GetLastChild", node_GetLastChild },
+				{ "GetChildren", node_GetChildren },
 				{ "GetName", node_GetName },
 				{ "GetValue", node_GetValue },
 				{ "GetChildValue", node_GetChildValue },
@@ -59,6 +62,7 @@ ModuleXML::ModuleXML()
 				{ "GetAttribute", node_GetAttribute },
 				{ "GetFirstAttribute", node_GetFirstAttribute },
 				{ "GetLastAttribute", node_GetLastAttribute },
+				{ "GetAttributes", node_GetAttributes },
 				{ "SetName", node_SetName },
 				{ "SetValue", node_SetValue },
 				{ "SetText", node_SetText },
@@ -84,6 +88,8 @@ ModuleXML::ModuleXML()
 				{ "FindDirectChild", node_FindDirectChild },
 				{ "FindDescendedChild", node_FindDescendedChild },
 				{ "FindAttribute", node_FindAttribute },
+				{ "Traverse", node_Traverse },
+				{ "Print", node_Print },
 			},
 			__gc_Node
 		},
@@ -383,6 +389,33 @@ ETHER_API node_GetChildByAttribute(lua_State* L)
 }
 
 
+ETHER_API node_GetChildren(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	int index = 1;
+	lua_newtable(L);
+	if (lua_gettop(L) > 1)
+	{
+		for (const xml_node& node : node->children(luaL_checkstring(L, 2)))
+		{
+			CopyAndPushNewUserdataToTable(xml_node, node, METANAME_NODE, index);
+		}
+	}
+	else
+	{
+		for (const xml_node& node : node->children())
+		{
+			CopyAndPushNewUserdataToTable(xml_node, node, METANAME_NODE, index);
+		}
+	}
+
+	return 1;
+}
+
+
 ETHER_API node_GetName(lua_State* L)
 {
 	xml_node* node = GetNodeData(1);
@@ -518,6 +551,23 @@ ETHER_API node_GetLastAttribute(lua_State* L)
 #endif
 	CopyAndPushNewUserdataToStack(xml_attribute,
 		node->last_attribute(), METANAME_ATTRIBUTE);
+
+	return 1;
+}
+
+
+ETHER_API node_GetAttributes(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	int index = 1;
+	lua_newtable(L);
+	for (const xml_attribute& attribute : node->attributes())
+	{
+		CopyAndPushNewUserdataToTable(xml_attribute, attribute, METANAME_ATTRIBUTE, index);
+	}
 
 	return 1;
 }
@@ -887,6 +937,7 @@ ETHER_API node_FindDescendedChild(lua_State* L)
 	CheckNodeData(node, 1);
 #endif
 	CheckHandlerFunctionAt2ndPos();
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_NODE_FIND_HANDLER);
 	CopyAndPushNewUserdataToStack(xml_node,
 		node->find_node(XML_Searcher(L)), METANAME_NODE);
 	lua_pushnil(L);
@@ -903,10 +954,43 @@ ETHER_API node_FindAttribute(lua_State* L)
 	CheckNodeData(node, 1);
 #endif
 	CheckHandlerFunctionAt2ndPos();
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_ATTRIBUTE_FIND_HANDLER);
 	CopyAndPushNewUserdataToStack(xml_attribute,
 		node->find_attribute(XML_Searcher(L)), METANAME_ATTRIBUTE);
 	lua_pushnil(L);
 	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_ATTRIBUTE_FIND_HANDLER);
+
+	return 1;
+}
+
+
+ETHER_API node_Traverse(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	CheckHandlerFunctionAt2ndPos();
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_NODE_TRAVERSE_HANDLER);
+	XML_Walker walker(L);
+	node->traverse(walker);
+	lua_pushnil(L);
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_NODE_TRAVERSE_HANDLER);
+
+	return 0;
+}
+
+
+ETHER_API node_Print(lua_State* L)
+{
+	xml_node* node = GetNodeData(1);
+#ifdef _ETHER_DEBUG_
+	CheckNodeData(node, 1);
+#endif
+	XML_Writer writer(L);
+	lua_gettop(L) > 1 && !lua_toboolean(L, 2)
+		? node->print(writer, "\t", format_raw)
+		: node->print(writer);
 
 	return 1;
 }
@@ -944,7 +1028,41 @@ ETHER_API document_SaveAsFile(lua_State* L)
 #ifdef _ETHER_DEBUG_
 	CheckDocumentDataAt1stPos(document);
 #endif
-	document->save_file(luaL_checkstring(L, 2));
+	lua_gettop(L) > 2 && !lua_toboolean(L, 3)
+		? document->save_file(luaL_checkstring(L, 2), "\t", format_raw)
+		: document->save_file(luaL_checkstring(L, 2));
+
+	return 1;
+}
+
+
+ETHER_API document_Traverse(lua_State* L)
+{
+	xml_document* document = GetDocumentDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckDocumentDataAt1stPos(document);
+#endif
+	CheckHandlerFunctionAt2ndPos();
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_NODE_TRAVERSE_HANDLER);
+	XML_Walker walker(L);
+	document->traverse(walker);
+	lua_pushnil(L);
+	lua_setfield(L, LUA_REGISTRYINDEX, REFKEY_NODE_TRAVERSE_HANDLER);
+
+	return 0;
+}
+
+
+ETHER_API document_Print(lua_State* L)
+{
+	xml_document* document = GetDocumentDataAt1stPos();
+#ifdef _ETHER_DEBUG_
+	CheckDocumentDataAt1stPos(document);
+#endif
+	XML_Writer writer(L);
+	lua_gettop(L) > 1 && !lua_toboolean(L, 2)
+		? document->print(writer, "\t", format_raw)
+		: document->print(writer);
 
 	return 1;
 }

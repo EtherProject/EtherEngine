@@ -227,7 +227,7 @@ ETHER_API loadJSONFromFile(lua_State* L)
 
 ETHER_API dumpJSON(lua_State* L)
 {
-	char* strJSON = LuaVaule2JSONStr(L, lua_toboolean(L, 2));
+	char* strJSON = LuaVaule2JSONStr(L, lua_gettop(L) > 1 ? lua_toboolean(L, 2) : false);
 	lua_pushstring(L, strJSON);
 	free(strJSON);
 	return 1;
@@ -237,7 +237,7 @@ ETHER_API dumpJSONToFile(lua_State* L)
 {
 	ofstream fout(luaL_checkstring(L, 2));
 	luaL_argcheck(L, fout.good(), 1, "cannot open or create such JSON file");
-	char* strJSON = LuaVaule2JSONStr(L, lua_toboolean(L, 3));
+	char* strJSON = LuaVaule2JSONStr(L, lua_gettop(L) > 2 ? lua_toboolean(L, 3) : false);
 	fout << strJSON << endl;
 	fout.close(); fout.clear();
 	free(strJSON);
