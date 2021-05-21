@@ -1,6 +1,10 @@
-MIT License
+License
 
-Copyright (c) 2020 Voidmatrix
+Copyright (c) 2021 EtherProject
+
+For the dependencies indicated in the software, 
+comply with the protocol required by the original software code,
+the rest of this software is subject to MIT license:
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +23,25 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+==================================================
+
+对于软件中所注明的依赖项，遵从原软件代码所要求的协议
+本软件中的其他内容，遵从麻省理工许可证：
+
+兹免费准许任何人取得副本
+本软件及相关文档文件（“软件”），以处理
+在软件中不受限制，包括但不限于权利
+使用、复制、修改、合并、发布、分发、再许可和/或销售
+软件的副本，并允许使用软件的人员
+按照以下条件提供：
+上述版权声明和本许可声明应包含在所有
+软件的副本或大部分。
+本软件按“原样”提供，不提供任何形式的明示或明示担保
+默示，包括但不限于适销性保证，
+适用于特定目的和非侵犯性。在任何情况下
+作者或版权持有人对任何索赔、损害或其他
+无论是在合同诉讼、侵权诉讼或其他诉讼中，
+不属于或与本软件有关，或与本软件的使用或其他交易有关
+软件。
