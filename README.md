@@ -2,7 +2,6 @@
 [![](https://img.shields.io/github/stars/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=e49e61)](https://github.com/VoidmatrixHeathcliff/EtherEngine/stargazers)
 [![](https://img.shields.io/github/forks/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=e49e61)](https://github.com/VoidmatrixHeathcliff/EtherEngine/network/members)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b2761c92b96e4125a5dbc9d681c54cf4)](https://www.codacy.com/gh/VoidmatrixHeathcliff/EtherEngine/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=VoidmatrixHeathcliff/EtherEngine&amp;utm_campaign=Badge_Grade)
-[![](https://img.shields.io/github/license/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&label=license&message=notspecified&labelColor=3f48cc)](https://github.com/VoidmatrixHeathcliff/EtherEngine/blob/main/LICENSE)
 [![](https://img.shields.io/github/contributors/VoidmatrixHeathcliff/EtherEngine)](https://github.com/VoidmatrixHeathcliff/EtherEngine/graphs/contributors)
 ![](https://img.shields.io/github/commit-activity/m/VoidmatrixHeathcliff/EtherEngine)
 
