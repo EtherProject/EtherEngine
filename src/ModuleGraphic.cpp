@@ -873,7 +873,7 @@ ETHER_API getTextSize(lua_State * L)
 	lua_pushnumber(L, width);
 	lua_pushnumber(L, height);
 
-	return 1;
+	return 2;
 }
 
 
