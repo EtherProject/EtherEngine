@@ -10,6 +10,6 @@
 
 + [UTF8ToGBK(utf8str)](_UTF8ToGBK_.md)：将UTF-8编码字符串转换为GBK编码
 
-+ [SubStrUTF8(utf8str)](_SubStrUTF8_.md)：截取UTF-8编码字符串
++ [SubStrUTF8(utf8str, start [, end])](_SubStrUTF8_.md)：截取UTF-8编码字符串
 
 + [LenUTF8(utf8str)](_LenUTF8_.md)：获取UTF-8编码字符串长度
