@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# IfRectsOverlap
+# CheckRectsOverlap
 
 > 判断两矩形区域是否相交（包含矩形边界）
 
 ```lua
 
-flag = IfRectsOverlap(rect1, rect2 [, border])
+flag = CheckRectsOverlap(rect1, rect2 [, border])
 
 ```
 

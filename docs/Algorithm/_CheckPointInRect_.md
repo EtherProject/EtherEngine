@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# IfPointInRect
+# CheckPointInRect
 
 > 判断点是否位于指定矩形区域内(包含矩形边界）
 
 ```lua
 
-flag = IfPointInRect(point, rect [, border])
+flag = CheckPointInRect(point, rect [, border])
 
 ```
 

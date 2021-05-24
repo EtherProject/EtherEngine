@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# IfCirclesOverlap
+# CheckCirclesOverlap
 
 > 判断两圆是否相交（包含圆形边界）
 
 ```lua
 
-flag = IfCirclesOverlap(center1, radius1, center2, radius2 [, border])
+flag = CheckCirclesOverlap(center1, radius1, center2, radius2 [, border])
 
 ```
 
