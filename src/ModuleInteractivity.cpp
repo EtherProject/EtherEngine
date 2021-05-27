@@ -722,7 +722,7 @@ ETHER_API getCursorPosition(lua_State * L)
 	lua_pushnumber(L, pointCursorPos.x);
 	lua_settable(L, -3);
 	lua_pushstring(L, "y");
-	lua_pushnumber(L, pointCursorPos.x);
+	lua_pushnumber(L, pointCursorPos.y);
 	lua_settable(L, -3);
 	return 1;
 }
