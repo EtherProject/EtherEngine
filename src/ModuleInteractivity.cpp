@@ -719,10 +719,10 @@ ETHER_API getCursorPosition(lua_State * L)
 {
 	lua_newtable(L);
 	lua_pushstring(L, "x");
-	lua_pushnumber(L, event.motion.x);
+	lua_pushnumber(L, pointCursorPos.x);
 	lua_settable(L, -3);
 	lua_pushstring(L, "y");
-	lua_pushnumber(L, event.motion.y);
+	lua_pushnumber(L, pointCursorPos.x);
 	lua_settable(L, -3);
 	return 1;
 }
@@ -757,9 +757,12 @@ ETHER_API getInputText(lua_State* L)
 }
 
 
-ETHER_API updateEvent(lua_State * L)
+ETHER_API updateEvent(lua_State* L)
 {
 	lua_pushboolean(L, SDL_PollEvent(&event));
+
+	if (event.type == SDL_MOUSEMOTION)
+		pointCursorPos = { event.motion.x, event.motion.y };
 
 	return 1;
 }

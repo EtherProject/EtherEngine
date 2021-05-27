@@ -11,7 +11,7 @@ ModuleGraphic& ModuleGraphic::Instance()
 ModuleGraphic::ModuleGraphic()
 {
 	TTF_Init();
-	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF);
+	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
 
 	_vCMethods = {
 		{ "SetCursorShow", setCursorShow },

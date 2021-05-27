@@ -318,6 +318,8 @@ private:
 
 extern SDL_Event event;
 
+extern SDL_Point pointCursorPos;
+
 /// <summary>
 /// 根据事件Map的一级Key获取Map的二级Value
 /// </summary>

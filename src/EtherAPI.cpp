@@ -4,6 +4,7 @@ string strNameEntry = DEFAULTNAME_ENTRY;
 vector<string> vStrPathList, vStrCPathList, vStrCmdList;
 
 SDL_Event event;
+SDL_Point pointCursorPos;
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
 
