@@ -26,15 +26,15 @@
 
 + [SetWindowSize(width, height)](_SetWindowSize_.md)：设置窗口大小
 
-+ [GetWindowSize(width, height)](_GetWindowSize_.md)：获取窗口大小
++ [GetWindowSize()](_GetWindowSize_.md)：获取窗口大小
 
 + [SetWindowMaxSize(width, height)](_SetWindowMaxSize_.md)：设置窗口最大尺寸的大小
 
-+ [GetWindowMaxSize(width, height)](_GetWindowMaxSize_.md)：获取窗口最大尺寸的大小
++ [GetWindowMaxSize()](_GetWindowMaxSize_.md)：获取窗口最大尺寸的大小
 
 + [SetWindowMinSize(width, height)](_SetWindowMinSize_.md)：设置窗口最小尺寸的大小
 
-+ [GetWindowMinSize(width, height)](_GetWindowMinSize_.md)：获取窗口最小尺寸的大小
++ [GetWindowMinSize()](_GetWindowMinSize_.md)：获取窗口最小尺寸的大小
 
 + [SetWindowPosition(position)](_SetWindowPosition_.md)：设置窗口位置
 
