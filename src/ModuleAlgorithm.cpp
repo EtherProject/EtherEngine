@@ -350,9 +350,16 @@ ETHER_API hslaToRGBA(lua_State* L)
 
 ETHER_API encodeBase64(lua_State* L)
 {
-	size_t size = 0;
-	string strBase64 = base64_encode((const unsigned char*)luaL_checklstring(L, 1, &size), size);
-	lua_pushstring(L, strBase64.c_str());
+	try
+	{
+		size_t size = 0;
+		string strBase64 = base64_encode((const unsigned char*)luaL_checklstring(L, 1, &size), size);
+		lua_pushstring(L, strBase64.c_str());
+	}
+	catch (const std::exception& e)
+	{
+		luaL_argcheck(L, false, 1, e.what());
+	}
 
 	return 1;
 }
@@ -360,8 +367,15 @@ ETHER_API encodeBase64(lua_State* L)
 
 ETHER_API decodeBase64(lua_State* L)
 {
-	string strData = base64_decode(luaL_checkstring(L, 1));
-	lua_pushlstring(L, strData.c_str(), strData.size());
+	try
+	{
+		string strData = base64_decode(luaL_checkstring(L, 1));
+		lua_pushlstring(L, strData.c_str(), strData.size());
+	}
+	catch (const std::exception& e)
+	{
+		luaL_argcheck(L, false, 1, e.what());
+	}
 
 	return 1;
 }
