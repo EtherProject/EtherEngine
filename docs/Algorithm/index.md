@@ -25,3 +25,8 @@
 + [RGBAToHSLA(color)](_RGBAToHSLA_.md)：RGBA颜色空间转HSLA颜色空间
 
 + [HSLAToRGBA(color)](_HSLAToRGBA_.md)：HSLA颜色空间转RGBA颜色空间
+
++ [EncodeBase64(data)](_EncodeBase64_.md)：将缓冲区数据编码为 Base64 编码的字符串
+
++ [DecodeBase64(str)](_DecodeBase64_.md)：将 Base64 编码的字符串解码为缓冲区数据
+
