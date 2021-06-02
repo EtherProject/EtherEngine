@@ -267,7 +267,7 @@ ETHER_API loadSoundFromFile(lua_State * L)
 
 ETHER_API loadSoundFromData(lua_State* L)
 {
-	size_t size;
+	size_t size = 0;
 	Mix_Chunk* sound = Mix_LoadWAV_RW(SDL_RWFromMem((void*)luaL_checklstring(L, 1, &size), size), 1);
 #ifdef _ETHER_DEBUG_
 	luaL_argcheck(L, sound, 1, "load sound failed");

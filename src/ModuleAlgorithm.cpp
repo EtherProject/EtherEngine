@@ -21,6 +21,8 @@ ModuleAlgorithm::ModuleAlgorithm()
 		{ "GetPointLineDistance", getPointLineDistance },
 		{ "RGBAToHSLA", rgbaToHSLA },
 		{ "HSLAToRGBA", hslaToRGBA },
+		{ "EncodeBase64", encodeBase64 },
+		{ "DecodeBase64", decodeBase64 },
 	};
 }
 
@@ -341,6 +343,25 @@ ETHER_API hslaToRGBA(lua_State* L)
 	lua_pushstring(L, "a");
 	lua_pushnumber(L, color.a * 255);
 	lua_settable(L, -3);
+
+	return 1;
+}
+
+
+ETHER_API encodeBase64(lua_State* L)
+{
+	size_t size = 0;
+	string strBase64 = base64_encode((const unsigned char*)luaL_checklstring(L, 1, &size), size);
+	lua_pushstring(L, strBase64.c_str());
+
+	return 1;
+}
+
+
+ETHER_API decodeBase64(lua_State* L)
+{
+	string strData = base64_decode(luaL_checkstring(L, 1));
+	lua_pushlstring(L, strData.c_str(), strData.size());
 
 	return 1;
 }

@@ -120,7 +120,7 @@ ETHER_API loadImageFromFile(lua_State * L)
 
 ETHER_API loadImageFromData(lua_State* L)
 {
-	size_t size;
+	size_t size = 0;
 	SDL_Surface* pSurface = IMG_Load_RW(SDL_RWFromMem((void*)luaL_checklstring(L, 1, &size), size), 1);
 #ifdef _ETHER_DEBUG_
 	luaL_argcheck(L, pSurface, 1, "load image failed");
@@ -677,7 +677,7 @@ ETHER_API loadFontFromFile(lua_State * L)
 
 ETHER_API loadFontFromData(lua_State* L)
 {
-	size_t size;
+	size_t size = 0;
 	TTF_Font* pFont = TTF_OpenFontRW(SDL_RWFromMem((void*)luaL_checklstring(L, 1, &size), size), 1, luaL_checknumber(L, 2));
 #ifdef _ETHER_DEBUG_
 	luaL_argcheck(L, pFont, 1, "load font failed");

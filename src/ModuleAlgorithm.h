@@ -7,6 +7,7 @@
 
 #include <lua.hpp>
 #include <SDL.h>
+#include <base64.h>
 
 #include <math.h>
 #include <string>
@@ -82,6 +83,16 @@ ETHER_API rgbaToHSLA(lua_State* L);
 // 1参数：使用HSLA描述的颜色（table）
 // 1返回值：使用RGBA描述的颜色（table）
 ETHER_API hslaToRGBA(lua_State* L);
+
+// 将缓冲区数据编码为 Base64 编码的字符串
+// 1参数：缓冲区数据（string）
+// 1返回值：Base64 编码的字符串（string）
+ETHER_API encodeBase64(lua_State* L);
+
+// 将 Base64 编码的字符串解码为缓冲区数据
+// 1参数：Base64 编码的字符串（string）
+// 1返回值：缓冲区数据（string）
+ETHER_API decodeBase64(lua_State* L);
 
 #endif // !_ALGORITHM_H_
 
