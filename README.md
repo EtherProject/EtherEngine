@@ -17,17 +17,19 @@ This project is renamed as **EtherAPI** from EtherEngine, which aims to provide 
 Since EtherAPI is implemented based on SDL, Lua and other libraries, you may need to compile the relevant libraries for support first.
 You can find the release version or source code of these dependencies for the platform you are using at the following address:   
 
-+ **Lua - 5.4.0：**[http://www.lua.org/](http://www.lua.org/)
-+ **SDL - 2.0.14：**[https://www.libsdl.org/](https://www.libsdl.org/)  
-+ **SDL_image - 2.0.5：**[https://www.libsdl.org/projects/SDL_image/](https://www.libsdl.org/projects/SDL_image/) 
-+ **SDL_gfx - 1.0.4：**[https://sourceforge.net/projects/sdlgfx/](https://sourceforge.net/projects/sdlgfx/) 
-+ **SDL_mixer - 2.0.4：**[https://www.libsdl.org/projects/SDL_mixer/](https://www.libsdl.org/projects/SDL_mixer/) 
-+ **SDL_ttf - 2.0.15：**[https://www.libsdl.org/projects/SDL_ttf/](https://www.libsdl.org/projects/SDL_ttf/) 
-+ **cpp-httplib - 0.8.4：**[https://github.com/yhirose/cpp-httplib/](https://github.com/yhirose/cpp-httplib/) 
-+ **cJSON - 1.7.14：**[https://github.com/DaveGamble/cJSON](https://github.com/DaveGamble/cJSON/) 
-+ **zlib - 1.2.11：**[http://www.zlib.net/](http://www.zlib.net/) 
-+ **openssl - 1.1.1k：**[https://www.openssl.org/](https://www.openssl.org/) 
-+ **pugixml - 1.11.4：**[https://github.com/zeux/pugixml](https://github.com/zeux/pugixml) 
+|库名称|网址|协议|
+|----|----|----|
+| **Lua - 5.4.0**|[http://www.lua.org/](http://www.lua.org/)  | MIT |
+|**SDL - 2.0.14**|[https://www.libsdl.org/](https://www.libsdl.org/)  | zlib license |
+|**SDL_image - 2.0.5**|[https://www.libsdl.org/projects/SDL_image/](https://www.libsdl.org/projects/SDL_image/)  | zlib license |
+|**SDL_gfx - 1.0.4**|[https://sourceforge.net/projects/sdlgfx/](https://sourceforge.net/projects/sdlgfx/)  | zlib/libpng License |
+|**SDL_mixer - 2.0.4**|[https://www.libsdl.org/projects/SDL_mixer/](https://www.libsdl.org/projects/SDL_mixer/)  | zlib license |
+|**SDL_ttf - 2.0.15**|[https://www.libsdl.org/projects/SDL_ttf/](https://www.libsdl.org/projects/SDL_ttf/)  | zlib license |
+|**cpp-httplib - 0.8.4**|[https://github.com/yhirose/cpp-httplib/](https://github.com/yhirose/cpp-httplib/)  | MIT |
+|**cJSON - 1.7.14**|[https://github.com/DaveGamble/cJSON](https://github.com/DaveGamble/cJSON/)  | MIT |
+|**zlib - 1.2.11**|[http://www.zlib.net/](http://www.zlib.net/)  | zlib license in ```zlib.h``` |
+|**openssl - 1.1.1k**|[https://www.openssl.org/](https://www.openssl.org/)  | "Apache-style license" |
+|**pugixml - 1.11.4**|[https://github.com/zeux/pugixml](https://github.com/zeux/pugixml)  | MIT |
 
 然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherAPI 启动器，它将加载同一目录下的 `config.json` 作为配置文件，配置文件中描述了入口文件和附加模块路径等多种信息。  
 另外，您可以在 `Macros.h` 文件中决定是否禁用 `_ETHER_DEBUG_` 宏来开启 Release 模式；在 Release 模式下，EtherAPI 将跳过部分严格的类型检查，来确保更加高效的运行，同时，在 Windows 平台下，此模式将意味着程序所使用的子系统为 `window` 而非 `console` ，程序将不会显示控制台，通过 `print()` 等操作输出的调试信息可能会被隐藏。
