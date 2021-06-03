@@ -210,7 +210,7 @@ void _HandleQuit()
 	}
 }
 
-
+#undef main // SDL_main∫¶»À
 int main(int argc, char** argv)
 {
 	luaL_openlibs(pL);

@@ -128,7 +128,7 @@ ETHER_API point(lua_State * L);
 // 在指定位置绘制直线
 // 2参数：起点坐标（table），终点坐标（table）
 // 0返回值
-ETHER_API line(lua_State * L);
+ETHER_API ether_drawline(lua_State * L);
 
 // 在指定位置绘制粗直线
 // 3参数：起点坐标（table），终点坐标（table），线条宽度（number）

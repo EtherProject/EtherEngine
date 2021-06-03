@@ -1102,7 +1102,7 @@ ETHER_API loadXMLFromFile(lua_State* L)
 
 ETHER_API loadXMLFromData(lua_State* L)
 {
-	size_t len;
+	size_t len = 0;
 	xml_document* document = new xml_document();
 	LoadXMLAndCheck(document, document->load_buffer(luaL_checklstring(L, 1, &len), len));
 

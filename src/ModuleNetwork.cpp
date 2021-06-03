@@ -929,7 +929,7 @@ ETHER_API response_SetContent(lua_State* L)
 #ifdef _ETHER_DEBUG_
 	CheckServerResDataAt1stPos(res);
 #endif
-	size_t len;
+	size_t len = 0;
 	res->set_content(luaL_checklstring(L, 2, &len), len, lua_isstring(L, 3) ? lua_tostring(L, 3) : "text/plain");
 
 	return 0;
