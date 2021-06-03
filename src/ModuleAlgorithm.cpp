@@ -358,7 +358,7 @@ ETHER_API encodeBase64(lua_State* L)
 	}
 	catch (const std::exception& e)
 	{
-		luaL_argcheck(L, false, 1, e.what());
+		luaL_argerror(L, 1, e.what());
 	}
 
 	return 1;
@@ -374,7 +374,7 @@ ETHER_API decodeBase64(lua_State* L)
 	}
 	catch (const std::exception& e)
 	{
-		luaL_argcheck(L, false, 1, e.what());
+		luaL_argerror(L, 1, e.what());
 	}
 
 	return 1;
