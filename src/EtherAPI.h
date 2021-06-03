@@ -40,7 +40,7 @@
 #define MODULENAME_OS				"OS"
 #define MODULENAME_TIME				"Time"
 #define MODULENAME_WINDOW			"Window"
-#define MODULENAME_STRING			"String"
+#define MODULENAME_STRING			"std::string"
 #define MODULENAME_JSON				"JSON"
 #define MODULENAME_COMPRESS			"Compress"
 #define MODULENAME_XML				"XML"

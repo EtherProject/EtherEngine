@@ -1,5 +1,8 @@
 #include "Utils.h"
 
+#if _MSVC_LANG >= 201703L
+#include <stringapiset.h>
+#endif
 
 template<class Facet>
 struct deletable_facet : Facet
@@ -24,6 +27,7 @@ std::string EncodingConversion::ToString(const std::wstring& wstr)
 	std::wstring_convert<mbs_facet_t> converter(&cvt);
 	std::string str = converter.to_bytes(wstr);
 	return str;
+	return "";
 }
 
 std::wstring EncodingConversion::ToWString(const std::string& str)
@@ -58,8 +62,18 @@ std::string EncodingConversion::ToUTF8(const std::wstring& wstr)
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
 	return convert.to_bytes(wstr.data(), wstr.data() + wstr.size());
 #elif defined(_WIN32) || defined(_WIN64)
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> convert;
-	return convert.to_bytes(wstr.data(), wstr.data() + wstr.size());
+	size_t wcs_size = wstr.size();
+	// ¼ÆËã×Ö·û´®³¤¶È
+	int u8_size = WideCharToMultiByte(
+		CP_UTF8,
+		0,
+		wstr.data(),
+		wcs_size >= INT_MAX ? throw std::invalid_argument("wstring is too long") : (int)wcs_size,
+		nullptr, 0,
+		'\0', nullptr
+	);
+
+	std::string ret{}
 #endif
 }
 

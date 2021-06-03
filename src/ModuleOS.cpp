@@ -1,5 +1,6 @@
 #include "ModuleOS.h"
 
+using namespace std;
 
 ModuleOS& ModuleOS::Instance()
 {

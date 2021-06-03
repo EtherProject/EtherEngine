@@ -11,8 +11,8 @@
 
 struct MetaData
 {
-	string name;
-	vector<luaL_Reg> cFuns;
+	std::string name;
+	std::vector<luaL_Reg> cFuns;
 	lua_CFunction gcFun = [](lua_State* L) -> int { return 0; };
 };
 
@@ -26,9 +26,9 @@ public:
 
 protected:
 	Module() {};
-	vector<luaL_Reg> _vCMethods;
-	vector<Macro> _vMacros;
-	vector<MetaData> _vMetaData;
+	std::vector<luaL_Reg> _vCMethods;
+	std::vector<Macro> _vMacros;
+	std::vector<MetaData> _vMetaData;
 	
 };
 

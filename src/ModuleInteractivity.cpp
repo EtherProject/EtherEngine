@@ -1,5 +1,6 @@
 #include "ModuleInteractivity.h"
 
+using namespace std;
 
 unordered_map<int, unordered_map<int, int>> ModuleInteractivity::mapMultiEventList = {
 	{	

@@ -70,28 +70,28 @@ using namespace httplib;
 
 struct RequestParam
 {
-	string route;
+	std::string route;
 	Headers headers;
-	string str_params;
+	std::string str_params;
 	Params tab_params;
-	string content_type;
+	std::string content_type;
 };
 
 struct E_Server
 {
 	Server* pServer;
-	string id;
-	vector<string> refKeys;
-	E_Server(Server* pServer, const string& id)
+	std::string id;
+	std::vector<std::string> refKeys;
+	E_Server(Server* pServer, const std::string& id)
 		: pServer(pServer), id(id) {}
 };
 
 class ModuleNetwork : public Module
 {
 public:
-	static unordered_map<int, int> mapErrorList;
+	static std::unordered_map<int, int> mapErrorList;
 	static ModuleNetwork& Instance();
-	static string GetServerID();
+	static std::string GetServerID();
 	~ModuleNetwork() {};
 
 private:
@@ -331,7 +331,7 @@ ETHER_API __gc_Client(lua_State* L);
 /// <param name="L">Lua 虚拟机指针</param>
 /// <param name="refKey">回调函数对象在注册表中的索引键</param>
 /// <param name="serverID">服务端ID</param>
-void CallRequestHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const string& serverID);
+void CallRequestHandler(const Request& req, Response& res, lua_State* L, const std::string& refKey, const std::string& serverID);
 
 /// <summary>
 /// 服务端异常处理回调函数代理
@@ -341,7 +341,7 @@ void CallRequestHandler(const Request& req, Response& res, lua_State* L, const s
 /// <param name="L">Lua 虚拟机指针</param>
 /// <param name="refKey">回调函数对象在注册表中的索引键</param>
 /// <param name="errmsg">异常信息</param>
-void CallExceptionHandler(const Request& req, Response& res, lua_State* L, const string& refKey, const string& errmsg);
+void CallExceptionHandler(const Request& req, Response& res, lua_State* L, const std::string& refKey, const std::string& errmsg);
 
 /*
 * 获取请求方法

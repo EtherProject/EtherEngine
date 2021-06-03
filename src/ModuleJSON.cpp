@@ -1,5 +1,6 @@
 #include "ModuleJSON.h"
 
+using namespace std;
 
 ModuleJSON& ModuleJSON::Instance()
 {

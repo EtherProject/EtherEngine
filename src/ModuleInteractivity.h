@@ -305,8 +305,8 @@
 class ModuleInteractivity : public Module
 {
 public:
-	static unordered_map<int, unordered_map<int, int>> mapMultiEventList;
-	static unordered_map<int, int> mapSingleEventList;
+	static std::unordered_map<int, std::unordered_map<int, int>> mapMultiEventList;
+	static std::unordered_map<int, int> mapSingleEventList;
 	static ModuleInteractivity& Instance();
 	~ModuleInteractivity() {};
 
