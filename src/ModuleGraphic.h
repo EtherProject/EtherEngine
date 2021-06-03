@@ -6,10 +6,10 @@
 #include "Utils.h"
 
 #include <lua.hpp>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL2_gfxPrimitives.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 
 #define FONT_STYLE_BOLD						1303
 #define FONT_STYLE_ITALIC					1304

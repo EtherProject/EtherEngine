@@ -5,12 +5,12 @@
 #include "Macros.h"
 
 #include <lua.hpp>
-#include <cJSON.h>
+#include <cjson/cJSON.h>
 
 #include <string>
 #include <fstream>
 #include <sstream>
-using namespace std;
+
 
 class ModuleJSON : public Module
 {

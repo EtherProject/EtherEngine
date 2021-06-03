@@ -6,11 +6,11 @@
 #include "Utils.h"
 
 #include <lua.hpp>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #include <math.h>
 #include <string>
-using namespace std;
+
 
 class ModuleAlgorithm : public Module
 {

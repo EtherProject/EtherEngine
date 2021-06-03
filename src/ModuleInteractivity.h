@@ -5,10 +5,9 @@
 #include "Macros.h"
 
 #include <lua.hpp>
-#include <SDL.h>
+#include <sdl2/SDL.h>
 
 #include <unordered_map>
-using namespace std;
 
 #define EVENT_QUIT						1016
 

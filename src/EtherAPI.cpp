@@ -1,5 +1,7 @@
 #include "EtherAPI.h"
 
+using namespace std;
+
 string strNameEntry = DEFAULTNAME_ENTRY;
 vector<string> vStrPathList, vStrCPathList, vStrCmdList;
 

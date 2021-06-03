@@ -16,14 +16,13 @@
 #include "ModuleXML.h"
 
 #include <lua.hpp>
-#include <cJSON.h>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include <SDL_ttf.h>
+#include <cjson/cJSON.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <unordered_map>
-using namespace std;
 
 #ifndef _ETHER_DEBUG_
 #ifdef __WINDOWS__

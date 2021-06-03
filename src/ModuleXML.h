@@ -9,7 +9,7 @@
 using namespace pugi;
 
 #include <unordered_map>
-using namespace std;
+
 
 #define NODETYPE_EMPTY						0
 #define NODETYPE_DOCUMENT					1

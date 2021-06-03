@@ -5,7 +5,7 @@
 #include "Macros.h"
 
 #include <lua.hpp>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #define CPPHTTPLIB_ZLIB_SUPPORT
 #define CPPHTTPLIB_OPENSSL_SUPPORT
@@ -15,7 +15,7 @@ using namespace httplib;
 #include <vector>
 #include <mutex>
 #include <unordered_map>
-using namespace std;
+
 
 #define ERRCODE_SUCCESS							1354
 #define ERRCODE_UNKNOWN							1355

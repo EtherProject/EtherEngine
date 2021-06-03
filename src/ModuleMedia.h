@@ -5,8 +5,8 @@
 #include "Macros.h"
 
 #include <lua.hpp>
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 #define MUSIC_TYPE_WAV					1308
 #define MUSIC_TYPE_MP3					1309
