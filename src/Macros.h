@@ -6,7 +6,7 @@
 #define _ETHER_DEBUG_
 #endif
 
-#define _VERSION_ "Alpha v4.1.0"
+#define _VERSION_ "Alpha v4.1.1"
 
 #define ETHER_API extern "C" int
 
