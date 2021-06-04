@@ -354,7 +354,8 @@ ETHER_API encodeBase64(lua_State* L)
 	try
 	{
 		size_t size = 0;
-		std::string strBase64 = base64_encode((const unsigned char*)luaL_checklstring(L, 1, &size), size);
+		const unsigned char* data = (const unsigned char*)luaL_checklstring(L, 1, &size);
+		std::string strBase64 = base64_encode(data, size);
 		lua_pushstring(L, strBase64.c_str());
 	}
 	catch (const std::exception& e)
