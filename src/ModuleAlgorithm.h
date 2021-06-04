@@ -7,6 +7,7 @@
 
 #include <lua.hpp>
 #include <SDL2/SDL.h>
+#include <cpp-base64/base64.h>
 
 #include <math.h>
 #include <string>
