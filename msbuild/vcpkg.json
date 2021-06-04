@@ -2,34 +2,42 @@
 	"$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
 	"name": "etherengine",
 	"version-string": "Alpha v4.1.0",
-	"dependencies":
-	[
+	"dependencies": [
 		{
 			"name": "lua",
-			"features":
-			[
+			"features": [
 				"cpp"
 			]
 		},
 		"sdl2",
 		{
 			"name": "sdl2-image",
-			"features":
-			[
-				"libjpeg-turbo"
+			"features": [
+				"libjpeg-turbo",
+				"libpng",
+				"tiff",
+				"libwebp"
 			]
 		},
 		"sdl2-gfx",
 		{
 			"name": "sdl2-mixer",
-			"features":
-			[
-				"mpg123",
+			"features": [
+				"dynamic-load",
+				"libflac",
+				"libmodplug",
 				"libvorbis",
-				"dynamic-load"
+				"mpg123",
+				"nativemidi",
+				"opusfile"
 			]
 		},
-		"sdl2-ttf",
+		{
+			"name": "sdl2-ttf",
+			"features": [
+				"freetype"
+			]
+		},
 		"cpp-httplib",
 		"cjson",
 		"zlib",
