@@ -42,7 +42,7 @@ You can find the release version or source code of these dependencies for the pl
 |**zlib - 1.2.11**|[http://www.zlib.net/](http://www.zlib.net/)  | zlib license in ```zlib.h``` |
 |**openssl - 1.1.1k**|[https://www.openssl.org/](https://www.openssl.org/)  | "Apache-style license" |
 |**pugixml - 1.11.4**|[https://github.com/zeux/pugixml](https://github.com/zeux/pugixml)  | MIT |
-|**base64 - 0.4.0**|[https://github.com/aklomp/base64](https://github.com/aklomp/base64)  | BSD-2-Clause License |
+|**cpp-base64 - V2.rc.08**|[https://github.com/ReneNyffenegger/cpp-base64](https://github.com/ReneNyffenegger/cpp-base64)  | Zlib License |
 
 然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherEngine 启动器。
 
