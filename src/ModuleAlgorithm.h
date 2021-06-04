@@ -12,7 +12,6 @@
 #include <math.h>
 #include <string>
 
-
 class ModuleAlgorithm : public Module
 {
 public:
