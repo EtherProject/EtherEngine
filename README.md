@@ -1,25 +1,37 @@
-# EtherAPI
+# EtherEngine
 [![](https://img.shields.io/github/stars/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=e49e61)](https://github.com/VoidmatrixHeathcliff/EtherEngine/stargazers)
 [![](https://img.shields.io/github/forks/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=e49e61)](https://github.com/VoidmatrixHeathcliff/EtherEngine/network/members)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b2761c92b96e4125a5dbc9d681c54cf4)](https://www.codacy.com/gh/VoidmatrixHeathcliff/EtherEngine/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=VoidmatrixHeathcliff/EtherEngine&amp;utm_campaign=Badge_Grade)
 [![](https://img.shields.io/github/contributors/VoidmatrixHeathcliff/EtherEngine)](https://github.com/VoidmatrixHeathcliff/EtherEngine/graphs/contributors)
 ![](https://img.shields.io/github/commit-activity/m/VoidmatrixHeathcliff/EtherEngine)
 
-本项目由 EtherEngine 更名为 **EtherAPI**，旨在提供一套跨平台的 Lua 接口，供游戏开发使用（当前版本仅支持 2D 游戏），功能涵盖 **图形、声音、交互、网络** 等方面，目前仍在不断开发和完善中；API 在设计过程中首先考虑的是 **简洁** 和 **易用性**，所以对于性能要求较高的游戏，EtherAPI 或许并不是一个最好的选择；但是在对于性能并不敏感的应用场景（如游戏原型的设计），EtherAPI 可以帮你快速建立起几乎所有类型游戏的演示框架甚至是一个已经可以直接发布的游戏。如果您对本项目感兴趣，欢迎为项目贡献代码或留下您的使用建议，记得点亮右上角的小星星哦 ~  
+**EtherEngine** 旨在提供一套跨平台的 Lua 接口，供游戏开发使用（当前版本仅支持 2D 游戏），功能涵盖 **图形、媒体、交互、网络** 等方面，目前仍在不断开发和完善中；API 在设计过程中首先考虑的是 **简洁** 和 **易用性**，**EtherEngine** 可以帮你快速建立起几乎所有类型游戏的演示框架甚至是一个已经可以直接发布的游戏。如果您对本项目感兴趣，欢迎为项目贡献代码或留下您的使用建议，记得点亮右上角的小星星哦 ~  
 
-This project is renamed as **EtherAPI** from EtherEngine, which aims to provide a set of cross platform Lua interface for game development (the current version only supports 2D games), with functions covering **graphics, sound, media, interaction, network** and other aspects, and is still under continuous development and improvement; the first consideration in the design process of API is **SIMPLICITY** and **EASE OF USE**, so EtherAPI may not be the best choice for games with high performance requirements. However, in application scenarios that are not sensitive to performance (such as the design of game prototypes), EtherAPI can help you quickly build up the performance framework of almost all kinds of games, even a game that can be released directly. If you are interested in this project, you are welcome to contribute code to the project or leave your suggestions. Remember to light up the little star in the upper right corner~
+**EtherEngine** aims to provide a set of cross platform Lua interface for game development (the current version only supports 2D games), with functions covering **graphics, media, interactivity, network**, etc. , which is still under development and improvement; In the process of API design, the first consideration is **SIMPLICITY** and **EASE OF USE**, **EtherEngine** can help you quickly build a demo framework for almost all types of games, even a game that can be released directly. If you are interested in this project, you are welcome to contribute code to the project or leave your suggestions. Remember to light up the little star in the upper right corner ~
 
 ## 本地编译 · Building
 
-由于 EtherAPI 基于 SDL 和 Lua 等库实现，所以您可能需要先本地编译相关的库进行支持。  
+### Windows 平台 · Windows Platform
+
+EtherEngine 使用 [vcpkg](https://github.com/microsoft/vcpkg) 作为自动构建工具，请确保您的设备上已安装 [vcpkg](https://github.com/microsoft/vcpkg) 并配置完全，使用 [VisualStudio](https://visualstudio.microsoft.com/) 打开 `msbuild` 目录下的 `EtherEngine.sln` 工程文件即可进行项目自动化配置及编译。
+
+EtherEngine uses [vcpkg](https://github.com/microsoft/vcpkg) as an automatic build tool, make sure [vcpkg](https://github.com/microsoft/vcpkg) is installed on your device, and the configuration is complete, using [VisualStudio](https://visualstudio.microsoft.com/) open the `EtherEngine.sln` project file under the `msbuild` directory to configure and compile the project automatically.
+
+`OptimizedDebug` 模式将启用 `_ETHER_DEBUG_` 宏进行编译，关于 `_ETHER_DEBUG_` 宏的更多内容见下方描述。
+
+`OptimizedDebug` mode will be enabled `_ETHER_DEBUG_` macro to compile, more about the `_ETHER_DEBUG_` macro is described below.
+
+### 其他平台 · Other Platforms
+
+由于 EtherEngine 基于 SDL 和 Lua 等库实现，所以您可能需要先本地编译相关的库进行支持。
 您可以在以下网址处找到这些依赖适合您所使用的平台的发布版本或源码： 
 
-Since EtherAPI is implemented based on SDL, Lua and other libraries, you may need to compile the relevant libraries for support first.
+Since EtherEngine is implemented based on SDL, Lua and other libraries, you may need to compile the relevant libraries for support first.
 You can find the release version or source code of these dependencies for the platform you are using at the following address:   
 
 |库名称|网址|协议|
 |----|----|----|
-| **Lua - 5.4.0**|[http://www.lua.org/](http://www.lua.org/)  | MIT |
+|**Lua - 5.4.0**|[http://www.lua.org/](http://www.lua.org/)  | MIT |
 |**SDL - 2.0.14**|[https://www.libsdl.org/](https://www.libsdl.org/)  | zlib license |
 |**SDL_image - 2.0.5**|[https://www.libsdl.org/projects/SDL_image/](https://www.libsdl.org/projects/SDL_image/)  | zlib license |
 |**SDL_gfx - 1.0.4**|[https://sourceforge.net/projects/sdlgfx/](https://sourceforge.net/projects/sdlgfx/)  | zlib/libpng License |
@@ -32,27 +44,29 @@ You can find the release version or source code of these dependencies for the pl
 |**pugixml - 1.11.4**|[https://github.com/zeux/pugixml](https://github.com/zeux/pugixml)  | MIT |
 |**base64 - 0.4.0**|[https://github.com/aklomp/base64](https://github.com/aklomp/base64)  | BSD-2-Clause License |
 
-然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherAPI 启动器，它将加载同一目录下的 `config.json` 作为配置文件，配置文件中描述了入口文件和附加模块路径等多种信息。  
-另外，您可以在 `Macros.h` 文件中决定是否禁用 `_ETHER_DEBUG_` 宏来开启 Release 模式；在 Release 模式下，EtherAPI 将跳过部分严格的类型检查，来确保更加高效的运行，同时，在 Windows 平台下，此模式将意味着程序所使用的子系统为 `window` 而非 `console` ，程序将不会显示控制台，通过 `print()` 等操作输出的调试信息可能会被隐藏。
+然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherEngine 启动器。
 
-Then add all source files in the `src` folder to your project and compile them to get the Ethernet API loader suitable for your current development platform, it will load `config.json` in the same directory as the configuration file, which describes the entry file, add-on module path and other information.
-In addition, you can decide whether to disable `_ETHER_DEBUG_` Macro in the `macro.h` file to open release mode; in release mode, etherapi will skip some strict type check to ensure more efficient operation. Meanwhile, under Windows platform, this mode will mean that the subsystem used by the program is `window` instead of `console`. The program will not show the console. Debugging information output through operation such as `print()` may be hidden.
+### 条件编译 · Conditional Compilation
+
+您可以在 `Macros.h` 文件中定义宏或添加编译指令 `_ETHER_DEBUG_` 来开启 Debug 模式；在 Debug 模式下，EtherEngine 将对参数进行严格的类型检查，来确保严谨正确的程序逻辑，同时，在 Windows 平台下，此模式将意味着程序所使用的子系统为 `console` 而非 `window` ，程序将显示控制台，通过 `print()` 等操作输出的调试信息不会被隐藏。
+
+You can define macros in the `Macros.h` file or add compilation instructions `_ETHER_DEBUG_` to open debug mode; In debug mode, EtherEngine will conduct strict type checking on parameters to ensure rigorous and correct program logic. At the same time, in Windows platform, this mode means that the subsystem used by the program is `console` instead of `window`. The program will display the console, and the debugging information output through such as `print()` will not be hidden
 
 ## 文档 · Documentation：
 
-当前发布的 EtherAPI 提供两个版本的开发者文档： 
+当前发布的 EtherEngine 提供两个版本的开发者文档： 
 
-There are two versions of the developer's documentation for the currently released EtherAPI:
+There are two versions of the developer's documentation for the currently released EtherEngine:
 
-+ [快速开始](docs/quick-start.md)：在这里您可以快速上手 EtherAPI ，文档将演示如 **窗口建立、按键交互、图像渲染、音乐播放** 等内容。  
-+ [QuickStart](docs/quick-start_en.md): Here you can quickly start the EtherAPI, and the document will demonstrate the contents such as **window startup, key interaction, image rendering, music playback** and so on.
++ [快速开始](docs/quick-start.md)：在这里您可以快速上手 EtherEngine ，文档将演示如 **窗口建立、按键交互、图像渲染、音乐播放** 等内容。  
++ [QuickStart](docs/quick-start_en.md): Here you can quickly start the EtherEngine, and the document will demonstrate the contents such as **window startup, key interaction, image rendering, music playback** and so on.
 
-+ [完全参考手册](docs/index.md)：这里将包含 EtherAPI 的全部内容和详细介绍。  
-+ [CompleteReferenceManual](docs/index.md): Here will contain all the contents and detailed introduction of EtherAPI.
++ [完全参考手册](docs/index.md)：这里将包含 EtherEngine 的全部内容和详细介绍。  
++ [CompleteReferenceManual](docs/index.md): Here will contain all the contents and detailed introduction of EtherEngine.
 
-我们建议您从 `快速开始` 开始接触 EtherAPI ，其中包含的实例将极大地减少您上手开发时的难度；尽管如此，`快速开始` 部分并不会对 EtherAPI 的全部内容进行详尽的介绍，所展示的内容也可能仅仅是您所需要的一部分，阅读 `完全参考手册` 来获取更多内容。
+我们建议您从 `快速开始` 开始接触 EtherEngine ，其中包含的实例将极大地减少您上手开发时的难度；尽管如此，`快速开始` 部分并不会对 EtherEngine 的全部内容进行详尽的介绍，所展示的内容也可能仅仅是您所需要的一部分，阅读 `完全参考手册` 来获取更多内容。
 
-We suggest that you start to contact the EtherAPI from the `QuickStart`, and the examples contained in it will greatly reduce the difficulty when you start the development. However, the `QuickStart` section will not give a detailed introduction to all the contents of the EtherAPI, and the contents displayed may only be part of what you need. Read the `CompleteReferenceManual` for more information.
+We suggest that you start to contact the EtherEngine from the `QuickStart`, and the examples contained in it will greatly reduce the difficulty when you start the development. However, the `QuickStart` section will not give a detailed introduction to all the contents of the EtherEngine, and the contents displayed may only be part of what you need. Read the `CompleteReferenceManual` for more information.
 
 ## 特别鸣谢 · Special Thanks
 
@@ -74,7 +88,7 @@ If there are any problems or suggestions during use, please submit issue in our 
 
 ## 投递作品 · Delivery Your Works
 
-我们十分欢迎您将自己的作品投递到 [EtherAPI 作品集](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection) 仓库下！  
+我们十分欢迎您将自己的作品投递到 [EtherEngine 作品集](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection) 仓库下！  
 关于投递规范和协议等更多内容详见 [此处](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection/blob/main/README.md)。
 
 We welcome you to send your works to the depository of [EtherWorkCollection](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection)!  
