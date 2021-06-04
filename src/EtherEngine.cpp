@@ -1,4 +1,6 @@
-#include "EtherAPI.h"
+#include "EtherEngine.h"
+
+using namespace std;
 
 string strNameEntry = DEFAULTNAME_ENTRY;
 vector<string> vStrPathList, vStrCPathList, vStrCmdList;
@@ -208,7 +210,7 @@ void _HandleQuit()
 	}
 }
 
-
+#undef main
 int main(int argc, char** argv)
 {
 	luaL_openlibs(pL);

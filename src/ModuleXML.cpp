@@ -1,5 +1,6 @@
 #include "ModuleXML.h"
 
+using namespace std;
 
 unordered_map<int, int> ModuleXML::mapNodeType = {
 	{ node_null, NODETYPE_EMPTY },

@@ -6,12 +6,11 @@
 #include "Utils.h"
 
 #include <lua.hpp>
-#include <SDL.h>
-#include <base64.h>
+#include <SDL2/SDL.h>
 
 #include <math.h>
 #include <string>
-using namespace std;
+
 
 class ModuleAlgorithm : public Module
 {
@@ -34,64 +33,64 @@ struct ColorHSLA
 
 double HLS2RGBvalue(double n1, double n2, double hue);
 
-// ½«ÊýÖµÏÞÖÆÔÚÖ¸¶¨Çø¼ä
-// 1»ò3²ÎÊý£º±»ÏÞ¶¨Öµ£¨number£©£¬ÏÂÏÞºÍÉÏÏÞ£¨number£¬Ä¬ÈÏÎª0ºÍ1£©
-// 1·µ»ØÖµ£ºÏÞ¶¨ºóÖµ
+// å°†æ•°å€¼é™åˆ¶åœ¨æŒ‡å®šåŒºé—´
+// 1æˆ–3å‚æ•°ï¼šè¢«é™å®šå€¼ï¼ˆnumberï¼‰ï¼Œä¸‹é™å’Œä¸Šé™ï¼ˆnumberï¼Œé»˜è®¤ä¸º0å’Œ1ï¼‰
+// 1è¿”å›žå€¼ï¼šé™å®šåŽå€¼
 ETHER_API clamp(lua_State * L);
 
-// ÅÐ¶ÏµãÊÇ·ñÎ»ÓÚÖ¸¶¨¾ØÐÎÇøÓòÄÚ(°üº¬¾ØÐÎ±ß½ç£©
-// 2»ò3²ÎÊý£ºµã×ø±ê£¨table£©£¬¾ØÐÎÇøÓò£¨table£©£¬ÊÇ·ñ°üº¬±ß½ç£¨boolean£¬¿ÉÑ¡£¬Ä¬ÈÏÎª true£©
-// 1·µ»ØÖµ£ºÊÇ·ñÎ»ÓÚÇøÓòÄÚ£¨boolean£©
+// åˆ¤æ–­ç‚¹æ˜¯å¦ä½äºŽæŒ‡å®šçŸ©å½¢åŒºåŸŸå†…(åŒ…å«çŸ©å½¢è¾¹ç•Œï¼‰
+// 2æˆ–3å‚æ•°ï¼šç‚¹åæ ‡ï¼ˆtableï¼‰ï¼ŒçŸ©å½¢åŒºåŸŸï¼ˆtableï¼‰ï¼Œæ˜¯å¦åŒ…å«è¾¹ç•Œï¼ˆbooleanï¼Œå¯é€‰ï¼Œé»˜è®¤ä¸º trueï¼‰
+// 1è¿”å›žå€¼ï¼šæ˜¯å¦ä½äºŽåŒºåŸŸå†…ï¼ˆbooleanï¼‰
 ETHER_API checkPointInRect(lua_State* L);
 
-// ÅÐ¶ÏµãÊÇ·ñÎ»ÓÚÖ¸¶¨Ô²ÐÎÇøÓòÄÚ(°üº¬Ô²ÐÎ±ß½ç£©
-// 3»ò4²ÎÊý£ºµã×ø±ê£¨table£©£¬Ô²ÐÄ×ø±ê£¨table£©£¬Ô²°ë¾¶£¨number£©£¬ÊÇ·ñ°üº¬±ß½ç£¨boolean£¬¿ÉÑ¡£¬Ä¬ÈÏÎª true£©
-// 1·µ»ØÖµ£ºÊÇ·ñÎ»ÓÚÇøÓòÄÚ£¨boolean£©
+// åˆ¤æ–­ç‚¹æ˜¯å¦ä½äºŽæŒ‡å®šåœ†å½¢åŒºåŸŸå†…(åŒ…å«åœ†å½¢è¾¹ç•Œï¼‰
+// 3æˆ–4å‚æ•°ï¼šç‚¹åæ ‡ï¼ˆtableï¼‰ï¼Œåœ†å¿ƒåæ ‡ï¼ˆtableï¼‰ï¼Œåœ†åŠå¾„ï¼ˆnumberï¼‰ï¼Œæ˜¯å¦åŒ…å«è¾¹ç•Œï¼ˆbooleanï¼Œå¯é€‰ï¼Œé»˜è®¤ä¸º trueï¼‰
+// 1è¿”å›žå€¼ï¼šæ˜¯å¦ä½äºŽåŒºåŸŸå†…ï¼ˆbooleanï¼‰
 ETHER_API checkPointInCircle(lua_State* L);
 
-// ÅÐ¶ÏÁ½¾ØÐÎÇøÓòÊÇ·ñÏà½»£¨°üº¬¾ØÐÎ±ß½ç£©
-// 2»ò3²ÎÊý£º¾ØÐÎ1ÇøÓò£¨table£©£¬¾ØÐÎ2ÇøÓò£¨table£©£¬ÊÇ·ñ°üº¬±ß½ç£¨boolean£¬¿ÉÑ¡£¬Ä¬ÈÏÎª true£©
-// 1·µ»ØÖµ£ºÊÇ·ñÏà½»£¨boolean£©
+// åˆ¤æ–­ä¸¤çŸ©å½¢åŒºåŸŸæ˜¯å¦ç›¸äº¤ï¼ˆåŒ…å«çŸ©å½¢è¾¹ç•Œï¼‰
+// 2æˆ–3å‚æ•°ï¼šçŸ©å½¢1åŒºåŸŸï¼ˆtableï¼‰ï¼ŒçŸ©å½¢2åŒºåŸŸï¼ˆtableï¼‰ï¼Œæ˜¯å¦åŒ…å«è¾¹ç•Œï¼ˆbooleanï¼Œå¯é€‰ï¼Œé»˜è®¤ä¸º trueï¼‰
+// 1è¿”å›žå€¼ï¼šæ˜¯å¦ç›¸äº¤ï¼ˆbooleanï¼‰
 ETHER_API checkRectsOverlap(lua_State* L);
 
-// ÅÐ¶ÏÁ½Ô²ÊÇ·ñÏà½»£¨°üº¬Ô²ÐÎ±ß½ç£©
-// 4»ò5²ÎÊý£ºÔ²1Ô²ÐÄ×ø±ê£¨table£©£¬Ô²1°ë¾¶£¨number£©£¬Ô²2Ô²ÐÄ×ø±ê£¨table£©£¬Ô²2°ë¾¶£¨number£©£¬ÊÇ·ñ°üº¬±ß½ç£¨boolean£¬¿ÉÑ¡£¬Ä¬ÈÏÎª true£©
-// 1·µ»ØÖµ£ºÊÇ·ñÏà½»£¨boolean£©
+// åˆ¤æ–­ä¸¤åœ†æ˜¯å¦ç›¸äº¤ï¼ˆåŒ…å«åœ†å½¢è¾¹ç•Œï¼‰
+// 4æˆ–5å‚æ•°ï¼šåœ†1åœ†å¿ƒåæ ‡ï¼ˆtableï¼‰ï¼Œåœ†1åŠå¾„ï¼ˆnumberï¼‰ï¼Œåœ†2åœ†å¿ƒåæ ‡ï¼ˆtableï¼‰ï¼Œåœ†2åŠå¾„ï¼ˆnumberï¼‰ï¼Œæ˜¯å¦åŒ…å«è¾¹ç•Œï¼ˆbooleanï¼Œå¯é€‰ï¼Œé»˜è®¤ä¸º trueï¼‰
+// 1è¿”å›žå€¼ï¼šæ˜¯å¦ç›¸äº¤ï¼ˆbooleanï¼‰
 ETHER_API checkCirclesOverlap(lua_State* L);
 
-// »ñÈ¡Á½µã¼äÖ±Ïß¾àÀë
-// 2²ÎÊý£ºµã1×ø±ê£¨table£©£¬µã2×ø±ê£¨table£©
-// 1·µ»ØÖµ£ºÁ½µã¼äÖ±Ïß¾àÀë£¨number£©
+// èŽ·å–ä¸¤ç‚¹é—´ç›´çº¿è·ç¦»
+// 2å‚æ•°ï¼šç‚¹1åæ ‡ï¼ˆtableï¼‰ï¼Œç‚¹2åæ ‡ï¼ˆtableï¼‰
+// 1è¿”å›žå€¼ï¼šä¸¤ç‚¹é—´ç›´çº¿è·ç¦»ï¼ˆnumberï¼‰
 ETHER_API getPointsDistance(lua_State* L);
 
-// »ñÈ¡Á½Ö±Ïß¼ä¾àÀë
-// 2²ÎÊý£ºÖ±Ïß1Æðµã×ø±ê£¨table£©£¬Ö±Ïß1ÖÕµã×ø±ê£¨table£©£¬Ö±Ïß2Æðµã×ø±ê£¨table£©£¬Ö±Ïß2ÖÕµã×ø±ê£¨table£©
-// 1·µ»ØÖµ£ºÁ½Ö±Ïß¼ä¾àÀë£¨number£©
+// èŽ·å–ä¸¤ç›´çº¿é—´è·ç¦»
+// 2å‚æ•°ï¼šç›´çº¿1èµ·ç‚¹åæ ‡ï¼ˆtableï¼‰ï¼Œç›´çº¿1ç»ˆç‚¹åæ ‡ï¼ˆtableï¼‰ï¼Œç›´çº¿2èµ·ç‚¹åæ ‡ï¼ˆtableï¼‰ï¼Œç›´çº¿2ç»ˆç‚¹åæ ‡ï¼ˆtableï¼‰
+// 1è¿”å›žå€¼ï¼šä¸¤ç›´çº¿é—´è·ç¦»ï¼ˆnumberï¼‰
 ETHER_API getLinesDistance(lua_State* L);
 
-// »ñÈ¡µãµ½Ö±ÏßµÄ´¹Ö±¾àÀë
-// 3²ÎÊý£ºµã×ø±ê£¨table£©£¬Ö±ÏßÆðµã×ø±ê£¨table£©£¬Ö±ÏßÖÕµã×ø±ê£¨table£©
-// 1·µ»ØÖµ£ºµãµ½Ö±ÏßµÄ¾àÀë£¨number£©
+// èŽ·å–ç‚¹åˆ°ç›´çº¿çš„åž‚ç›´è·ç¦»
+// 3å‚æ•°ï¼šç‚¹åæ ‡ï¼ˆtableï¼‰ï¼Œç›´çº¿èµ·ç‚¹åæ ‡ï¼ˆtableï¼‰ï¼Œç›´çº¿ç»ˆç‚¹åæ ‡ï¼ˆtableï¼‰
+// 1è¿”å›žå€¼ï¼šç‚¹åˆ°ç›´çº¿çš„è·ç¦»ï¼ˆnumberï¼‰
 ETHER_API getPointLineDistance(lua_State* L);
 
-// RGBAÑÕÉ«¿Õ¼ä×ªHSLAÑÕÉ«¿Õ¼ä
-// 1²ÎÊý£ºÊ¹ÓÃRGBAÃèÊöµÄÑÕÉ«£¨table£©
-// 1·µ»ØÖµ£ºÊ¹ÓÃHSLAÃèÊöµÄÑÕÉ«£¨table£©
+// RGBAé¢œè‰²ç©ºé—´è½¬HSLAé¢œè‰²ç©ºé—´
+// 1å‚æ•°ï¼šä½¿ç”¨RGBAæè¿°çš„é¢œè‰²ï¼ˆtableï¼‰
+// 1è¿”å›žå€¼ï¼šä½¿ç”¨HSLAæè¿°çš„é¢œè‰²ï¼ˆtableï¼‰
 ETHER_API rgbaToHSLA(lua_State* L);
 
-// HSLAÑÕÉ«¿Õ¼ä×ªRGBAÑÕÉ«¿Õ¼ä
-// 1²ÎÊý£ºÊ¹ÓÃHSLAÃèÊöµÄÑÕÉ«£¨table£©
-// 1·µ»ØÖµ£ºÊ¹ÓÃRGBAÃèÊöµÄÑÕÉ«£¨table£©
+// HSLAé¢œè‰²ç©ºé—´è½¬RGBAé¢œè‰²ç©ºé—´
+// 1å‚æ•°ï¼šä½¿ç”¨HSLAæè¿°çš„é¢œè‰²ï¼ˆtableï¼‰
+// 1è¿”å›žå€¼ï¼šä½¿ç”¨RGBAæè¿°çš„é¢œè‰²ï¼ˆtableï¼‰
 ETHER_API hslaToRGBA(lua_State* L);
 
-// ½«»º³åÇøÊý¾Ý±àÂëÎª Base64 ±àÂëµÄ×Ö·û´®
-// 1²ÎÊý£º»º³åÇøÊý¾Ý£¨string£©
-// 1·µ»ØÖµ£ºBase64 ±àÂëµÄ×Ö·û´®£¨string£©
+// å°†ç¼“å†²åŒºæ•°æ®ç¼–ç ä¸º Base64 ç¼–ç çš„å­—ç¬¦ä¸²
+// 1å‚æ•°ï¼šç¼“å†²åŒºæ•°æ®ï¼ˆstringï¼‰
+// 1è¿”å›žå€¼ï¼šBase64 ç¼–ç çš„å­—ç¬¦ä¸²ï¼ˆstringï¼‰
 ETHER_API encodeBase64(lua_State* L);
 
-// ½« Base64 ±àÂëµÄ×Ö·û´®½âÂëÎª»º³åÇøÊý¾Ý
-// 1²ÎÊý£ºBase64 ±àÂëµÄ×Ö·û´®£¨string£©
-// 1·µ»ØÖµ£º»º³åÇøÊý¾Ý£¨string£©
+// å°† Base64 ç¼–ç çš„å­—ç¬¦ä¸²è§£ç ä¸ºç¼“å†²åŒºæ•°æ®
+// 1å‚æ•°ï¼šBase64 ç¼–ç çš„å­—ç¬¦ä¸²ï¼ˆstringï¼‰
+// 1è¿”å›žå€¼ï¼šç¼“å†²åŒºæ•°æ®ï¼ˆstringï¼‰
 ETHER_API decodeBase64(lua_State* L);
 
 #endif // !_ALGORITHM_H_

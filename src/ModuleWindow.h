@@ -6,8 +6,8 @@
 #include "ModuleGraphic.h"
 
 #include <lua.hpp>
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #ifdef __WINDOWS__
 #define  WIN32_LEAN_AND_MEAN

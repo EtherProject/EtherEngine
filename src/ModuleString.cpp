@@ -1,5 +1,6 @@
 #include "ModuleString.h"
 
+using namespace std;
 
 ModuleString& ModuleString::Instance()
 {

@@ -9,7 +9,7 @@
 using namespace pugi;
 
 #include <unordered_map>
-using namespace std;
+
 
 #define NODETYPE_EMPTY						0
 #define NODETYPE_DOCUMENT					1
@@ -42,7 +42,7 @@ using namespace std;
 
 #define LoadXMLAndCheck(doc, res)\
 	xml_parse_result result = res;\
-	luaL_argcheck(L, !result.status, 1, string("XML parse error: ").append(result.description()).c_str());\
+	luaL_argcheck(L, !result.status, 1, std::string("XML parse error: ").append(result.description()).c_str());\
 	xml_document** uppdoc = (xml_document**)lua_newuserdata(L, sizeof(xml_document*));\
 	*uppdoc = doc; luaL_getmetatable(L, METANAME_DOCUMENT); lua_setmetatable(L, -2);
 
@@ -121,7 +121,7 @@ struct XML_Writer : xml_writer
 class ModuleXML : public Module
 {
 public:
-	static unordered_map<int, int> mapNodeType;
+	static std::unordered_map<int, int> mapNodeType;
 	static ModuleXML& Instance();
 	~ModuleXML() {};
 

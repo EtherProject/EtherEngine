@@ -7,7 +7,7 @@
 #include <lua.hpp>
 
 #include <iostream>
-using namespace std;
+
 
 class ModuleCompress : public Module
 {

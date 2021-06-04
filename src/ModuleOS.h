@@ -5,10 +5,10 @@
 #include "Macros.h"
 
 #include <lua.hpp>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #include <string>
-using namespace std;
+
 
 #ifdef __WINDOWS__
 #define  WIN32_LEAN_AND_MEAN

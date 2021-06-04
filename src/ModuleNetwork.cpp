@@ -1,5 +1,6 @@
 #include "ModuleNetwork.h"
 
+using namespace std;
 
 size_t ModuleNetwork::_stServerIndex = 0;
 

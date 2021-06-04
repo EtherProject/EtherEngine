@@ -5,10 +5,9 @@
 #include "Macros.h"
 
 #include <lua.hpp>
-#include <SDL.h>
+#include <sdl2/SDL.h>
 
 #include <unordered_map>
-using namespace std;
 
 #define EVENT_QUIT						1016
 
@@ -306,8 +305,8 @@ using namespace std;
 class ModuleInteractivity : public Module
 {
 public:
-	static unordered_map<int, unordered_map<int, int>> mapMultiEventList;
-	static unordered_map<int, int> mapSingleEventList;
+	static std::unordered_map<int, std::unordered_map<int, int>> mapMultiEventList;
+	static std::unordered_map<int, int> mapSingleEventList;
 	static ModuleInteractivity& Instance();
 	~ModuleInteractivity() {};
 
