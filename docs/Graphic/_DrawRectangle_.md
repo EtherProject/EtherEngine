@@ -1,19 +1,18 @@
 ### [[ << 回到上层 ]](index.md)
 
-# FillRoundRectangle
+# DrawRectangle
 
-> 设置鼠标是否显示
+> 在指定位置绘制无填充矩形
 
 ```lua
 
-FillRoundRectangle(rect, radius)
+DrawRectangle(rect)
 
 ```
 
 ## 参数：
 
 + rect [table]：用以描述显示区域的矩形
-+ radius [number]：圆角半径大小
 
 ## 返回值：
 

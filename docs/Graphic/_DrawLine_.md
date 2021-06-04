@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# ThickLine
+# DrawLine
 
-> 在指定位置绘制粗直线
+> 在指定位置绘制直线
 
 ```lua
 
-ThickLine(start, end, width)
+DrawLine(start, end)
 
 ```
 
@@ -14,7 +14,6 @@ ThickLine(start, end, width)
 
 + start [table]：起点坐标
 + end [table]：终点坐标
-+ width [number]：线条宽度
 
 ## 返回值：
 

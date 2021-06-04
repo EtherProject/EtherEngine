@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# Pie
+# DrawPie
 
 > 在指定位置绘制无填充扇形
 
 ```lua
 
-Pie(center, radius, startAngle, endAngle)
+DrawPie(center, radius, startAngle, endAngle)
 
 ```
 
