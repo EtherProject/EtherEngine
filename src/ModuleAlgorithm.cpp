@@ -1,5 +1,6 @@
 #include "ModuleAlgorithm.h"
 
+#include <cpp-base64/base64.cpp>
 
 ModuleAlgorithm& ModuleAlgorithm::Instance()
 {
