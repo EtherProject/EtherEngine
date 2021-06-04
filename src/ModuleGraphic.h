@@ -123,77 +123,77 @@ ETHER_API getDrawColor(lua_State * L);
 // 在指定位置绘制点
 // 1参数：点坐标（table）
 // 0返回值
-ETHER_API point(lua_State * L);
+ETHER_API drawPoint(lua_State * L);
 
 // 在指定位置绘制直线
 // 2参数：起点坐标（table），终点坐标（table）
 // 0返回值
-ETHER_API ether_drawline(lua_State * L);
+ETHER_API drawLine(lua_State * L);
 
 // 在指定位置绘制粗直线
 // 3参数：起点坐标（table），终点坐标（table），线条宽度（number）
 // 无返回值
-ETHER_API thickLine(lua_State * L);
+ETHER_API drawThickLine(lua_State * L);
 
 // 在指定位置绘制无填充矩形
 // 1参数：用以描述显示区域的矩形（table）
 // 0返回值
-ETHER_API rectangle(lua_State * L);
+ETHER_API drawRectangle(lua_State * L);
 
 // 在指定位置绘制填充矩形
 // 1参数：用以描述显示区域的矩形（table）
 // 0返回值
-ETHER_API fillRectangle(lua_State * L);
+ETHER_API drawFillRectangle(lua_State * L);
 
 // 在指定位置绘制圆角无填充矩形
 // 2参数：用以描述显示区域的矩形（table），圆角半径大小（number）
 // 0返回值
-ETHER_API roundRectangle(lua_State * L);
+ETHER_API drawRoundRectangle(lua_State * L);
 
 // 在指定位置绘制圆角填充矩形
 // 2参数：用以描述显示区域的矩形（table），圆角半径大小（number）
 // 0返回值
-ETHER_API fillRoundRectangle(lua_State * L);
+ETHER_API drawFillRoundRectangle(lua_State * L);
 
 // 在指定位置绘制无填充圆形
 // 2参数：圆心坐标（table），圆半径（number）
 // 0返回值
-ETHER_API circle(lua_State * L);
+ETHER_API drawCircle(lua_State * L);
 
 // 在指定位置绘制填充圆形
 // 2参数：圆心坐标（table），圆半径（number）
 // 0返回值
-ETHER_API fillCircle(lua_State * L);
+ETHER_API drawFillCircle(lua_State * L);
 
 // 在指定位置绘制无填充椭圆
 // 3参数：椭圆中心坐标（table），椭圆x轴半径（number），椭圆y轴半径（number）
 // 0返回值
-ETHER_API ellipse(lua_State * L);
+ETHER_API drawEllipse(lua_State * L);
 
 // 在指定位置绘制填充椭圆
 // 3参数：椭圆中心坐标（table），椭圆x轴半径（number），椭圆y轴半径（number）
 // 0返回值
-ETHER_API fillEllipse(lua_State * L);
+ETHER_API drawFillEllipse(lua_State * L);
 
 // 在指定位置绘制无填充扇形
 // 4参数：扇形所在圆的圆心坐标（table），扇形所在圆的半径（number），扇形开始角度（number），扇形结束角度（number）（扇形从以其所在圆心为原点的二维笛卡尔坐标系的x轴正方向开始绘制，角度的正方向为顺时针方向）
 // 0返回值
-ETHER_API pie(lua_State * L);
+ETHER_API drawPie(lua_State * L);
 
 // 在指定位置绘制填充扇形
 // 4参数：扇形所在圆的圆心坐标（table），扇形所在圆的半径（number），扇形开始角度（number），扇形结束角度（number）（扇形从以其所在圆心为原点的二维笛卡尔坐标系的x轴正方向开始绘制，角度的正方向为顺时针方向）
 // 0返回值
-ETHER_API fillPie(lua_State * L);
+ETHER_API drawFillPie(lua_State * L);
 
 // 在指定位置绘制无填充三角形
 // 6参数：第一个顶点坐标（table），第二个顶点坐标（table），第三个顶点坐标（table）
 // 0返回值
-ETHER_API triangle(lua_State * L);
+ETHER_API drawTriangle(lua_State * L);
 
 // 在指定位置绘制填充三角形
 // 6参数：第一个顶点坐标（table），第二个顶点坐标（table），第三个顶点坐标（table）
 // 0返回值
-ETHER_API fillTriangle(lua_State * L);
+ETHER_API drawFillTriangle(lua_State * L);
 
 // 从文件中加载字体
 // 2参数：字体文件路径（string）、字体大小（number）

@@ -24,21 +24,21 @@ ModuleGraphic::ModuleGraphic()
 		{ "CopyRotateReshapeTexture", copyRotateReshapeTexture },
 		{ "SetDrawColor", setDrawColor },
 		{ "GetDrawColor", getDrawColor },
-		{ "Point", point },
-		{ "Line", ether_drawline },
-		{ "ThickLine", thickLine },
-		{ "Rectangle", rectangle },
-		{ "FillRectangle", fillRectangle },
-		{ "RoundRectangle", roundRectangle },
-		{ "FillRoundRectangle", fillRoundRectangle },
-		{ "Circle", circle },
-		{ "FillCircle", fillCircle },
-		{ "Ellipse", ellipse },
-		{ "FillEllipse", fillEllipse },
-		{ "Pie", pie },
-		{ "FillPie", fillPie },
-		{ "Triangle", triangle },
-		{ "FillTriangle", fillTriangle },
+		{ "DrawPoint", drawPoint },
+		{ "DrawLine", drawLine },
+		{ "DrawThickLine", drawThickLine },
+		{ "DrawRectangle", drawRectangle },
+		{ "DrawFillRectangle", drawFillRectangle },
+		{ "DrawRoundRectangle", drawRoundRectangle },
+		{ "DrawFillRoundRectangle", drawFillRoundRectangle },
+		{ "DrawCircle", drawCircle },
+		{ "DrawFillCircle", drawFillCircle },
+		{ "DrawEllipse", drawEllipse },
+		{ "DrawFillEllipse", drawFillEllipse },
+		{ "DrawPie", drawPie },
+		{ "DrawFillPie", drawFillPie },
+		{ "DrawTriangle", drawTriangle },
+		{ "DrawFillTriangle", drawFillTriangle },
 		{ "LoadFontFromFile", loadFontFromFile },
 		{ "LoadFontFromData", loadFontFromData },
 		{ "GetTextSize", getTextSize },
@@ -415,7 +415,7 @@ ETHER_API getDrawColor(lua_State * L)
 }
 
 
-ETHER_API point(lua_State * L)
+ETHER_API drawPoint(lua_State * L)
 {
 	SDL_Point point;
 #ifdef _ETHER_DEBUG_
@@ -429,8 +429,8 @@ ETHER_API point(lua_State * L)
 	return 0;
 }
 
-// ÓëSDL2µÄline³åÍ»
-ETHER_API ether_drawline(lua_State * L)
+
+ETHER_API drawLine(lua_State * L)
 {
 	SDL_Point startPoint, endPoint;
 #ifdef _ETHER_DEBUG_
@@ -449,7 +449,7 @@ ETHER_API ether_drawline(lua_State * L)
 }
 
 
-ETHER_API thickLine(lua_State * L)
+ETHER_API drawThickLine(lua_State * L)
 {
 	SDL_Point startPoint, endPoint;
 #ifdef _ETHER_DEBUG_
@@ -468,7 +468,7 @@ ETHER_API thickLine(lua_State * L)
 }
 
 
-ETHER_API rectangle(lua_State * L)
+ETHER_API drawRectangle(lua_State * L)
 {
 	SDL_Rect rect;
 #ifdef _ETHER_DEBUG_
@@ -482,7 +482,7 @@ ETHER_API rectangle(lua_State * L)
 }
 
 
-ETHER_API fillRectangle(lua_State * L)
+ETHER_API drawFillRectangle(lua_State * L)
 {
 	SDL_Rect rect;
 #ifdef _ETHER_DEBUG_
@@ -496,7 +496,7 @@ ETHER_API fillRectangle(lua_State * L)
 }
 
 
-ETHER_API roundRectangle(lua_State * L)
+ETHER_API drawRoundRectangle(lua_State * L)
 {
 	SDL_Rect rect;
 #ifdef _ETHER_DEBUG_
@@ -512,7 +512,7 @@ ETHER_API roundRectangle(lua_State * L)
 }
 
 
-ETHER_API fillRoundRectangle(lua_State * L)
+ETHER_API drawFillRoundRectangle(lua_State * L)
 {
 	SDL_Rect rect;
 #ifdef _ETHER_DEBUG_
@@ -528,7 +528,7 @@ ETHER_API fillRoundRectangle(lua_State * L)
 }
 
 
-ETHER_API circle(lua_State * L)
+ETHER_API drawCircle(lua_State * L)
 {
 	SDL_Point point;
 #ifdef _ETHER_DEBUG_
@@ -544,7 +544,7 @@ ETHER_API circle(lua_State * L)
 }
 
 
-ETHER_API fillCircle(lua_State * L)
+ETHER_API drawFillCircle(lua_State * L)
 {
 	SDL_Point point;
 #ifdef _ETHER_DEBUG_
@@ -560,7 +560,7 @@ ETHER_API fillCircle(lua_State * L)
 }
 
 
-ETHER_API ellipse(lua_State * L)
+ETHER_API drawEllipse(lua_State * L)
 {
 	SDL_Point point;
 #ifdef _ETHER_DEBUG_
@@ -576,7 +576,7 @@ ETHER_API ellipse(lua_State * L)
 }
 
 
-ETHER_API fillEllipse(lua_State * L)
+ETHER_API drawFillEllipse(lua_State * L)
 {
 	SDL_Point point;
 #ifdef _ETHER_DEBUG_
@@ -591,7 +591,7 @@ ETHER_API fillEllipse(lua_State * L)
 	return 0;
 }
 
-ETHER_API pie(lua_State * L)
+ETHER_API drawPie(lua_State * L)
 {
 	SDL_Point point;
 #ifdef _ETHER_DEBUG_
@@ -606,7 +606,7 @@ ETHER_API pie(lua_State * L)
 	return 0;
 }
 
-ETHER_API fillPie(lua_State * L)
+ETHER_API drawFillPie(lua_State * L)
 {
 	SDL_Point point;
 #ifdef _ETHER_DEBUG_
@@ -621,7 +621,7 @@ ETHER_API fillPie(lua_State * L)
 	return 0;
 }
 
-ETHER_API triangle(lua_State * L)
+ETHER_API drawTriangle(lua_State * L)
 {
 	SDL_Point point_1, point_2, point_3;
 #ifdef _ETHER_DEBUG_
@@ -640,7 +640,7 @@ ETHER_API triangle(lua_State * L)
 	return 0;
 }
 
-ETHER_API fillTriangle(lua_State * L)
+ETHER_API drawFillTriangle(lua_State * L)
 {
 	SDL_Point point_1, point_2, point_3;
 #ifdef _ETHER_DEBUG_
