@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# Ellipse
+# DrawFillEllipse
 
-> 在指定位置绘制无填充椭圆
+> 在指定位置绘制填充椭圆
 
 ```lua
 
-Ellipse(center, radiusX, radiusY)
+DrawFillEllipse(center, radiusX, radiusY)
 
 ```
 

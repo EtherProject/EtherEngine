@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# FillRectangle
+# DrawFillRectangle
 
 > 在指定位置绘制填充矩形
 
 ```lua
 
-FillRectangle(rect)
+DrawFillRectangle(rect)
 
 ```
 

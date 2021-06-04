@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# RoundRectangle
+# DrawFillRoundRectangle
 
-> 在指定位置绘制圆角无填充矩形
+> 设置鼠标是否显示
 
 ```lua
 
-RoundRectangle(rect, radius)
+DrawFillRoundRectangle(rect, radius)
 
 ```
 

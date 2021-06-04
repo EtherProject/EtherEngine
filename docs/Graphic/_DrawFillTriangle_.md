@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# FillTriangle
+# DrawFillTriangle
 
 > 在指定位置绘制填充三角形
 
 ```lua
 
-FillTriangle(point1, point2, point3)
+DrawFillTriangle(point1, point2, point3)
 
 ```
 

@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# FillCircle
+# DrawCircle
 
-> 在指定位置绘制填充圆形
+> 在指定位置绘制无填充圆形
 
 ```lua
 
-FillCircle(center, radius)
+DrawCircle(center, radius)
 
 ```
 

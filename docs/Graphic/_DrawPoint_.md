@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# Point
+# DrawPoint
 
 > 在指定位置绘制点
 
 ```lua
 
-Point(point)
+DrawPoint(point)
 
 ```
 

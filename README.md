@@ -17,17 +17,20 @@ This project is renamed as **EtherAPI** from EtherEngine, which aims to provide 
 Since EtherAPI is implemented based on SDL, Lua and other libraries, you may need to compile the relevant libraries for support first.
 You can find the release version or source code of these dependencies for the platform you are using at the following address:   
 
-+ **Lua - 5.4.0：**[http://www.lua.org/](http://www.lua.org/)
-+ **SDL - 2.0.14：**[https://www.libsdl.org/](https://www.libsdl.org/)  
-+ **SDL_image - 2.0.5：**[https://www.libsdl.org/projects/SDL_image/](https://www.libsdl.org/projects/SDL_image/) 
-+ **SDL_gfx - 1.0.4：**[https://sourceforge.net/projects/sdlgfx/](https://sourceforge.net/projects/sdlgfx/) 
-+ **SDL_mixer - 2.0.4：**[https://www.libsdl.org/projects/SDL_mixer/](https://www.libsdl.org/projects/SDL_mixer/) 
-+ **SDL_ttf - 2.0.15：**[https://www.libsdl.org/projects/SDL_ttf/](https://www.libsdl.org/projects/SDL_ttf/) 
-+ **cpp-httplib - 0.8.4：**[https://github.com/yhirose/cpp-httplib/](https://github.com/yhirose/cpp-httplib/) 
-+ **cJSON - 1.7.14：**[https://github.com/DaveGamble/cJSON](https://github.com/DaveGamble/cJSON/) 
-+ **zlib - 1.2.11：**[http://www.zlib.net/](http://www.zlib.net/) 
-+ **openssl - 1.1.1k：**[https://www.openssl.org/](https://www.openssl.org/) 
-+ **pugixml - 1.11.4：**[https://github.com/zeux/pugixml](https://github.com/zeux/pugixml) 
+|库名称|网址|协议|
+|----|----|----|
+| **Lua - 5.4.0**|[http://www.lua.org/](http://www.lua.org/)  | MIT |
+|**SDL - 2.0.14**|[https://www.libsdl.org/](https://www.libsdl.org/)  | zlib license |
+|**SDL_image - 2.0.5**|[https://www.libsdl.org/projects/SDL_image/](https://www.libsdl.org/projects/SDL_image/)  | zlib license |
+|**SDL_gfx - 1.0.4**|[https://sourceforge.net/projects/sdlgfx/](https://sourceforge.net/projects/sdlgfx/)  | zlib/libpng License |
+|**SDL_mixer - 2.0.4**|[https://www.libsdl.org/projects/SDL_mixer/](https://www.libsdl.org/projects/SDL_mixer/)  | zlib license |
+|**SDL_ttf - 2.0.15**|[https://www.libsdl.org/projects/SDL_ttf/](https://www.libsdl.org/projects/SDL_ttf/)  | zlib license |
+|**cpp-httplib - 0.8.4**|[https://github.com/yhirose/cpp-httplib/](https://github.com/yhirose/cpp-httplib/)  | MIT |
+|**cJSON - 1.7.14**|[https://github.com/DaveGamble/cJSON](https://github.com/DaveGamble/cJSON/)  | MIT |
+|**zlib - 1.2.11**|[http://www.zlib.net/](http://www.zlib.net/)  | zlib license in ```zlib.h``` |
+|**openssl - 1.1.1k**|[https://www.openssl.org/](https://www.openssl.org/)  | "Apache-style license" |
+|**pugixml - 1.11.4**|[https://github.com/zeux/pugixml](https://github.com/zeux/pugixml)  | MIT |
+|**base64 - 0.4.0**|[https://github.com/aklomp/base64](https://github.com/aklomp/base64)  | BSD-2-Clause License |
 
 然后将 `src` 文件夹内的所有源码文件添加到您的工程并进行编译，即可得到适合您当前开发平台的 EtherAPI 启动器，它将加载同一目录下的 `config.json` 作为配置文件，配置文件中描述了入口文件和附加模块路径等多种信息。  
 另外，您可以在 `Macros.h` 文件中决定是否禁用 `_ETHER_DEBUG_` 宏来开启 Release 模式；在 Release 模式下，EtherAPI 将跳过部分严格的类型检查，来确保更加高效的运行，同时，在 Windows 平台下，此模式将意味着程序所使用的子系统为 `window` 而非 `console` ，程序将不会显示控制台，通过 `print()` 等操作输出的调试信息可能会被隐藏。
@@ -53,10 +56,12 @@ We suggest that you start to contact the EtherAPI from the `QuickStart`, and the
 
 ## 特别鸣谢 · Special Thanks
 
++ [Fa鸽](https://github.com/Akarinnnnn)：感谢技术高超的大佬，为项目的自动化构建无私地付出了大量精力，提供了极其关键的重构
 + [HandamardMatrix](https://github.com/HandamardMatrix)：感谢我的小可爱，为引擎算法提供灵感并且陪我度过了最寒冷的冬天
 + [LHR1926](https://github.com/LHR1926)：感谢我的战友，为引擎的第一份 API 文档做出贡献
 + [VisualDust](https://github.com/VisualDust)：感谢素未谋面的大佬，能够在百忙之中为引擎文档提供英文译本
 
++ [Fa鸽](https://github.com/Akarinnnnn)：Thanks to the highly skilled mogul, who selflessly paid a lot of energy for the automatic construction of the project and provided the extremely critical reconstruction
 + [HandamardMatrix](https://github.com/HandamardMatrix)：Thank my sweet for providing inspiration for engine algorithm and accompanying me through the coldest winter
 + [LHR1926](https://github.com/LHR1926)：Thank my comrades in arms for contributing to the first version of API document of the engine
 + [VisualDust](https://github.com/VisualDust)：Thank the mogul we haven't met before for providing English translation for engine documents in your busy time

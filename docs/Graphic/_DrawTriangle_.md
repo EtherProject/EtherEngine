@@ -1,12 +1,12 @@
 ### [[ << 回到上层 ]](index.md)
 
-# Triangle
+# DrawTriangle
 
 > 在指定位置绘制无填充三角形
 
 ```lua
 
-Triangle(point1, point2, point3)
+DrawTriangle(point1, point2, point3)
 
 ```
 

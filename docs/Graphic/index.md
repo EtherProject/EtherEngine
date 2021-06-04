@@ -26,35 +26,35 @@
 
 + [GetDrawColor()](_GetDrawColor_.md)：获取窗口绘图颜色
 
-+ [Point(point)](_Point_.md)：在指定位置绘制点
++ [DrawPoint(point)](_DrawPoint_.md)：在指定位置绘制点
 
-+ [Line(start, end)](_Line_.md)：在指定位置绘制直线
++ [DrawLine(start, end)](_DrawLine_.md)：在指定位置绘制直线
 
-+ [ThickLine(start, end, width)](_ThickLine_.md)：在指定位置绘制粗直线
++ [DrawThickLine(start, end, width)](_DrawThickLine_.md)：在指定位置绘制粗直线
 
-+ [Rectangle(rect)](_Rectangle_.md)：在指定位置绘制无填充矩形
++ [Rectangle(rect)](_DrawRectangle_.md)：在指定位置绘制无填充矩形
 
-+ [FillRectangle(rect)](_FillRectangle_.md)：在指定位置绘制填充矩形
++ [DrawFillRectangle(rect)](_DrawFillRectangle_.md)：在指定位置绘制填充矩形
 
-+ [RoundRectangle(rect, radius)](_RoundRectangle_.md)：在指定位置绘制圆角无填充矩形
++ [DrawRoundRectangle(rect, radius)](_DrawRoundRectangle_.md)：在指定位置绘制圆角无填充矩形
 
-+ [FillRoundRectangle(rect, radius)](_FillRoundRectangle_.md)：在指定位置绘制圆角填充矩形
++ [DrawFillRoundRectangle(rect, radius)](_DrawFillRoundRectangle_.md)：在指定位置绘制圆角填充矩形
 
-+ [Circle(center, radius)](_Circle_.md)：在指定位置绘制无填充圆形
++ [DrawCircle(center, radius)](_DrawCircle_.md)：在指定位置绘制无填充圆形
 
-+ [FillCircle(center, radius)](_FillCircle_.md)：在指定位置绘制填充圆形
++ [DrawFillCircle(center, radius)](_DrawFillCircle_.md)：在指定位置绘制填充圆形
 
-+ [Ellipse(center, radiusX, radiusY)](_Ellipse_.md)：在指定位置绘制无填充椭圆
++ [DrawEllipse(center, radiusX, radiusY)](_DrawEllipse_.md)：在指定位置绘制无填充椭圆
 
-+ [FillEllipse(center, radiusX, radiusY)](_FillEllipse_.md)：在指定位置绘制填充椭圆
++ [DrawFillEllipse(center, radiusX, radiusY)](_DrawFillEllipse_.md)：在指定位置绘制填充椭圆
 
-+ [Pie(center, radius, startAngle, endAngle)](_Pie_.md)：在指定位置绘制无填充扇形
++ [DrawPie(center, radius, startAngle, endAngle)](_DrawPie_.md)：在指定位置绘制无填充扇形
 
-+ [FillPie(center, radius, startAngle, endAngle)](_FillPie_.md)：在指定位置绘制填充扇形
++ [DrawFillPie(center, radius, startAngle, endAngle)](_DrawFillPie_.md)：在指定位置绘制填充扇形
 
-+ [Triangle(point1, point2, point3)](_Triangle_.md)：在指定位置绘制无填充三角形
++ [DrawTriangle(point1, point2, point3)](_DrawTriangle_.md)：在指定位置绘制无填充三角形
 
-+ [FillTriangle(point1, point2, point3)](_FillTriangle_.md)：在指定位置绘制填充三角形
++ [DrawFillTriangle(point1, point2, point3)](_DrawFillTriangle_.md)：在指定位置绘制填充三角形
 
 + [LoadFontFromFile(path, size)](_LoadFontFromFile_.md)：从文件中加载字体
 
