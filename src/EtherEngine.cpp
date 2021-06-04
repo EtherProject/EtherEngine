@@ -1,4 +1,4 @@
-#include "EtherAPI.h"
+#include "EtherEngine.h"
 
 using namespace std;
 
@@ -210,7 +210,7 @@ void _HandleQuit()
 	}
 }
 
-#undef main // SDL_mainº¦ÈË
+#undef main // SDL_mainï¿½ï¿½ï¿½ï¿½
 int main(int argc, char** argv)
 {
 	luaL_openlibs(pL);

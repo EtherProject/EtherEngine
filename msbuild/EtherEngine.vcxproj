@@ -30,7 +30,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{657e4950-ed13-4b97-b1cb-fb7d4e7466be}</ProjectGuid>
-    <RootNamespace>EtherAPI</RootNamespace>
+    <RootNamespace>EtherEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -251,7 +251,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\EtherAPI.h" />
+    <ClInclude Include="..\src\EtherEngine.h" />
     <ClInclude Include="..\src\Macros.h" />
     <ClInclude Include="..\src\Module.h" />
     <ClInclude Include="..\src\ModuleAlgorithm.h" />
@@ -269,7 +269,7 @@
     <ClInclude Include="..\src\Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\EtherAPI.cpp" />
+    <ClCompile Include="..\src\EtherEngine.cpp" />
     <ClCompile Include="..\src\Module.cpp" />
     <ClCompile Include="..\src\ModuleAlgorithm.cpp" />
     <ClCompile Include="..\src\ModuleCompress.cpp" />
