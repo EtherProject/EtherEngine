@@ -259,7 +259,7 @@ ETHER_API copyRotateTexture(lua_State * L)
 	GetPointParam(L, 3, flipCenter);
 	GetRectParam(L, 5, showRect);
 #endif
-	SDL_RendererFlip flip;
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
 #ifdef _ETHER_DEBUG_
 	CheckTableParam(L, 4);
 #endif
@@ -337,7 +337,7 @@ ETHER_API copyRotateReshapeTexture(lua_State * L)
 	GetRectParam(L, 6, showRect);
 #endif
 
-	SDL_RendererFlip flip;
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
 #ifdef _ETHER_DEBUG_
 	CheckTableParam(L, 4);
 #endif
