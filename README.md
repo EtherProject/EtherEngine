@@ -93,3 +93,17 @@ If there are any problems or suggestions during use, please submit issue in our 
 
 We welcome you to send your works to the depository of [EtherWorkCollection](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection)!  
 Please refer to [HERE](https://github.com/VoidmatrixHeathcliff/EtherWorkCollection/blob/main/README.md) for more details about delivery specifications and licenses.
+
+## 下载 · Download
+
+推荐直接点击右侧 Releases 下载最新版本。
+为方便国内同步和下载本项目，本项目已被布丁天堂档案馆开源镜像站收录。本镜像站设为每15天同步一次。
+
+地址:http://39.104.19.62:443/
+
+It is recommended to directly click RELEASES on the right to download the latest version
+To speed the sync and download of this project in China, this project has been included in the open source mirror of Pudding Paradise Archives. This mirror is set to sync every 15 days. 
+
+Address: http://39.104.19.62:443/
+
+![](https://unigal-mirrors.oss-cn-shanghai.aliyuncs.com/PuddingParadiseMirror.jpg)
