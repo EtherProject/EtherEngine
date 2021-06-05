@@ -34,7 +34,7 @@ EtherEngine 由一套轻量级的 Lua 游戏开发接口，它基于许多 C/C++
 
 ## 引入模块
 
-为了方便命名空间管理及优化引擎自动速度，我们将是否加载指定模块的权限交付给了开发者：与 Lua 的标准库函数 `require()` 类似，`UsingModule()` 会将 EtherEngine 内置的模块以 table 的形式返回；不同的是，`UsingModule()` 会优先在 EtherEngine 内部寻找指定名称的模块，如果没有找到则会调用 Lua 的标准库函数 `require()` 在外部尝试加载文件模块。所以在一般情况下，我们推荐您使用 `UsingModule()` 函数替代 Lua 内置的 `require()`。
+为了方便命名空间管理及优化引擎启动速度，我们将是否加载指定模块的权限交付给了开发者：与 Lua 的标准库函数 `require()` 类似，`UsingModule()` 会将 EtherEngine 内置的模块以 table 的形式返回；不同的是，`UsingModule()` 会优先在 EtherEngine 内部寻找指定名称的模块，如果没有找到则会调用 Lua 的标准库函数 `require()` 在外部尝试加载文件模块。所以在一般情况下，我们推荐您使用 `UsingModule()` 函数替代 Lua 内置的 `require()`。
 
 关于支持的 EtherEngine 内置模块名称，详见 [此处](index.md#模块索引)。
 
