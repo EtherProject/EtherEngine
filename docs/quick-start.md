@@ -76,7 +76,7 @@ EtherEngine 中各模块中的 `宏` 在本质上为 number 类型的变量，�
 
 Window = UsingModule("Window")
 
-CreateWindow(
+Window.CreateWindow(
     "HelloWorld",
     {
         x = Window.WINDOW_POSITION_DEFAULT, 
