@@ -1,6 +1,6 @@
 # EtherEngine 快速入门
 
-简体中文 | [English](quick-start_en.md) | [日本語](quick-start_ja.md)
+**简体中文** | [English](quick-start_en.md) | [日本語](quick-start_ja.md)
 
 > 本文档为 4.x 版本文档，3.x 或更低版本请参考 [此处](quick-start_deprecated.md)
 
