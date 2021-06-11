@@ -40,7 +40,7 @@ You can find the release version or source code of these dependencies for the pl
 |**cpp-httplib - 0.8.4**|[https://github.com/yhirose/cpp-httplib/](https://github.com/yhirose/cpp-httplib/)  | MIT |
 |**cJSON - 1.7.14**|[https://github.com/DaveGamble/cJSON](https://github.com/DaveGamble/cJSON/)  | MIT |
 |**zlib - 1.2.11**|[http://www.zlib.net/](http://www.zlib.net/)  | zlib license in ```zlib.h``` |
-|**openssl - 1.1.1k**|[https://www.openssl.org/](https://www.openssl.org/)  | "Apache-style license" |
+|**openssl - 1.1.1k**|[https://www.openssl.org/](https://www.openssl.org/)  | Apache-style license |
 |**pugixml - 1.11.4**|[https://github.com/zeux/pugixml](https://github.com/zeux/pugixml)  | MIT |
 |**cpp-base64 - V2.rc.08**|[https://github.com/ReneNyffenegger/cpp-base64](https://github.com/ReneNyffenegger/cpp-base64)  | Zlib License |
 
