@@ -328,7 +328,7 @@ bIsQuit = false
 
 while not bIsQuit do
     -- 更新事件队列，若存在未处理事件则进行分支判断处理 
-    while Interactivity.UpdateEvent() then
+    while Interactivity.UpdateEvent() do
         -- 获取当前未处理事件类型
         local _event = Interactivity.GetEventType()
         -- 若事件类型为退出事件，则跳出游戏主循环
@@ -374,7 +374,7 @@ Window.CreateWindow(
 Interactivity.StartTextInput()
 
 while true do
-    if Interactivity.UpdateEvent() then
+    while Interactivity.UpdateEvent() do
         local _event = Interactivity.GetEventType()
         -- 若事件类型为文本输入事件，则获取并打印文本输入内容
         if _event == Interactivity.EVENT_TEXTINPUT then
