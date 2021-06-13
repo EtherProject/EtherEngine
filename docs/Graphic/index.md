@@ -32,7 +32,7 @@
 
 + [DrawThickLine(start, end, width)](_DrawThickLine_.md)：在指定位置绘制粗直线
 
-+ [Rectangle(rect)](_DrawRectangle_.md)：在指定位置绘制无填充矩形
++ [DrawRectangle(rect)](_DrawRectangle_.md)：在指定位置绘制无填充矩形
 
 + [DrawFillRectangle(rect)](_DrawFillRectangle_.md)：在指定位置绘制填充矩形
 
