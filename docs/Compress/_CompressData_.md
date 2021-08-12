@@ -6,7 +6,7 @@
 
 ```lua
 
-data = CompressData(raw_data)
+data = CompressData(raw_data, level)
 
 ```
 
