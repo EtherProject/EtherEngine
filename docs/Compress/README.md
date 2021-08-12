@@ -6,6 +6,6 @@
 
 ## 模块函数列表：
 
-+ [CompressData(raw_data)](_CompressData_.md)：压缩数据
++ [CompressData(raw_data, level)](_CompressData_.md)：压缩数据
 
 + [DecompressData(data)](_DecompressData_.md)：解压数据
