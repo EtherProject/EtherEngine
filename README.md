@@ -61,8 +61,8 @@ There are two versions of the developer's documentation for the currently releas
 + [快速开始](docs/quick-start.md)：在这里您可以快速上手 EtherEngine ，文档将演示如 **窗口建立、按键交互、图像渲染、音乐播放** 等内容。  
 + [QuickStart](docs/quick-start_en.md): Here you can quickly start the EtherEngine, and the document will demonstrate the contents such as **window startup, key interaction, image rendering, music playback** and so on.
 
-+ [完全参考手册](docs/index.md)：这里将包含 EtherEngine 的全部内容和详细介绍。  
-+ [CompleteReferenceManual](docs/index.md): Here will contain all the contents and detailed introduction of EtherEngine.
++ [完全参考手册](docs/README.md)：这里将包含 EtherEngine 的全部内容和详细介绍。  
++ [CompleteReferenceManual](docs/README.md): Here will contain all the contents and detailed introduction of EtherEngine.
 
 我们建议您从 `快速开始` 开始接触 EtherEngine ，其中包含的实例将极大地减少您上手开发时的难度；尽管如此，`快速开始` 部分并不会对 EtherEngine 的全部内容进行详尽的介绍，所展示的内容也可能仅仅是您所需要的一部分，阅读 `完全参考手册` 来获取更多内容。
 
