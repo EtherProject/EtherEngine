@@ -2,11 +2,11 @@
 
 [简体中文](quick-start.md) | English | [日本語](quick-start_ja.md)
 
-> The 4.x version quick start document is under maintenance. Please read the [Full Manual](index.md) or use the 3.x version.
+> The 4.x version quick start document is under maintenance. Please read the [Full Manual](README.md) or use the 3.x version.
 
 Welcome to EtherAPI (for EtherEngine). EtherAPI consists of a set of lightweight Lua game development interfaces developed based on many C/C++ open source projects for game developers to quickly build game prototypes or conduct various conceptual tests. similarly, it also supports various games (The current version only supports 2D games) in development and production environments.
 
-Here is a quick start guide for EtherAPI, its purpose is to help you quickly get started using the interface library; therefore, this document will only introduce the content of commonly used interfaces, and many important functions will only be briefly introduced or even not mentioned. For more complete information, you should read [Full EtherAPI Manual](index.md).
+Here is a quick start guide for EtherAPI, its purpose is to help you quickly get started using the interface library; therefore, this document will only introduce the content of commonly used interfaces, and many important functions will only be briefly introduced or even not mentioned. For more complete information, you should read [Full EtherAPI Manual](README.md).
 
 ---
 
@@ -32,7 +32,7 @@ The EtherAPI launcher will automatically load the `config.json` as a configurati
 }
 ```
 
-For more information, see [Complete Manual: Configuration](index.md#Configuration).
+For more information, see [Complete Manual: Configuration](README.md#Configuration).
 
 ---
 
@@ -40,7 +40,7 @@ For more information, see [Complete Manual: Configuration](index.md#Configuratio
 
 ## Importing Modules
 
-In order to facilitate namespace management and optimize the speed of the engine, we have given the developer the authority to enable the specified module. Developers can enable the module with the specified name through the `UsingModule()` function. The supported module name parameters are shown in [Complete Manual : Directory](index.md#directory), special, the incoming string `All` means that the engine will enable all modules, and this method can be used to avoid cumbersome package guide code during testing. In addition, unless these modules are The included API will be needed in the program, we do not recommend you to do this.
+In order to facilitate namespace management and optimize the speed of the engine, we have given the developer the authority to enable the specified module. Developers can enable the module with the specified name through the `UsingModule()` function. The supported module name parameters are shown in [Complete Manual : Directory](README.md#directory), special, the incoming string `All` means that the engine will enable all modules, and this method can be used to avoid cumbersome package guide code during testing. In addition, unless these modules are The included API will be needed in the program, we do not recommend you to do this.
 
 Differing from the  Lua's standard library function `require()`, the function `UsingModule()` does not return the table type module as the return value, but pushes the functions contained in the specified module into the global space. The return value is `nil`. It should be noted that in the versions of the `UsingModule()` function supported by EtherAPI 3.0.x and below, the introduction of the module will introduce the macros contained in the module into the global space, while in EtherAPI 3.0.x and above, `UsingModule( )` The function puts the macro into the global table with the same name as the module. The relevant difference sample code is as follows:
 
@@ -85,7 +85,7 @@ The `CreateWindow()` function accepts three parameters for initializing window p
 + The second parameter is a rectangular structure of table type to describe the position and size of the window
 + The third parameter is the table type window identifier, which is used to describe meta-information such as the style of the window
 
-Here we mentioned the concept of `rectangular structure`, similar to `dot structure`, `RGBA color space structure` and `HSLA color space structure`, their essence is a table variable containing a specific key value, For example, in the `rectangular structure`, the keys that need to be included are `x`, `y`, `w` and `h`, which are used to represent the coordinates (top left vertex position) and size of a certain rectangular area, and The `dot structure` only needs to include the two key values `x` and `y`. For more information, see [Complete Manual: Appendix](index.md#Appendix).
+Here we mentioned the concept of `rectangular structure`, similar to `dot structure`, `RGBA color space structure` and `HSLA color space structure`, their essence is a table variable containing a specific key value, For example, in the `rectangular structure`, the keys that need to be included are `x`, `y`, `w` and `h`, which are used to represent the coordinates (top left vertex position) and size of a certain rectangular area, and The `dot structure` only needs to include the two key values `x` and `y`. For more information, see [Complete Manual: Appendix](README.md#Appendix).
 
 Therefore, creating a stretchable window with the title `HelloWorld` and displayed in the default position can be written as the following code:
 
@@ -180,7 +180,7 @@ In addition, if you need to crop or revolve the image for display, you only need
 + [`CopyRotateTexture()`](Graphic/CopyReshapeTexture.md) function can first rotate the texture and then copy
 + [`CopyRotateReshapeTexture()`](Graphic/CopyReshapeTexture.md) function will rotate and crop the texture before copying
 
-For descriptions of these functions, see [Manual: Graphic Module](Graphic/index.md)
+For descriptions of these functions, see [Manual: Graphic Module](Graphic/README.md)
 
 
 
@@ -238,7 +238,7 @@ while true do
 end
 ```
 
-In the second step of rendering text maps, there are many functions that support different text rendering methods and different text encoding formats; in addition, developers can also use such as [`SetFontStyle()`](Graphic/SetFontStyle.md) and other functions to set the font style. For more details, please refer to [Manual: Graphic Module](Graphic/index.md)
+In the second step of rendering text maps, there are many functions that support different text rendering methods and different text encoding formats; in addition, developers can also use such as [`SetFontStyle()`](Graphic/SetFontStyle.md) and other functions to set the font style. For more details, please refer to [Manual: Graphic Module](Graphic/README.md)
 
 
 
@@ -287,7 +287,7 @@ The drawing color of the window can be set by the `SetDrawColor()` function. All
 
 It should be noted that all geometric drawing is also performed in the rendering buffer, so after the drawing process is completed, you still need to call the `UpdateWindow()` function to flush the buffer.
 
-For more details about the geometric drawing API, please refer to [Manual: Graphic Module](Graphic/index.md)
+For more details about the geometric drawing API, please refer to [Manual: Graphic Module](Graphic/README.md)
 
 
 
@@ -317,7 +317,7 @@ FadeInMusic(music, -1, 1500)
 while true do end
 ```
 
-For more media broadcast control API, please refer to [Manual: Media Module](Media/index.md)
+For more media broadcast control API, please refer to [Manual: Media Module](Media/README.md)
 
 
 
@@ -388,14 +388,14 @@ For more interactive event types, please refer to [Manual：Interactivity](Inter
 
 ## Other Tools
 
-Tool module is a kind of module that encapsulates algorithm and system level to assist game development. It covers algorithm, network, time, JSON parsing, string encoding, operating system and other modules. Only its catalog index is placed below. It will be introduced in detail, please refer to the corresponding part of the [full manual](index.md#directory) for specific content:
+Tool module is a kind of module that encapsulates algorithm and system level to assist game development. It covers algorithm, network, time, JSON parsing, string encoding, operating system and other modules. Only its catalog index is placed below. It will be introduced in detail, please refer to the corresponding part of the [full manual](README.md#directory) for specific content:
 
-+ [Algorithm module](Algorithm/index.md): encapsulates common algorithms such as numerical limitation, basic collision detection, color space conversion, etc.
-+ [Network Module](Network/index.md): Provides operations such as host address and routing separation, HTTP request, etc.
-+ [Time Module](Time/index.md): Covers functions such as program pause, delay, dynamic delay, high-resolution timing, etc.
-+ [JSON Module](JSON/index.md): Provides JSON format data encoding and decoding operations
-+ [String Module](String/index.md): Provides a convenient operation for converting between different coded strings
-+ [Operating System Module](OS/index.md): encapsulates functions such as system information acquisition, platform-related file system API, clipboard operation, etc.
++ [Algorithm module](Algorithm/README.md): encapsulates common algorithms such as numerical limitation, basic collision detection, color space conversion, etc.
++ [Network Module](Network/README.md): Provides operations such as host address and routing separation, HTTP request, etc.
++ [Time Module](Time/README.md): Covers functions such as program pause, delay, dynamic delay, high-resolution timing, etc.
++ [JSON Module](JSON/README.md): Provides JSON format data encoding and decoding operations
++ [String Module](String/README.md): Provides a convenient operation for converting between different coded strings
++ [Operating System Module](OS/README.md): encapsulates functions such as system information acquisition, platform-related file system API, clipboard operation, etc.
 
 
 
