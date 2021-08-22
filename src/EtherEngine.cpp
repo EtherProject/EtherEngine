@@ -30,7 +30,6 @@ unordered_map<string, function<Module*()>> _mapMoudles = {
 
 ETHER_API usingModule(lua_State* L)
 {
-	
 	auto iter = _mapMoudles.find(luaL_checkstring(L, 1));
 	if (iter != _mapMoudles.end())
 	{
