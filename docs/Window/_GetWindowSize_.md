@@ -2,7 +2,7 @@
 
 # GetWindowSize
 
-> 设置窗口大小
+> 获取窗口大小
 
 ```lua
 

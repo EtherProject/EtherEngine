@@ -22,6 +22,7 @@ ModuleWindow::ModuleWindow()
 		{ "SetWindowOpacity", setWindowOpacity },
 		{ "SetWindowSize", setWindowSize },
 		{ "GetWindowSize", getWindowSize },
+		{ "GetWindowDrawableSize", getWindowDrawableSize },
 		{ "SetWindowMaxSize", setWindowMaxSize },
 		{ "GetWindowMaxSize", getWindowMaxSize },
 		{ "SetWindowMinSize", setWindowMinSize },
@@ -359,6 +360,22 @@ ETHER_API getWindowSize(lua_State* L)
 
 	int width = 0, height = 0;
 	SDL_GetWindowSize(window, &width, &height);
+	lua_pushnumber(L, width);
+	lua_pushnumber(L, height);
+
+	return 2;
+}
+
+
+ETHER_API getWindowDrawableSize(lua_State* L)
+{
+#ifdef _ETHER_DEBUG_
+	if (!window)
+		luaL_error(L, "size operation must be done after the window created");
+#endif
+
+	int width = 0, height = 0;
+	SDL_GetRendererOutputSize(renderer, &width, &height);
 	lua_pushnumber(L, width);
 	lua_pushnumber(L, height);
 

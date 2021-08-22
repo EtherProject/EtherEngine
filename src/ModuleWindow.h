@@ -117,6 +117,11 @@ ETHER_API setWindowMaxSize(lua_State * L);
 // 2返回值：窗口最大宽度（number），窗口最大高度（number）
 ETHER_API getWindowMaxSize(lua_State * L);
 
+// 获取窗口可渲染尺寸大小（支持高 DPI）
+// 0 参数
+// 2返回值：窗口可渲染宽度（number），窗口可渲染高度（number）
+ETHER_API getWindowDrawableSize(lua_State* L);
+
 // 设置窗口最小尺寸的大小
 // 2参数：窗口最小宽度（number），窗口最小高度（number）
 // 0返回值
