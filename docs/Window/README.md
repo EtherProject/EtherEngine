@@ -28,6 +28,8 @@
 
 + [GetWindowSize()](_GetWindowSize_.md)：获取窗口大小
 
++ [GetWindowDrawableSize()](_GetWindowDrawableSize_.md)：获取窗口可渲染尺寸大小（支持高 DPI）
+
 + [SetWindowMaxSize(width, height)](_SetWindowMaxSize_.md)：设置窗口最大尺寸的大小
 
 + [GetWindowMaxSize()](_GetWindowMaxSize_.md)：获取窗口最大尺寸的大小
