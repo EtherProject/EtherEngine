@@ -5,7 +5,7 @@
 #include "Macros.h"
 #include "Utils.h"
 
-#include <lua.hpp>
+#include "lua.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>

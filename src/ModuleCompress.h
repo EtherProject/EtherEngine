@@ -4,7 +4,7 @@
 #include "Module.h"
 
 #include "zlib.h"
-#include <lua.hpp>
+#include "lua.hpp"
 
 #include <iostream>
 

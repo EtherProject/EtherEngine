@@ -1,3 +1,5 @@
+#define NOMINMAX
+
 #include "EtherEngine.h"
 
 using namespace std;

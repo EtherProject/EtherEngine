@@ -4,7 +4,7 @@
 #include "Module.h"
 #include "Macros.h"
 
-#include <lua.hpp>
+#include "lua.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 

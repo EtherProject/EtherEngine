@@ -4,20 +4,20 @@ using namespace std;
 
 size_t ModuleNetwork::_stServerIndex = 0;
 
-unordered_map<int, int> ModuleNetwork::mapErrorList = {
-	{ httplib::Success, ERRCODE_SUCCESS },
-	{ httplib::Unknown, ERRCODE_UNKNOWN },
-	{ httplib::Connection, ERRCODE_CONNECTION },
-	{ httplib::BindIPAddress, ERRCODE_BINDIPADDRESS },
-	{ httplib::Read, ERRCODE_READ },
-	{ httplib::Write, ERRCODE_WRITE },
-	{ httplib::ExceedRedirectCount, ERRCODE_EXCEEDREDRICTCOUNT },
-	{ httplib::Canceled, ERRCODE_CANCELED },
-	{ httplib::SSLConnection, ERRCODE_SSLCONNECTION },
-	{ httplib::SSLLoadingCerts, ERRCODE_SSLLOADINGCERTS },
-	{ httplib::SSLServerVerification, ERRCODE_SSLSERVERVERIFY },
-	{ httplib::UnsupportedMultipartBoundaryChars, ERRCODE_UNSUPPORTEDMBC },
-	{ httplib::Compression, ERRCODE_COMPRESSION },
+unordered_map < httplib::Error , int > ModuleNetwork::mapErrorList = {
+	{ httplib::Error::Success, ERRCODE_SUCCESS },
+	{ httplib::Error::Unknown, ERRCODE_UNKNOWN },
+	{ httplib::Error::Connection, ERRCODE_CONNECTION },
+	{ httplib::Error::BindIPAddress, ERRCODE_BINDIPADDRESS },
+	{ httplib::Error::Read, ERRCODE_READ },
+	{ httplib::Error::Write, ERRCODE_WRITE },
+	{ httplib::Error::ExceedRedirectCount, ERRCODE_EXCEEDREDRICTCOUNT },
+	{ httplib::Error::Canceled, ERRCODE_CANCELED },
+	{ httplib::Error::SSLConnection, ERRCODE_SSLCONNECTION },
+	{ httplib::Error::SSLLoadingCerts, ERRCODE_SSLLOADINGCERTS },
+	{ httplib::Error::SSLServerVerification, ERRCODE_SSLSERVERVERIFY },
+	{ httplib::Error::UnsupportedMultipartBoundaryChars, ERRCODE_UNSUPPORTEDMBC },
+	{ httplib::Error::Compression, ERRCODE_COMPRESSION },
 };
 
 mutex mtxServerRequest, mtxServerException;

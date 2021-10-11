@@ -2,28 +2,31 @@
 	"$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
 	"name": "etherengine",
 	"version-string": "Alpha v4.1.0",
-	"dependencies": [
+	"builtin-baseline": "973a7d517c09c8cfb7e6a548fcc260ca34ba7b60",
+	"dependencies":
+	[
 		{
 			"name": "lua",
-			"features": [
+			"features":
+			[
 				"cpp"
 			]
 		},
 		"sdl2",
 		{
 			"name": "sdl2-image",
-			"features": [
+			"features":
+			[
 				"libjpeg-turbo",
-				"libpng",
-				"tiff",
-				"libwebp"
+				"libwebp",
+				"tiff"
 			]
 		},
 		"sdl2-gfx",
 		{
 			"name": "sdl2-mixer",
-			"features": [
-				"dynamic-load",
+			"features":
+			[
 				"libflac",
 				"libmodplug",
 				"libvorbis",
@@ -33,10 +36,7 @@
 			]
 		},
 		{
-			"name": "sdl2-ttf",
-			"features": [
-				"freetype"
-			]
+			"name": "sdl2-ttf"
 		},
 		"cpp-httplib",
 		"cjson",
@@ -44,5 +44,13 @@
 		"openssl",
 		"pugixml",
 		"cpp-base64"
+	],
+	"overrides":
+	[
+		{
+			"name": "openssl",
+			"version-string": "1.1.1k",
+			"port-version": 8
+		}
 	]
 }

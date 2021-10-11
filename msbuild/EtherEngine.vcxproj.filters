@@ -63,6 +63,9 @@
     <ClInclude Include="..\src\Utils.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\lua.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\EtherEngine.cpp">
