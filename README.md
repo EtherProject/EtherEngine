@@ -71,13 +71,13 @@ We suggest that you start to contact the EtherEngine from the `QuickStart`, and 
 ## 特别鸣谢 · Special Thanks
 
 + [Fa鸽](https://github.com/Akarinnnnn)：感谢技术高超的大佬，为项目的自动化构建无私地付出了大量精力，提供了极其关键的重构
-+ [快乐的老鼠宝宝](https://github.com/LaoshuBaby)：感谢热心的伙伴，为引擎项目搭建国内镜像源
++ [快乐的老鼠宝宝](https://github.com/LaoshuBaby)：感谢热心的伙伴，为引擎项目提供意见
 + [HandamardMatrix](https://github.com/HandamardMatrix)：感谢我的小可爱，为引擎算法提供灵感并且陪我度过了最寒冷的冬天
 + [LHR1926](https://github.com/LHR1926)：感谢我的战友，为引擎的第一份 API 文档做出贡献
 + [VisualDust](https://github.com/VisualDust)：感谢素未谋面的大佬，能够在百忙之中为引擎文档提供英文译本
 
 + [Fa鸽](https://github.com/Akarinnnnn)：Thanks to the highly skilled mogul, who selflessly paid a lot of energy for the automatic construction of the project and provided the extremely critical reconstruction
-+ [快乐的老鼠宝宝](https://github.com/LaoshuBaby)：Thank my enthusiastic partner for building a domestic image source for the engine project
++ [快乐的老鼠宝宝](https://github.com/LaoshuBaby)：Thank my enthusiastic partner for giving advice
 + [HandamardMatrix](https://github.com/HandamardMatrix)：Thank my sweet for providing inspiration for engine algorithm and accompanying me through the coldest winter
 + [LHR1926](https://github.com/LHR1926)：Thank my comrades in arms for contributing to the first version of API document of the engine
 + [VisualDust](https://github.com/VisualDust)：Thank the mogul we haven't met before for providing English translation for engine documents in your busy time
@@ -99,13 +99,5 @@ Please refer to [HERE](https://github.com/VoidmatrixHeathcliff/EtherWorkCollecti
 ## 下载 · Download
 
 推荐直接点击右侧 Releases 下载最新版本。  
-为方便国内同步和下载本项目，本项目已被布丁天堂档案馆开源镜像站收录。本镜像站设为每15天同步一次。
-
-地址：http://39.104.19.62:443/
 
 It is recommended to directly click RELEASES on the right to download the latest version.  
-To speed the sync and download of this project in China, this project has been included in the open source mirror of Pudding Paradise Archives. This mirror is set to sync every 15 days. 
-
-Address: http://39.104.19.62:443/
-
-![](https://unigal-mirrors.oss-cn-shanghai.aliyuncs.com/PuddingParadiseMirror.jpg)
