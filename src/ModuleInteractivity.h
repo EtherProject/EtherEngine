@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Macros.h"
+#include "SdlHelper.hpp"
 
 #include "lua.hpp"
 #include <sdl2/SDL.h>
@@ -301,6 +302,11 @@
 #define EVENT_KEYUP_EMAIL				1302
 
 #define EVENT_TEXTINPUT					1303
+
+enum EVENT_DROPFILE
+{
+	EVENT_DROPFILE_FILE = 1304,
+};
 
 class ModuleInteractivity : public Module
 {

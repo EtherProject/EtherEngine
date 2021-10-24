@@ -8,6 +8,7 @@ string strNameEntry = DEFAULTNAME_ENTRY;
 vector<string> vStrPathList, vStrCPathList, vStrCmdList;
 
 SDL_Event event;
+SdlStrings dropList;
 SDL_Point pointCursorPos;
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
@@ -235,7 +236,7 @@ int main(int argc, char** argv)
 #endif	
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-
+	
 	_PushArgs(pL, argc, argv, environ);
 
 	lua_register(pL, "UsingModule", usingModule);

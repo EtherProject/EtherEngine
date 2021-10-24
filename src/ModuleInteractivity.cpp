@@ -1,6 +1,17 @@
 #include "ModuleInteractivity.h"
 
+// MSVC C26812
+#pragma warning(disable:26812)
+
 using namespace std;
+
+#define MakeLMacro(identifier) { #identifier , identifier }
+
+#pragma region filedrop internals
+#define LMap_Drop(value) { value , value - 2792 }
+extern SdlStrings dropList;
+
+#pragma endregion
 
 unordered_map<int, unordered_map<int, int>> ModuleInteractivity::mapMultiEventList = {
 	{	
@@ -371,6 +382,14 @@ unordered_map<int, unordered_map<int, int>> ModuleInteractivity::mapMultiEventLi
 			{ SDL_BUTTON_RIGHT, EVENT_MOUSEBTNUP_RIGHT },
 			{ SDL_BUTTON_MIDDLE, EVENT_MOUSEBTNUP_MIDDLE },
 		}
+	},
+	{
+		SDL_DROPFILE,
+		{
+			LMap_Drop(SDL_DROPFILE),
+			LMap_Drop(SDL_DROPBEGIN),
+			LMap_Drop(SDL_DROPCOMPLETE),
+		}
 	}
 };
 
@@ -399,6 +418,7 @@ ModuleInteractivity::ModuleInteractivity()
 		{ "GetInputText", getInputText },
 		{ "UpdateEvent", updateEvent },
 		{ "GetEventType", getEventType },
+		{ "GetDropfileList", [](lua_State* l) -> int { for (char* s : dropList) lua_pushstring(l, s); return (int)dropList.v.size(); }}
 	};
 
 	_vMacros = {
@@ -694,6 +714,8 @@ ModuleInteractivity::ModuleInteractivity()
 		{ "EVENT_KEYUP_EMAIL", EVENT_KEYUP_EMAIL },
 
 		{ "EVENT_TEXTINPUT", EVENT_TEXTINPUT },
+
+		MakeLMacro(EVENT_DROPFILE_FILE),
 	};
 }
 
@@ -757,13 +779,19 @@ ETHER_API getInputText(lua_State* L)
 	return 1;
 }
 
-
 ETHER_API updateEvent(lua_State* L)
 {
 	lua_pushboolean(L, SDL_PollEvent(&event));
 
 	if (event.type == SDL_MOUSEMOTION)
 		pointCursorPos = { event.motion.x, event.motion.y };
+
+	// prepare list
+	if (event.type == SDL_DROPBEGIN)
+		dropList.clear();
+	
+	if (event.type == SDL_DROPFILE)
+		dropList.v.push_back(event.drop.file);
 
 	return 1;
 }

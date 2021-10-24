@@ -14,6 +14,7 @@
 #include "ModuleJSON.h"
 #include "ModuleCompress.h"
 #include "ModuleXML.h"
+#include "SdlHelper.hpp"
 
 #include "lua.hpp"
 #include <cjson/cJSON.h>
