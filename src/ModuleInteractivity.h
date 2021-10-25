@@ -305,7 +305,7 @@
 
 enum EVENT_DROPFILE
 {
-	EVENT_DROPFILE_FILE = 1304,
+	EVENT_DROPFILE_READY = 1304,
 };
 
 class ModuleInteractivity : public Module

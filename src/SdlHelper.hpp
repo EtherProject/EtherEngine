@@ -19,7 +19,7 @@ struct SdlStrings
 
 	void destory()
 	{
-		for (auto& s : v)
+		for (auto* s : v)
 			SDL_free(s);
 	}
 
