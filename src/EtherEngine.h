@@ -15,7 +15,7 @@
 #include "ModuleCompress.h"
 #include "ModuleXML.h"
 
-#include <lua.hpp>
+#include "lua.hpp"
 #include <cjson/cJSON.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

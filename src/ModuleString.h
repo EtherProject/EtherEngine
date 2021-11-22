@@ -5,7 +5,7 @@
 #include "Macros.h"
 #include "Utils.h"
 
-#include <lua.hpp>
+#include "lua.hpp"
 
 class ModuleString : public Module
 {

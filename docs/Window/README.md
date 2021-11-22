@@ -1,4 +1,4 @@
-### [[ << 回到主页 ]](../index.md)
+### [[ << 回到主页 ]](../README.md)
 
 # Window
 
@@ -27,6 +27,8 @@
 + [SetWindowSize(width, height)](_SetWindowSize_.md)：设置窗口大小
 
 + [GetWindowSize()](_GetWindowSize_.md)：获取窗口大小
+
++ [GetWindowDrawableSize()](_GetWindowDrawableSize_.md)：获取窗口可渲染尺寸大小（支持高 DPI）
 
 + [SetWindowMaxSize(width, height)](_SetWindowMaxSize_.md)：设置窗口最大尺寸的大小
 

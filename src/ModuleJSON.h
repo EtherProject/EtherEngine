@@ -4,7 +4,7 @@
 #include "Module.h"
 #include "Macros.h"
 
-#include <lua.hpp>
+#include "lua.hpp"
 #include <cjson/cJSON.h>
 
 #include <string>

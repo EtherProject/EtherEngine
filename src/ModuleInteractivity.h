@@ -4,7 +4,7 @@
 #include "Module.h"
 #include "Macros.h"
 
-#include <lua.hpp>
+#include "lua.hpp"
 #include <sdl2/SDL.h>
 
 #include <unordered_map>

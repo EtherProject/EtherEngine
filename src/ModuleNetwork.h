@@ -1,10 +1,9 @@
 #ifndef _NETWORK_H_
 #define _NETWORK_H_
-
 #include "Module.h"
 #include "Macros.h"
 
-#include <lua.hpp>
+#include "lua.hpp"
 #include <SDL2/SDL.h>
 
 #define CPPHTTPLIB_ZLIB_SUPPORT
@@ -89,7 +88,7 @@ struct E_Server
 class ModuleNetwork : public Module
 {
 public:
-	static std::unordered_map<int, int> mapErrorList;
+	static std::unordered_map<httplib::Error, int> mapErrorList;
 	static ModuleNetwork& Instance();
 	static std::string GetServerID();
 	~ModuleNetwork() {};

@@ -1,4 +1,4 @@
-### [[ << 回到上层 ]](index.md)
+### [[ << 回到上层 ]](README.md)
 
 # CompressData
 
@@ -6,7 +6,7 @@
 
 ```lua
 
-data = CompressData(raw_data)
+data = CompressData(raw_data, level)
 
 ```
 

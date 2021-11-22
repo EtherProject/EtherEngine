@@ -41,7 +41,7 @@ You can find the release version or source code of these dependencies for the pl
 |**cpp-httplib - 0.8.4**|[https://github.com/yhirose/cpp-httplib/](https://github.com/yhirose/cpp-httplib/)  | MIT |
 |**cJSON - 1.7.14**|[https://github.com/DaveGamble/cJSON](https://github.com/DaveGamble/cJSON/)  | MIT |
 |**zlib - 1.2.11**|[http://www.zlib.net/](http://www.zlib.net/)  | zlib license in ```zlib.h``` |
-|**openssl - 1.1.1k**|[https://www.openssl.org/](https://www.openssl.org/)  | "Apache-style license" |
+|**openssl - 1.1.1k**|[https://www.openssl.org/](https://www.openssl.org/)  | Apache-style license |
 |**pugixml - 1.11.4**|[https://github.com/zeux/pugixml](https://github.com/zeux/pugixml)  | MIT |
 |**cpp-base64 - V2.rc.08**|[https://github.com/ReneNyffenegger/cpp-base64](https://github.com/ReneNyffenegger/cpp-base64)  | Zlib License |
 
@@ -62,8 +62,8 @@ There are two versions of the developer's documentation for the currently releas
 + [快速开始](docs/quick-start.md)：在这里您可以快速上手 EtherEngine ，文档将演示如 **窗口建立、按键交互、图像渲染、音乐播放** 等内容。  
 + [QuickStart](docs/quick-start_en.md): Here you can quickly start the EtherEngine, and the document will demonstrate the contents such as **window startup, key interaction, image rendering, music playback** and so on.
 
-+ [完全参考手册](docs/index.md)：这里将包含 EtherEngine 的全部内容和详细介绍。  
-+ [CompleteReferenceManual](docs/index.md): Here will contain all the contents and detailed introduction of EtherEngine.
++ [完全参考手册](docs/README.md)：这里将包含 EtherEngine 的全部内容和详细介绍。  
++ [CompleteReferenceManual](docs/README.md): Here will contain all the contents and detailed introduction of EtherEngine.
 
 我们建议您从 `快速开始` 开始接触 EtherEngine ，其中包含的实例将极大地减少您上手开发时的难度；尽管如此，`快速开始` 部分并不会对 EtherEngine 的全部内容进行详尽的介绍，所展示的内容也可能仅仅是您所需要的一部分，阅读 `完全参考手册` 来获取更多内容。
 
@@ -72,13 +72,13 @@ We suggest that you start to contact the EtherEngine from the `QuickStart`, and 
 ## 特别鸣谢 · Special Thanks
 
 + [Fa鸽](https://github.com/Akarinnnnn)：感谢技术高超的大佬，为项目的自动化构建无私地付出了大量精力，提供了极其关键的重构
-+ [快乐的老鼠宝宝](https://github.com/LaoshuBaby)：感谢热心的伙伴，为引擎项目搭建国内镜像源
++ [快乐的老鼠宝宝](https://github.com/LaoshuBaby)：感谢热心的伙伴，为引擎项目提供意见
 + [HandamardMatrix](https://github.com/HandamardMatrix)：感谢我的小可爱，为引擎算法提供灵感并且陪我度过了最寒冷的冬天
 + [LHR1926](https://github.com/LHR1926)：感谢我的战友，为引擎的第一份 API 文档做出贡献
 + [VisualDust](https://github.com/VisualDust)：感谢素未谋面的大佬，能够在百忙之中为引擎文档提供英文译本
 
 + [Fa鸽](https://github.com/Akarinnnnn)：Thanks to the highly skilled mogul, who selflessly paid a lot of energy for the automatic construction of the project and provided the extremely critical reconstruction
-+ [快乐的老鼠宝宝](https://github.com/LaoshuBaby)：Thank my enthusiastic partner for building a domestic image source for the engine project
++ [快乐的老鼠宝宝](https://github.com/LaoshuBaby)：Thank my enthusiastic partner for giving advice
 + [HandamardMatrix](https://github.com/HandamardMatrix)：Thank my sweet for providing inspiration for engine algorithm and accompanying me through the coldest winter
 + [LHR1926](https://github.com/LHR1926)：Thank my comrades in arms for contributing to the first version of API document of the engine
 + [VisualDust](https://github.com/VisualDust)：Thank the mogul we haven't met before for providing English translation for engine documents in your busy time
@@ -100,17 +100,9 @@ Please refer to [HERE](https://github.com/VoidmatrixHeathcliff/EtherWorkCollecti
 ## 下载 · Download
 
 推荐直接点击右侧 Releases 下载最新版本。  
-为方便国内同步和下载本项目，本项目已被布丁天堂档案馆开源镜像站收录。本镜像站设为每15天同步一次。
-
-地址：http://39.104.19.62:443/
 
 It is recommended to directly click RELEASES on the right to download the latest version.  
-To speed the sync and download of this project in China, this project has been included in the open source mirror of Pudding Paradise Archives. This mirror is set to sync every 15 days. 
 
-Address: http://39.104.19.62:443/
+## 协议 · License
 
-![](https://unigal-mirrors.oss-cn-shanghai.aliyuncs.com/PuddingParadiseMirror.jpg)
-
-
-## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLaoshuBaby%2FEtherEngine.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLaoshuBaby%2FEtherEngine?ref=badge_large)

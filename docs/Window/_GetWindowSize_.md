@@ -1,8 +1,8 @@
-### [[ << 回到上层 ]](index.md)
+### [[ << 回到上层 ]](README.md)
 
 # GetWindowSize
 
-> 设置窗口大小
+> 获取窗口大小
 
 ```lua
 

@@ -1,6 +1,7 @@
 #if _WIN32
 #define _WIN32_LEAN_AND_MEAN 1
 // 逃不掉的，只能把整个windows.h放进来
+#define NOMINMAX
 #include <Windows.h>
 #endif
 
