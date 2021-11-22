@@ -2,6 +2,7 @@
 [![](https://img.shields.io/github/stars/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=e49e61)](https://github.com/VoidmatrixHeathcliff/EtherEngine/stargazers)
 [![](https://img.shields.io/github/forks/VoidmatrixHeathcliff/EtherEngine.svg?style=flat&labelColor=e49e61)](https://github.com/VoidmatrixHeathcliff/EtherEngine/network/members)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b2761c92b96e4125a5dbc9d681c54cf4)](https://www.codacy.com/gh/VoidmatrixHeathcliff/EtherEngine/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=VoidmatrixHeathcliff/EtherEngine&amp;utm_campaign=Badge_Grade)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLaoshuBaby%2FEtherEngine.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLaoshuBaby%2FEtherEngine?ref=badge_shield)
 [![](https://img.shields.io/github/contributors/VoidmatrixHeathcliff/EtherEngine)](https://github.com/VoidmatrixHeathcliff/EtherEngine/graphs/contributors)
 ![](https://img.shields.io/github/commit-activity/m/VoidmatrixHeathcliff/EtherEngine)
 
@@ -101,3 +102,7 @@ Please refer to [HERE](https://github.com/VoidmatrixHeathcliff/EtherWorkCollecti
 推荐直接点击右侧 Releases 下载最新版本。  
 
 It is recommended to directly click RELEASES on the right to download the latest version.  
+
+## 协议 · License
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLaoshuBaby%2FEtherEngine.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLaoshuBaby%2FEtherEngine?ref=badge_large)
